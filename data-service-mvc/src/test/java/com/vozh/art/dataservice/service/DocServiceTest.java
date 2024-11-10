@@ -20,12 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-//@ActiveProfiles("test")
 @SpringBootTest(properties = {
         "spring.cloud.discovery.enabled=false",
         "spring.cloud.service-registry.auto-registration.enabled=false"
 })
-//@AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application.properties")
 class DocServiceTest {
 
@@ -51,5 +49,6 @@ class DocServiceTest {
         Assertions.assertFalse(docService.verifyDocument(file2, singedDoc.getEd25519PublicKey(), singedDoc.getEd25519Signature()));
 
     }
+
 
 }

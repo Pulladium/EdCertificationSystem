@@ -35,19 +35,28 @@ public class CertificateService {
     }
 
     public static CertificateResponse mapToResponse(Certificate certificate){
-        return CertificateResponse.builder()
+        CertificateResponse response = CertificateResponse.builder()
                 .certificateId(certificate.getId())
                 .description(certificate.getDescription())
-                .issuers(certificate.getIssuers().stream()
-                        .map(issuer -> OrganizationService.mapToResponse(issuer))
-                        .collect(Collectors.toSet()))
-                .categories(certificate.getCategories().stream()
-                        .map(category -> CategoryService.mapToResponse(category ,1))
-                        .collect(Collectors.toSet()))
-                .participants(certificate.getCertificateParticipants().stream()
-                        .map(participant -> ParticipantService.mapToResponse(participant.getParticipant()))
-                        .collect(Collectors.toSet()))
                 .build();
+
+        if(certificate.getCategories() != null){
+            response.setCategories(certificate.getCategories().stream()
+                    .map(category -> CategoryService.mapToResponse(category ,1))
+                    .collect(Collectors.toSet()));
+        }
+        if (certificate.getIssuers() != null) {
+            response.setIssuers(certificate.getIssuers().stream()
+                    .map(issuer -> OrganizationService.mapToResponse(issuer))
+                    .collect(Collectors.toSet()));
+        }
+        if (certificate.getCertificateParticipants() != null) {
+
+            response.setParticipants(certificate.getCertificateParticipants().stream()
+                    .map(participant -> ParticipantService.mapToResponse(participant.getParticipant()))
+                    .collect(Collectors.toSet()));
+        }
+        return response;
     }
 
 
