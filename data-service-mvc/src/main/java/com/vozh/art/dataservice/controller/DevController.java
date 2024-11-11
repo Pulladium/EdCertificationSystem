@@ -17,10 +17,10 @@ public class DevController {
 
     private final CategoryService categoryService;
 
-    @PostMapping("/create")
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        log.info("Creating category: {}", category);
-        return ResponseEntity.ok(categoryService.createCategory(category));
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+//        log.info("Creating category: {}", category);
+//        return ResponseEntity.ok(categoryService.createCategory(category));
+//    }
 
 }

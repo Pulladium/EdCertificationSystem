@@ -48,6 +48,16 @@ public class DataServiceApplication {
                     .parentCategory(category)
                     .build();
 
+            Category sub2Category = Category.builder()
+                    .description("Povesitsja")
+                    .parentCategory(subCategory)
+                    .build();
+            Category category1 = Category.builder()
+                    .description("googl cloud ")
+                    .build();
+
+            categoryRepository.save(category1);
+
             Set<Category> subCategories = new HashSet<>();
             subCategories.add(subCategory);
             subCategories.add(subCategory2);

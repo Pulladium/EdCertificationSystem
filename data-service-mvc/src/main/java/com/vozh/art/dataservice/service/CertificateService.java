@@ -74,7 +74,7 @@ public class CertificateService {
             log.trace("Set categories to certificate with id {}", certificateId);
 //            duplicated code
         }
-//        todo do i save cat?
+//        todo do i save cat? i dont have cascade
         return save(certificate);
     }
 

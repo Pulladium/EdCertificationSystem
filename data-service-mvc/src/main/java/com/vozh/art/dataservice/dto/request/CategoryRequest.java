@@ -14,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class CategoryRequest {
+    private Long id;
     @NotBlank
     private String name;
     @NotBlank
