@@ -28,11 +28,13 @@ public class CategoryController {
         log.trace("CategoryController: Creating category: {}", request);
         return ResponseEntity.ok(categoryService.postNewCategory(request));
     }
-    @GetMapping("/get/{id}")
-    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id, @RequestParam int depth) {
+    //todo still should prevent infinite recursion
+    @GetMapping("/byId/{id}/depth/{depth}")
+    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id, @PathVariable int depth) {
         log.trace("CategoryController: Getting category by id: {}", id);
         return ResponseEntity.ok(categoryService.getCategoryResponseById(id, depth));
     }
+    //todo still should prevent infinite recursion can cause ?stackoverflow
     @GetMapping("/all/depth/{depth}")
     public ResponseEntity<Set<CategoryResponse>> getAllCategories(@PathVariable int depth) {
         log.trace("CategoryController: Getting all categories");

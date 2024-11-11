@@ -23,7 +23,8 @@ public class CategoryService {
     }
 
     public Category saveUpdateCategory(Category category) {
-        log.trace("Saving category: {} with {} subCategories", category, category.getSubCategories().size());
+        log.trace("Saving category: {} with {} subCategories", category,
+                category.getSubCategories() == null? 0 : category.getSubCategories().size());
         return categoryRepository.save(category);
     }
 
@@ -86,12 +87,14 @@ public class CategoryService {
                 .categoryId(category.getId())
                 .description(category.getDescription());
 
+        builder.parentCategoryId(category.getParentCategory().getId());
         if (depth > 0) {
-            builder.parentCategory(mapToResponse(category.getParentCategory(), depth - 1))
-                    .subCategories(category.getSubCategories() != null ?
-                            category.getSubCategories().stream()
-                                    .map(sub -> mapToResponse(sub, depth - 1))
-                                    .collect(Collectors.toSet()) : new HashSet<>());
+
+            builder.subCategories(category.getSubCategories() != null ?
+                    category.getSubCategories().stream()
+                            .map(sub -> mapToResponse(sub, depth - 1))
+                            .collect(Collectors.toSet()) : new HashSet<>());
+
         }
 
         return builder.build();

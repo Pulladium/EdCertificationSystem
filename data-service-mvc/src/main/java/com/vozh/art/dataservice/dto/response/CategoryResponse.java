@@ -15,6 +15,6 @@ public class CategoryResponse {
     private Long categoryId;
     private String description;
 
-    private CategoryResponse parentCategory;
+    private Long parentCategoryId;
     private Set<CategoryResponse> subCategories;
 }
