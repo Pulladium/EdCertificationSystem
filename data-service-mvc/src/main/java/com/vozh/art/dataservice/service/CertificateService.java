@@ -82,16 +82,7 @@ public class CertificateService {
 //        todo do i save cat? i dont have cascade
         return save(certificate);
     }
-//    public Set<CertificateParticipant> addParticipantsToCertificate(Set<Participant> participants, Certificate certificate){
-//        for (Participant participant: participants){
-//            CertificateParticipant certificateParticipant = CertificateParticipant.builder()
-//                    .participant(participant)
-//                    .certificate(certificate)
-//                    .build();
-//            certificate.getCertificateParticipants().add(certificateParticipant);
-//        }
-//        return certificate.getCertificateParticipants();
-//    }
+
 
     public static CertificateResponse mapToResponse(Certificate certificate) {
         CertificateResponse response = CertificateResponse.builder()
@@ -120,7 +111,8 @@ public class CertificateService {
 
     public static Certificate mapToCertificateEntity(CreateCertificateRequest request,
                                                      CategoryService categoryService,
-                                                     ParticipantService participantService) {
+                                                     ParticipantService participantService,
+                                                     CertificateParticipantService certificateParticipantService) {
         {
             Certificate certificate = Certificate.builder()
                     .description(request.getDescription())
@@ -130,16 +122,12 @@ public class CertificateService {
                         .map(cat -> CategoryService.mapToCategoryEntity(cat, categoryService))
                         .collect(java.util.stream.Collectors.toSet()));
             }
-// todo this
             if (request.getCertificateParticipants() != null) {
-                participantService.addNewParticipants((List<ParticipantRequest>) request.getCertificateParticipants());
+                List<Participant> addedPartic = participantService.addNewParticipants((List<ParticipantRequest>) request.getCertificateParticipants());
 
-                for(ParticipantRequest participantRequest: request.getCertificateParticipants()) {
-                    CertificateParticipant certificateParticipant = CertificateParticipant.builder()
-                            .participant(participantService.mapToEntity(participantRequest))
-                            .certificate(certificate)
-                            .build();
-                }
+                certificateParticipantService.assignParticipantToCertificate(certificate.getId(), addedPartic.stream()
+                        .map(Participant::getId)
+                        .collect(Collectors.toList()));
             }
             return certificate;
         }

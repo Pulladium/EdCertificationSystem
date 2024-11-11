@@ -1,6 +1,7 @@
 package com.vozh.art.dataservice.service;
 
 import com.vozh.art.dataservice.entity.*;
+import com.vozh.art.dataservice.entity.embedKey.ParticipantKey;
 import com.vozh.art.dataservice.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,9 +61,11 @@ public class CertificateTest {
 
 
         Participant participant = Participant.builder()
-                .name("Jonh")
-                .surname("Svoboda")
-                .email("jouk.as@mail.cz")
+                .participantKey(new ParticipantKey(
+                        "Bdsa",
+                        "Waasss",
+                        "Lolal.sd@main.com"
+                ))
                 .build();
 
         CertificateParticipant certificateParticipant = CertificateParticipant.builder()
