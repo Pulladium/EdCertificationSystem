@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,6 +26,7 @@ public class CategoryService {
 //        return categoryRepository.save(category);
 //    }
 
+
     public Category saveUpdateCategory(Category category) {
         log.trace("Saving category: {} with {} subCategories", category, category.getSubCategories().size());
         return categoryRepository.save(category);
@@ -33,7 +36,27 @@ public class CategoryService {
         return categoryRepository.findById(id).orElse(null);
     }
 
+    public CategoryResponse postNewCategory(CategoryRequest request){
+        Category category = mapFromRequest(request);
+        Category savedCategory = saveUpdateCategory(category);
+        return mapToResponse(savedCategory, 2);
+    }
 
+    public CategoryResponse getCategoryByIdResponse(Long id, int depth) {
+        Category category = getCategoryById(id);
+        return mapToResponse(category, depth);
+    }
+
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAllRootCategoriesWithSubCategories();
+    }
+    public List<CategoryResponse> getAllCategoriesRespWithSubCatDepth(int depth){
+        List<Category> category = getAllCategories();
+
+        return category.stream()
+                .map(cat -> mapToResponse(cat, depth))
+                .collect(Collectors.toList());
+    }
 
 
 
@@ -75,5 +98,6 @@ public class CategoryService {
 
         return builder.build();
     }
+
 
 }
