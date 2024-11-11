@@ -17,5 +17,4 @@ public class CategoryResponse {
 
     private CategoryResponse parentCategory;
     private Set<CategoryResponse> subCategories;
-
 }
