@@ -1,6 +1,9 @@
 package com.vozh.art.dataservice.service;
 
+import com.vozh.art.dataservice.dto.request.CategoryRequest;
 import com.vozh.art.dataservice.dto.request.CertificateAddCategoryRequest;
+import com.vozh.art.dataservice.dto.request.CreateCertificateRequest;
+import com.vozh.art.dataservice.dto.request.ParticipantRequest;
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
 import com.vozh.art.dataservice.entity.Category;
 import com.vozh.art.dataservice.entity.Certificate;
@@ -104,6 +107,22 @@ public class CertificateService {
         return response;
     }
 
-
+    public static Certificate mapToCertificateEntity(CreateCertificateRequest request, CategoryService categoryService) {
+        Certificate certificate =  Certificate.builder()
+                .description(request.getDescription())
+                .build();
+        if (request.getCategories() != null) {
+            certificate.setCategories(request.getCategories().stream()
+                    .map(cat -> CategoryService.mapToCategoryEntity(cat, categoryService))
+                    .collect(java.util.stream.Collectors.toSet()));
+        }
+// todo this
+//        if (request.getCertificateParticipants() != null) {
+//            certificate.setCertificateParticipants(request.getCertificateParticipants().stream()
+//                    .map(ParticipantService::mapToEntity)
+//                    .collect(java.util.stream.Collectors.toSet()));
+//        }
+        return certificate;
+    }
 
 }

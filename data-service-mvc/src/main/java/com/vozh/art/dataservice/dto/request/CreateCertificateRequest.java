@@ -36,17 +36,5 @@ public class CreateCertificateRequest {
     //cant be added by user
 //    private Set<SingedDocRef> signedDocumentUUID;
 
-    public static Certificate mapToCertificateEntity(CreateCertificateRequest request) {
-        Certificate.CertificateBuilder builder = Certificate.builder()
-                .name(request.getName())
-                .description(request.getDescription());
-        if (request.getCategories() != null) {
-            builder.categories(request.getCategories().stream()
-                    .map(CategoryRequest::mapToCategoryEntity)
-                    .collect(java.util.stream.Collectors.toSet()));
-        }
-        if (request.getCertificateParticipants() != null) {
-            builder.certificateParticipants(ParticipantRequest.mapToParticipantEntity(request.getCertificateParticipants()));
-        }
-    }
+
 }

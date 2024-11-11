@@ -1,5 +1,6 @@
 package com.vozh.art.dataservice.entity;
 
+import com.vozh.art.dataservice.entity.embedKey.ParticipantKey;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.*;
@@ -17,7 +18,5 @@ public class Participant extends BaseEntity<Long>{
     @OneToMany(mappedBy = "participant")
     private Set<CertificateParticipant> certificateParticipants;
 
-    private String name;
-    private String surname;
-    private String email;
+    private ParticipantKey participantKey;
 }
