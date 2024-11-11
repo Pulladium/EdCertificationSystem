@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Objects;
 import java.util.Set;
@@ -16,6 +17,12 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedQueries({
+            @NamedQuery(
+                    name = "Category.findAllRootCategoriesWithSubCategories",
+                    query = "SELECT c FROM Category c LEFT JOIN FETCH c.subCategories WHERE c.parentCategory IS NULL"
+            )
+        })
 public class Category extends BaseEntity<Long> {
 
     private String name;
@@ -33,6 +40,7 @@ public class Category extends BaseEntity<Long> {
     @OneToMany(mappedBy = "parentCategory",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             orphanRemoval = false)
+    @OrderBy("name ASC")
     private Set<Category> subCategories;
 
 
