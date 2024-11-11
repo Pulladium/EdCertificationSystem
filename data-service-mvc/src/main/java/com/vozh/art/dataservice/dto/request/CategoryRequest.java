@@ -14,12 +14,12 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class CategoryRequest {
-//    todo need name
+    @NotBlank
+    private String name;
     @NotBlank
     private String description;
-//
-//    @Nullable
-    private CategoryResponse parentCategory;
-    private Set<CategoryResponse> subCategories;
+
+    private CategoryRequest parentCategory;
+    private Set<CategoryRequest> subCategories;
 
 }

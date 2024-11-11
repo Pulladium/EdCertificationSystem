@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryController {
     private final CategoryService categoryService;
 
-    @PostMapping("/create")
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        log.info("Creating category: {}", category);
-        return ResponseEntity.ok(categoryService.createCategory(category));
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+//        log.info("Creating category: {}", category);
+//        return ResponseEntity.ok(categoryService.createCategory(category));
+//    }
     @GetMapping("/ping")
     public String ping() {
         return "pong";
