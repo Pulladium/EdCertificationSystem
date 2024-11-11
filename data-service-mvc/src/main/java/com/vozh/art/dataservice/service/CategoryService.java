@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,7 +41,7 @@ public class CategoryService {
         return mapToResponse(savedCategory, 2);
     }
 
-    public CategoryResponse getCategoryByIdResponse(Long id, int depth) {
+    public CategoryResponse getCategoryResponseById(Long id, int depth) {
         Category category = getCategoryById(id);
         return mapToResponse(category, depth);
     }
