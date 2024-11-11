@@ -18,22 +18,17 @@ public class CertificateController {
 
 
     private final CertificateService certificateService;
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CertificateResponse> getCertificates(@PathVariable Long id) {
-        log.info("Getting certificates for user with id: {}", id);
+        log.trace("Getting certificates for user with id: {}", id);
 
         return ResponseEntity.ok(CertificateService.
                 mapToResponse(certificateService.getById(id)));
     }
 
-    @GetMapping("/ping")
-    public String ping() {
-        return "pong";
-    }
-
     @PostMapping("/create")
-    public ResponseEntity<Certificate> createCertificate(@RequestBody Certificate certificate) {
-        log.info("Creating certificate: {}", certificate);
+    public ResponseEntity<CertificateResponse> createCertificate(@RequestBody CertificateRequest certificate) {
+        log.trace("Creating certificate: {}", certificate);
         return ResponseEntity.ok(certificateService.save(certificate));
     }
 

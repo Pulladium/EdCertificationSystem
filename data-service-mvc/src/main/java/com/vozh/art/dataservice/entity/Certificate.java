@@ -24,6 +24,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class Certificate extends BaseEntity<Long> {
 
+    private String name;
     private String description;
 //    many issueres can issue many certificates
     @ManyToMany

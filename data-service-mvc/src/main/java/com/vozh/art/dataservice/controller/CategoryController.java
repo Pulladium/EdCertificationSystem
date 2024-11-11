@@ -18,11 +18,7 @@ import java.util.Set;
 public class CategoryController {
     private final CategoryService categoryService;
 
-//    @PostMapping("/create")
-//    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-//        log.info("Creating category: {}", category);
-//        return ResponseEntity.ok(categoryService.createCategory(category));
-//    }
+
     @PostMapping("/create")
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
         log.trace("CategoryController: Creating category: {}", request);
@@ -45,11 +41,5 @@ public class CategoryController {
         log.trace("CategoryController: Deleting category by id: {}", id);
         categoryService.deleteCategoryById(id);
         return ResponseEntity.ok("Category with id: " + id + " deleted");
-    }
-
-
-    @GetMapping("/ping")
-    public String ping() {
-        return "pong";
     }
 }
