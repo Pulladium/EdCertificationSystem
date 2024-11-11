@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,15 +40,18 @@ public class DataServiceApplication {
                     .parentCategory(category)
                     .build();
 
-            category.setSubCategories(Set.of(subCategory));
-            subCategory.setParentCategory(category);
+//            category.setSubCategories(Set.of(subCategory));
+//            subCategory.setParentCategory(category);
 
             Category subCategory2 = Category.builder()
-                    .description("Spring boot")
+                    .description("Jpa Repos")
                     .parentCategory(category)
                     .build();
 
-            category.setSubCategories(Set.of(subCategory2));
+            Set<Category> subCategories = new HashSet<>();
+            subCategories.add(subCategory);
+            subCategories.add(subCategory2);
+            category.setSubCategories(subCategories);
 
             Organization organization = Organization.builder()
                     .name("NOT CTU")
@@ -83,7 +87,8 @@ public class DataServiceApplication {
 
             participantRepository.save(participant);
 
-            categoryRepository.saveAll(List.of(category));
+//            categoryRepository.saveAll(List.of(category,subCategory,subCategory2));
+            categoryRepository.save(category);
             organizationRepository.save(organization);
             Certificate savedCert = certificateRepository.save(certificate);
             certificateParticipantRepo.save(certificateParticipant);
