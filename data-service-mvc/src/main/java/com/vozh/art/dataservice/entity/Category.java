@@ -29,9 +29,19 @@ public class Category extends BaseEntity<Long> {
     @JoinColumn(name = "parent_category_id")
     private Category parentCategory;
 
-    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "parentCategory",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            orphanRemoval = false)
     private Set<Category> subCategories;
 
+
+    @PreRemove
+    private void removeParentFromChildren() {
+        for (Category subCategory : subCategories) {
+            subCategory.setParentCategory(null);
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
