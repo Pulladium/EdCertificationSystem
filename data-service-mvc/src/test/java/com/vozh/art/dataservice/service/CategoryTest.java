@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,17 +39,18 @@ public class CategoryTest {
                 .parentCategory(category)
                 .build();
 
-        category.setSubCategories(Set.of(subCategory));
-        subCategory.setParentCategory(category);
 
         Category subCategory2 = Category.builder()
-                .description("Spring boot")
+                .description("NOT Spring boot")
                 .parentCategory(category)
                 .build();
+//        better save subcats first id value generated on save
+        Set<Category> subCategories = new HashSet<>();
+        subCategories.add(subCategory);
+        subCategories.add(subCategory2);
 
-        category.setSubCategories(Set.of(subCategory2));
-        subCategory2.setParentCategory(category);
 
+        category.setSubCategories(subCategories);
         savedCat = categoryRepository.save(category);
     }
 
