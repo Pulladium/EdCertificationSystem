@@ -87,7 +87,8 @@ public class CategoryService {
                 .categoryId(category.getId())
                 .description(category.getDescription());
 
-        builder.parentCategoryId(category.getParentCategory().getId());
+        builder.parentCategoryId(category.getParentCategory() == null ? null : category.getParentCategory().getId());
+
         if (depth > 0) {
 
             builder.subCategories(category.getSubCategories() != null ?
