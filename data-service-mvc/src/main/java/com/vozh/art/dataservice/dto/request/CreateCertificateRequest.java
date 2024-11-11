@@ -1,10 +1,7 @@
 package com.vozh.art.dataservice.dto.request;
 
 
-import com.vozh.art.dataservice.entity.Category;
-import com.vozh.art.dataservice.entity.CertificateParticipant;
-import com.vozh.art.dataservice.entity.Organization;
-import com.vozh.art.dataservice.entity.SingedDocRef;
+import com.vozh.art.dataservice.entity.*;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -38,4 +35,18 @@ public class CreateCertificateRequest {
 
     //cant be added by user
 //    private Set<SingedDocRef> signedDocumentUUID;
+
+    public static Certificate mapToCertificateEntity(CreateCertificateRequest request) {
+        Certificate.CertificateBuilder builder = Certificate.builder()
+                .name(request.getName())
+                .description(request.getDescription());
+        if (request.getCategories() != null) {
+            builder.categories(request.getCategories().stream()
+                    .map(CategoryRequest::mapToCategoryEntity)
+                    .collect(java.util.stream.Collectors.toSet()));
+        }
+        if (request.getCertificateParticipants() != null) {
+            builder.certificateParticipants(ParticipantRequest.mapToParticipantEntity(request.getCertificateParticipants()));
+        }
+    }
 }

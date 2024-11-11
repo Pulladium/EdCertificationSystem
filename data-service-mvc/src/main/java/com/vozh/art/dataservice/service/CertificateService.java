@@ -40,6 +40,7 @@ public class CertificateService {
         }
     }
 
+    //todo maybe return CertificateResponse
     public Certificate addCategoryToCertificate(CertificateAddCategoryRequest request){
         Long certificateId = request.getCertificateId();
         Long categoryId = request.getCategoryId();
@@ -102,7 +103,6 @@ public class CertificateService {
         }
         return response;
     }
-
 
 
 

@@ -1,6 +1,7 @@
 package com.vozh.art.dataservice.controller;
 
 import com.vozh.art.dataservice.dto.request.CertificateAddCategoryRequest;
+import com.vozh.art.dataservice.dto.request.CreateCertificateRequest;
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
 import com.vozh.art.dataservice.entity.Certificate;
 import com.vozh.art.dataservice.service.CertificateService;
@@ -27,9 +28,10 @@ public class CertificateController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CertificateResponse> createCertificate(@RequestBody CertificateRequest certificate) {
-        log.trace("Creating certificate: {}", certificate);
-        return ResponseEntity.ok(certificateService.save(certificate));
+    public ResponseEntity<CertificateResponse> createCertificate(@RequestBody CreateCertificateRequest request) {
+        log.trace("Creating certificate: {}", request);
+
+        return ResponseEntity.ok(certificateService.save(request));
     }
 
     @PostMapping("/addCategory")
