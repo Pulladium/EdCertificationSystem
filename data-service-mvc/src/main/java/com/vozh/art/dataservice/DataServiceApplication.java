@@ -1,6 +1,7 @@
 package com.vozh.art.dataservice;
 
 import com.vozh.art.dataservice.entity.*;
+import com.vozh.art.dataservice.entity.embedKey.ParticipantKey;
 import com.vozh.art.dataservice.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -74,9 +75,7 @@ public class DataServiceApplication {
 
 
             Participant participant = Participant.builder()
-                    .name("Jonh")
-                    .surname("Svoboda")
-                    .email("jouk.as@mail.cz")
+                    .participantKey(new ParticipantKey("Bdsa", "Waasss", "Bdsad@gamdk.com"))
                     .build();
 
             CertificateParticipant certificateParticipant = CertificateParticipant.builder()

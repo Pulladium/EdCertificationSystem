@@ -37,7 +37,7 @@ public class CategoryService {
     }
 
     public CategoryResponse postNewCategory(CategoryRequest request){
-        Category category = mapFromRequest(request);
+        Category category = mapToCategoryEntity(request, this);
         Category savedCategory = saveUpdateCategory(category);
         return mapToResponse(savedCategory, 2);
     }
