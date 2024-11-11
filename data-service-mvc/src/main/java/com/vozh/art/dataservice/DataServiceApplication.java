@@ -42,6 +42,12 @@ public class DataServiceApplication {
             category.setSubCategories(Set.of(subCategory));
             subCategory.setParentCategory(category);
 
+            Category subCategory2 = Category.builder()
+                    .description("Spring boot")
+                    .parentCategory(category)
+                    .build();
+
+            category.setSubCategories(Set.of(subCategory2));
 
             Organization organization = Organization.builder()
                     .name("NOT CTU")
@@ -77,7 +83,7 @@ public class DataServiceApplication {
 
             participantRepository.save(participant);
 
-            categoryRepository.saveAll(List.of(category,subCategory));
+            categoryRepository.saveAll(List.of(category));
             organizationRepository.save(organization);
             Certificate savedCert = certificateRepository.save(certificate);
             certificateParticipantRepo.save(certificateParticipant);
