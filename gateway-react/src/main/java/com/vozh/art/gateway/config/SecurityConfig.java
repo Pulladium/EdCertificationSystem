@@ -19,14 +19,17 @@ public class SecurityConfig {
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
+                .route("data-service-mvc", r ->
+                        r.path("/api/data/**")
+                                .uri("lb://data-service-mvc"))
                 .route("processing-service", r ->
                         r.path("/api/processing/**")
                                 .uri("lb://processing-service"))
-                    .route("eureka-server", r -> r.path("/eureka/web/**")
-                            .filters(f -> f.setPath("/"))
-                            .uri("http://localhost:8761"))
-                    .route("eureka-server-static-resources", r -> r.path("/eureka/**")
-                            .uri("http://localhost:8761"))
+                .route("eureka-server", r -> r.path("/eureka/web/**")
+                        .filters(f -> f.setPath("/"))
+                        .uri("http://localhost:8761"))
+                .route("eureka-server-static-resources", r -> r.path("/eureka/**")
+                        .uri("http://localhost:8761"))
                 .build();
     }
     //todo change to pathMathcers.permit and others authinticated

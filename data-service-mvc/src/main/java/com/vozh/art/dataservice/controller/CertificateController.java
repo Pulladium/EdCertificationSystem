@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/certificates")
+@RequestMapping("/api/data/certificates")
 @RequiredArgsConstructor
 @Slf4j
 public class CertificateController {
