@@ -62,6 +62,7 @@ public class CategoryService {
         if (category == null || depth < 0) {
             return null;
         }
+//        /
 
         CategoryResponse.CategoryResponseBuilder builder = CategoryResponse.builder()
                 .name(category.getName())
