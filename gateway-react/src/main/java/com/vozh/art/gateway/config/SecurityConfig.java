@@ -21,7 +21,7 @@ public class SecurityConfig {
         return builder.routes()
                 .route("data-service-mvc", r ->
                         r.path("/api/data/**")
-                                .uri("lb://data-service-mvc"))
+                                .uri("lb://data-service"))
                 .route("processing-service", r ->
                         r.path("/api/processing/**")
                                 .uri("lb://processing-service"))
