@@ -11,18 +11,19 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+//https://www.baeldung.com/spring-deny-access
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
-public class ResourceServerConfig implements WebMvcConfigurer {
+public class ResourceServerConfig  {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().authenticated()
-                )
-                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
-        return http.build();
-    }
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeHttpRequests((authorize) -> authorize
+//                        .anyRequest().authenticated()
+//                )
+//                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
+//        return http.build();
+//    }
 }
