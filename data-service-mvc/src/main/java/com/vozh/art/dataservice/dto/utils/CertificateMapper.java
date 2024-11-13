@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class CertificateMapper {
+public final class CertificateMapper {
     public static CertificateResponse mapToResponse(Certificate certificate) {
         CertificateResponse response = CertificateResponse.builder()
                 .certificateId(certificate.getId())
@@ -29,7 +29,7 @@ public class CertificateMapper {
         }
         if (certificate.getIssuers() != null) {
             response.setIssuers(certificate.getIssuers().stream()
-                    .map(issuer -> OrganizationService.mapToResponse(issuer))
+                    .map(issuer -> OrganizationMapper.mapToResponse(issuer))
                     .collect(Collectors.toSet()));
         }
         if (certificate.getCertificateParticipants() != null) {
