@@ -2,6 +2,8 @@ package com.vozh.art.dataservice.service;
 
 import com.vozh.art.dataservice.dto.response.CategoryResponse;
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
+import com.vozh.art.dataservice.dto.utils.CategoryMapper;
+import com.vozh.art.dataservice.dto.utils.CertificateMapper;
 import com.vozh.art.dataservice.entity.Category;
 import com.vozh.art.dataservice.entity.Certificate;
 import org.junit.jupiter.api.Test;
@@ -51,18 +53,18 @@ public class MappingTest {
         secondCat.setSubCategories(Set.of(thirdCat));
         thirdCat.setParentCategory(secondCat);
 
-        CategoryResponse result = CategoryService.mapToResponse(firstCat, 1);
+        CategoryResponse result = CategoryMapper.mapToResponse(firstCat, 1);
         assertTrue(result.getSubCategories().stream().anyMatch(c -> c.getSubCategories()==null));
 
 
 
-        CategoryResponse result2 = CategoryService.mapToResponse(firstCat, 2);
+        CategoryResponse result2 = CategoryMapper.mapToResponse(firstCat, 2);
         assertTrue(result2.getSubCategories().stream().anyMatch(c -> c.getSubCategories().stream().anyMatch(c2 -> c2.getSubCategories()==null)));
  }
 
     @Test
     public void testEmptyCertMapping() {
-        CertificateResponse result = CertificateService.mapToResponse(Certificate.builder()
+        CertificateResponse result = CertificateMapper.mapToResponse(Certificate.builder()
                 .id(1L)
                 .description("description")
                 .build());

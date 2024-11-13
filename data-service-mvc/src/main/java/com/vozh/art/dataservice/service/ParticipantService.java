@@ -2,6 +2,7 @@ package com.vozh.art.dataservice.service;
 
 import com.vozh.art.dataservice.dto.request.ParticipantRequest;
 import com.vozh.art.dataservice.dto.response.ParticipantResponse;
+import com.vozh.art.dataservice.dto.utils.ParticipantMapper;
 import com.vozh.art.dataservice.entity.Participant;
 import com.vozh.art.dataservice.entity.embedKey.ParticipantKey;
 import com.vozh.art.dataservice.repository.ParticipantRepository;
@@ -33,13 +34,13 @@ public class ParticipantService {
         }
     }
     public ParticipantResponse postNewParticipant(ParticipantRequest request){
-        Participant participant = mapToEntity(request);
+        Participant participant = ParticipantMapper.mapToEntity(request);
         Participant savedParticipant = savePaticipant(participant);
-        return mapToResponse(savedParticipant);
+        return ParticipantMapper.mapToResponse(savedParticipant);
     }
     public ParticipantResponse getParticipantResponseById(Long id) {
         Participant participant = getById(id);
-        return mapToResponse(participant);
+        return ParticipantMapper.mapToResponse(participant);
     }
     public List<Participant> getAllParticipants(){
         return participantRepository.findAll();
@@ -53,7 +54,7 @@ public class ParticipantService {
 //                    expecting problems here with query
                     new ParticipantKey(participant.getName(), participant.getSurname(), participant.getEmail()));
             if(foundParticipant == null){
-                participantRepository.save(mapToEntity(participant));
+                participantRepository.save(ParticipantMapper.mapToEntity(participant));
             }
         }
         return getAllParticipants();
@@ -61,26 +62,6 @@ public class ParticipantService {
 
 
 
-    public static ParticipantResponse mapToResponse(Participant participant) {
-        return ParticipantResponse.builder()
-                .participantId(participant.getId())
-                .name(participant.getParticipantKey().getName())
-                .surname(participant.getParticipantKey().getSurname())
-                .email(participant.getParticipantKey().getEmail())
-                .build();
-    }
-
-    public static Participant mapToEntity(ParticipantRequest participantRequest) {
-        return Participant.builder()
-                .participantKey(
-                        new ParticipantKey(
-                                participantRequest.getName(),
-                                participantRequest.getSurname(),
-                                participantRequest.getEmail()
-                        )
-                )
-                .build();
-    }
 
 
 }

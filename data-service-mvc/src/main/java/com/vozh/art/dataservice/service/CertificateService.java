@@ -5,6 +5,7 @@ import com.vozh.art.dataservice.dto.request.CertificateAddCategoryRequest;
 import com.vozh.art.dataservice.dto.request.CreateCertificateRequest;
 import com.vozh.art.dataservice.dto.request.ParticipantRequest;
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
+import com.vozh.art.dataservice.dto.utils.CategoryMapper;
 import com.vozh.art.dataservice.entity.Category;
 import com.vozh.art.dataservice.entity.Certificate;
 import com.vozh.art.dataservice.entity.CertificateParticipant;
@@ -84,52 +85,5 @@ public class CertificateService {
     }
 
 
-    public static CertificateResponse mapToResponse(Certificate certificate) {
-        CertificateResponse response = CertificateResponse.builder()
-                .certificateId(certificate.getId())
-                .description(certificate.getDescription())
-                .build();
 
-        if (certificate.getCategories() != null) {
-            response.setCategories(certificate.getCategories().stream()
-                    .map(category -> CategoryService.mapToResponse(category, 1))
-                    .collect(Collectors.toSet()));
-        }
-        if (certificate.getIssuers() != null) {
-            response.setIssuers(certificate.getIssuers().stream()
-                    .map(issuer -> OrganizationService.mapToResponse(issuer))
-                    .collect(Collectors.toSet()));
-        }
-        if (certificate.getCertificateParticipants() != null) {
-
-            response.setParticipants(certificate.getCertificateParticipants().stream()
-                    .map(participant -> ParticipantService.mapToResponse(participant.getParticipant()))
-                    .collect(Collectors.toSet()));
-        }
-        return response;
-    }
-
-    public static Certificate mapToCertificateEntity(CreateCertificateRequest request,
-                                                     CategoryService categoryService,
-                                                     ParticipantService participantService,
-                                                     CertificateParticipantService certificateParticipantService) {
-        {
-            Certificate certificate = Certificate.builder()
-                    .description(request.getDescription())
-                    .build();
-            if (request.getCategories() != null) {
-                certificate.setCategories(request.getCategories().stream()
-                        .map(cat -> CategoryService.mapToCategoryEntity(cat, categoryService))
-                        .collect(java.util.stream.Collectors.toSet()));
-            }
-            if (request.getCertificateParticipants() != null) {
-                List<Participant> addedPartic = participantService.addNewParticipants((List<ParticipantRequest>) request.getCertificateParticipants());
-
-                certificateParticipantService.assignParticipantToCertificate(certificate.getId(), addedPartic.stream()
-                        .map(Participant::getId)
-                        .collect(Collectors.toList()));
-            }
-            return certificate;
-        }
-    }
 }

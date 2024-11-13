@@ -3,6 +3,7 @@ package com.vozh.art.dataservice.controller;
 import com.vozh.art.dataservice.dto.request.CertificateAddCategoryRequest;
 import com.vozh.art.dataservice.dto.request.CreateCertificateRequest;
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
+import com.vozh.art.dataservice.dto.utils.CertificateMapper;
 import com.vozh.art.dataservice.entity.Category;
 import com.vozh.art.dataservice.entity.Certificate;
 import com.vozh.art.dataservice.service.CategoryService;
@@ -32,7 +33,7 @@ public class CertificateController {
     public ResponseEntity<CertificateResponse> getCertificates(@PathVariable Long id) {
         log.trace("Getting certificates for user with id: {}", id);
 
-        return ResponseEntity.ok(CertificateService.
+        return ResponseEntity.ok(CertificateMapper.
                 mapToResponse(certificateService.getById(id)));
     }
 
@@ -40,16 +41,16 @@ public class CertificateController {
     public ResponseEntity<CertificateResponse> createCertificate(@RequestBody CreateCertificateRequest request) {
         log.trace("Creating certificate: {}", request);
 
-        Certificate cert2Save = CertificateService.mapToCertificateEntity(request, categoryService,participantService,certificateParticipantService);
+        Certificate cert2Save = CertificateMapper.mapToCertificateEntity(request, categoryService,participantService,certificateParticipantService);
 
         Certificate savedCertificate = certificateService.save(cert2Save);
-        return ResponseEntity.ok(CertificateService.mapToResponse(savedCertificate));
+        return ResponseEntity.ok(CertificateMapper.mapToResponse(savedCertificate));
     }
 
     @PostMapping("/addCategory")
     public ResponseEntity<CertificateResponse> addCategoryToCertificate(@RequestBody CertificateAddCategoryRequest request) {
         log.info("Adding category to certificate: {}", request);
         Certificate cert = certificateService.addCategoryToCertificate(request);
-        return ResponseEntity.ok(CertificateService.mapToResponse(cert));
+        return ResponseEntity.ok(CertificateMapper.mapToResponse(cert));
     }
 }
