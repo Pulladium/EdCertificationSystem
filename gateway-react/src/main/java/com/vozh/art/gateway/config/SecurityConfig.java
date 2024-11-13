@@ -39,7 +39,7 @@ public class SecurityConfig {
         http
                 .authorizeExchange((authorize) -> authorize
                         .pathMatchers("/eureka/**").permitAll()
-//                        .pathMatchers("/api/data/**")
+                        .pathMatchers("/api/data/dev/**").hasAuthority("admin")
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));

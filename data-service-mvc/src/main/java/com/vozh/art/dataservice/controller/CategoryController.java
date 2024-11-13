@@ -7,9 +7,11 @@ import com.vozh.art.dataservice.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -23,16 +25,16 @@ public class CategoryController {
     private final CategoryService categoryService;
 
 
-//    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/create")
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
         log.trace("CategoryController: Creating category: {}", request);
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        log.info("Current user authorities: {}",
-//                auth.getAuthorities().stream()
-//                        .map(Object::toString)
-//                        .collect(Collectors.joining(", "))
-//        );
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        log.info("Current user authorities: {}",
+                auth.getAuthorities().stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining(", "))
+        );
         return ResponseEntity.ok(categoryService.postNewCategory(request));
     }
 
