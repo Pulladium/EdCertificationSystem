@@ -40,7 +40,9 @@ public class CertificateController {
     public ResponseEntity<CertificateResponse> createCertificate(@RequestBody CreateCertificateRequest request) {
         log.trace("Creating certificate: {}", request);
 
-        Certificate savedCertificate = certificateService.save(CertificateService.mapToCertificateEntity(request, categoryService,participantService,certificateParticipantService));
+        Certificate cert2Save = CertificateService.mapToCertificateEntity(request, categoryService,participantService,certificateParticipantService);
+
+        Certificate savedCertificate = certificateService.save(cert2Save);
         return ResponseEntity.ok(CertificateService.mapToResponse(savedCertificate));
     }
 

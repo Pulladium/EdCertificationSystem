@@ -12,6 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class CategoryResponse {
+    private String name;
     private Long categoryId;
     private String description;
 

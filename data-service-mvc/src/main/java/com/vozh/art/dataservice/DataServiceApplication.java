@@ -33,10 +33,12 @@ public class DataServiceApplication {
 
         return args -> {
             Category category = Category.builder()
+                    .name("ABC")
                     .description("Spring")
                     .build();
 
             Category subCategory = Category.builder()
+                    .name("BCD")
                     .description("Spring boot")
                     .parentCategory(category)
                     .build();
@@ -45,15 +47,18 @@ public class DataServiceApplication {
 //            subCategory.setParentCategory(category);
 
             Category subCategory2 = Category.builder()
+                    .name("CDE")
                     .description("Jpa Repos")
                     .parentCategory(category)
                     .build();
 
             Category sub2Category = Category.builder()
+                    .name("DEF")
                     .description("Povesitsja")
                     .parentCategory(subCategory)
                     .build();
             Category category1 = Category.builder()
+                    .name("GHI")
                     .description("googl cloud ")
                     .build();
 

@@ -64,6 +64,7 @@ public class CategoryService {
         }
 
         CategoryResponse.CategoryResponseBuilder builder = CategoryResponse.builder()
+                .name(category.getName())
                 .categoryId(category.getId())
                 .description(category.getDescription());
 
