@@ -22,5 +22,9 @@ public class DevController {
 //        log.info("Creating category: {}", category);
 //        return ResponseEntity.ok(categoryService.createCategory(category));
 //    }
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {
+        return ResponseEntity.ok("pong");
+    }
 
 }

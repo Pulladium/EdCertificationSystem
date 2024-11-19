@@ -5,6 +5,7 @@ import com.vozh.art.gateway.config.filters.AuthorityLogFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.GatewayFilterSpec;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +15,12 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -79,6 +83,16 @@ public class SecurityConfig {
         http.csrf(ServerHttpSecurity.CsrfSpec::disable);
         return http.build();
     }
+
+//    private String extractAuthorities() {
+//        return ReactiveSecurityContextHolder.getContext()
+//                .map(SecurityContext::getAuthentication)
+//                .map(Authentication::getAuthorities)
+//                .map(authorities -> authorities.stream()
+//                        .map(GrantedAuthority::getAuthority)
+//                        .collect(Collectors.joining(",")))
+//                .block();
+//    }
 
     @Bean
     ReactiveJwtAuthenticationConverter jwtAuthenticationConverter(Converter<Jwt, Flux<GrantedAuthority>> authoritiesConverter) {
