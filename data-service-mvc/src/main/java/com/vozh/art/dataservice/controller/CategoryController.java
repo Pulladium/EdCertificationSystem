@@ -26,7 +26,7 @@ public class CategoryController {
 
 
 //    @PreAuthorize("hasAuthority('admin')")
-//    @PreAuthorize("hasRole('ROLE_admin')")
+    @PreAuthorize("hasRole('ROLE_admin')")
     @PostMapping("/create")
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
         log.trace("CategoryController: Creating category: {}", request);
