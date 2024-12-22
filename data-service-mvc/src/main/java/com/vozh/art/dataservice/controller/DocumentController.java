@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/documents")
+@RequestMapping("/api/data/documents")
 @RequiredArgsConstructor
 @Slf4j
 public class DocumentController {

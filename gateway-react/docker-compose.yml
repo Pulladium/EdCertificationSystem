@@ -1,3 +1,4 @@
+
 version: '4'
 services:
   postgres:
@@ -11,9 +12,10 @@ services:
       POSTGRES_PASSWORD: keycloak_password
     networks:
       - keycloak_network
-
+#https://www.baeldung.com/spring-boot-keycloak
   keycloak:
     image: quay.io/keycloak/keycloak:23.0.6
+
     container_name: keycloak
     command: start
     environment:
@@ -31,6 +33,7 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin_password
     ports:
       - "8484:8080"
+
     depends_on:
       - postgres
     networks:
@@ -42,3 +45,8 @@ networks:
 
 volumes:
   postgres_data:
+
+  #//if idea dosent see docker
+  #sudo chmod a+rwx /var/run/docker.sock
+  #sudo chmod a+rwx /var/run/docker.pid
+#install docker compose on clean linux
