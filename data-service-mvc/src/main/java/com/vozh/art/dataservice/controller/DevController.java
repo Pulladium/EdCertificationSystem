@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/dev")
+@RequestMapping("/api/data/dev")
 @RequiredArgsConstructor
 @Slf4j
 public class DevController {
@@ -22,5 +22,9 @@ public class DevController {
 //        log.info("Creating category: {}", category);
 //        return ResponseEntity.ok(categoryService.createCategory(category));
 //    }
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {
+        return ResponseEntity.ok("pong");
+    }
 
 }

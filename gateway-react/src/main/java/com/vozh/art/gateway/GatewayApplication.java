@@ -14,5 +14,5 @@ public class GatewayApplication {
         SpringApplication.run(GatewayApplication.class);
     }
 
-
+    //todo I dont have health issuer that keycloak is accessible
 }
