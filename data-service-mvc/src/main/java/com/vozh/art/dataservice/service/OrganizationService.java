@@ -10,7 +10,10 @@ import com.vozh.art.dataservice.repository.OrganizationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Slf4j
 @Service
@@ -58,6 +61,14 @@ public class OrganizationService {
         organization.setStatus(Organization.OrganizationStatus.APPROVED);
         Organization savedOrganization = organizationRepository.save(organization);
         return OrganizationResponse.fromOrganization(savedOrganization);
+    }
+
+    @GetMapping("/user-info")
+    public String getUserInfo(@AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject(); // This is the user's UUID
+        String email = jwt.getClaim("email");
+        // Access other claims as needed
+        return "User ID: " + userId + ", Email: " + email;
     }
 
 
