@@ -7,7 +7,11 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
+
+
 export default function ButtonAppBar() {
+
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -22,9 +26,19 @@ export default function ButtonAppBar() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        News
+                        Certification Edu
                     </Typography>
-                    <Button color="inherit">Login</Button>
+
+                    <Button color="inherit">/Sign Up</Button>
+                    {/*{!keycloak.authenticated && (*/}
+                    {/*<Button color="inherit" onClick={() => keycloak.login()}>/Login</Button>*/}
+                    {/*)}*/}
+
+                    {/*{!!keycloak.authenticated && (*/}
+                    {/*<Button color="inherit">/Logout</Button>*/}
+                    {/*)}*/}
+                    <Button color="inherit">/Login</Button>
+
                 </Toolbar>
             </AppBar>
         </Box>

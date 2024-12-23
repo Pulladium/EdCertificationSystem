@@ -5,21 +5,9 @@ import {
 } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 
-const data = [
-    { id: 1, name: 'Chelsea Otakan', hasAvatar: true },
-    { id: 2, name: 'Eric Hoffman', hasAvatar: false },
-    { id: 3, name: 'John Doe', hasAvatar: true },
-    { id: 4, name: 'Jane Smith', hasAvatar: false },
-    { id: 5, name: 'John Smith', hasAvatar: true },
-    { id: 6, name: 'Jane Doe', hasAvatar: false },
-    { id: 7, name: 'Eric Hoffman', hasAvatar: true },
-    { id: 8, name: 'John Doe', hasAvatar: false },
-    { id: 9, name: 'Jane Smith', hasAvatar: true },
-    { id: 10, name: 'John Smith', hasAvatar: false },
-    // ... add more items as needed
-];
 
-export default function PaginatedList() {
+
+export default function PaginatedList({data = []}) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
