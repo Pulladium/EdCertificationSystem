@@ -9,10 +9,10 @@ import { blue } from "@mui/material/colors";
 import keycloak from "../../config/keycloak";
 import CertificatesList from "../pageSubLists/CertificatesList";
 
-export default function PagiListFetchWrapper ({AddButtonIcon = <AddCircleOutline/>, onAddButtonClick, AddButtonLabel, ListComponent, apiEndpoint }) {
+export default function BasePaginatedList({AddButtonIcon = <AddCircleOutline/>, onAddButtonClick, AddButtonLabel, ListComponent, apiEndpoint }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [fetchedData, setFetchedData] = useState([]);
+    const [data, setData] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -35,7 +35,7 @@ export default function PagiListFetchWrapper ({AddButtonIcon = <AddCircleOutline
                 throw new Error('Network response was not ok');
             }
             const result = await response.json();
-            setFetchedData(result.content);
+            setData(result.content);
             setTotalCount(result.totalElements);
         } catch (error) {
             setError(error.message);
@@ -44,11 +44,11 @@ export default function PagiListFetchWrapper ({AddButtonIcon = <AddCircleOutline
         }
     };
     // only for new Participant
-    // const addSimpleItem = (item) => {
-    //     setFetchedData(prevData => [...prevData, item]);
-    //     setTotalCount(prevCount => prevCount + 1);
-    //     setPage(0);
-    // };
+    const addSimpleItem = (item) => {
+        setData(prevData => [...prevData, item]);
+        setTotalCount(prevCount => prevCount + 1);
+        setPage(0);
+    };
 
     useEffect(() => {
 
@@ -92,7 +92,7 @@ export default function PagiListFetchWrapper ({AddButtonIcon = <AddCircleOutline
         <Paper>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 <ListItem disablePadding>
-                    <ListItemButton  onClick={onAddButtonClick}>
+                    <ListItemButton  onClick={() => onAddButtonClick(addSimpleItem)}>
                         <ListItemIcon>
                             <Avatar sx={{ bgcolor: blue[500] }}>
                                 {AddButtonIcon}
@@ -102,7 +102,7 @@ export default function PagiListFetchWrapper ({AddButtonIcon = <AddCircleOutline
                     </ListItemButton>
                 </ListItem>
 
-                <ListComponent data={fetchedData} />
+               <ListComponent data={data} />
                 {/*<CertificatesList data={data} />*/}
 
             </List>

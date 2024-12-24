@@ -10,7 +10,7 @@ import Grid from "@mui/material/Grid2";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import {FormControl, OutlinedInput} from "@mui/material";
-import PaginatedList from "./PaginatedList";
+import BasePaginatedList from "./paginateList/BasePaginatedList";
 import ParticipantsList from "./pageSubLists/ParticipantsList";
 import OrganizationsList from "./pageSubLists/OrganizationsList";
 
@@ -68,12 +68,12 @@ export default function CreateCertPanel() {
                     />
                     </Stack>
                         <Stack spacing={2} direction={"row"}>
-                            <PaginatedList onAddButtonClick={handleAddParticipant}  AddButtonLabel={"Add new participant"}
-                                           apiEndpoint={null} ListComponent={ParticipantsList} />
+                            <BasePaginatedList onAddButtonClick={handleAddParticipant} AddButtonLabel={"Add new participant"}
+                                               apiEndpoint={null} ListComponent={ParticipantsList} />
                            <Paper>
                                <Stack spacing={2} direction={"row"}>
-                            <PaginatedList AddButtonIcon={<DeleteOutlinedIcon/>}  onAddButtonClick={()=>{}} AddButtonLabel={"Clean All"} apiEndpoint={null} ListComponent={OrganizationsList} />
-                            <PaginatedList onAddButtonClick={()=>{}} AddButtonLabel={"Manage your organizations"} apiEndpoint={null} ListComponent={OrganizationsList} />
+                            <BasePaginatedList AddButtonIcon={<DeleteOutlinedIcon/>} onAddButtonClick={()=>{}} AddButtonLabel={"Clean All"} apiEndpoint={null} ListComponent={OrganizationsList} />
+                            <BasePaginatedList onAddButtonClick={()=>{}} AddButtonLabel={"Manage your organizations"} apiEndpoint={null} ListComponent={OrganizationsList} />
                                  </Stack>
                            </Paper>
                         </Stack>
