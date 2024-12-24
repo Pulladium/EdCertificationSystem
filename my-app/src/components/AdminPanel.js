@@ -34,7 +34,7 @@ export default function AdminPanel() {
             return role + " ";
         });
     };
-    const sendPostRequest = async () => {
+    const sendPingRequest = async () => {
         try {
             const response = await fetch('http://localhost:8080/api/data/dev/ping', {
                 method: 'GET',
@@ -42,10 +42,15 @@ export default function AdminPanel() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${keycloak.token}`
                 },
-
             });
-            const data = await response.json();
-            return `Success: ${JSON.stringify(data)}`;
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.text(); // Use text() instead of json()
+            console.log('Success:', data);
+            return `Success: ${data}`;
         } catch (error) {
             console.error('Error:', error);
             return `Error: ${error.message}`;
@@ -53,7 +58,7 @@ export default function AdminPanel() {
     };
 
     const handleSendHttp2ResourceServer = () => {
-        return sendPostRequest();
+        return sendPingRequest();
     };
     const handleRedirect2AdminConsole = () => {
         window.open("http://localhost:8484/admin/master/console/#/CertEdu", "_blank");
@@ -82,7 +87,7 @@ export default function AdminPanel() {
                     <ButtonWithPopper
                         buttonLabel="Send Http 2 Resource Server"
                         onClick={handleSendHttp2ResourceServer}
-                        popperContent="Sending POST request to Resource Server"
+                        popperContent={handleSendHttp2ResourceServer()}
                     />
 
                     <Button variant="outlined" onClick={handleRedirect2AdminConsole}
