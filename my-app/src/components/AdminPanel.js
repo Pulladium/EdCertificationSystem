@@ -34,9 +34,27 @@ export default function AdminPanel() {
             return role + " ";
         });
     };
+    const sendPostRequest = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/data/dev/ping', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${keycloak.token}`
+                },
 
+            });
+            const data = await response.json();
+            return `Success: ${JSON.stringify(data)}`;
+        } catch (error) {
+            console.error('Error:', error);
+            return `Error: ${error.message}`;
+        }
+    };
 
-    const handleSendHttp2ResourceServer = () => {};
+    const handleSendHttp2ResourceServer = () => {
+        return sendPostRequest();
+    };
     const handleRedirect2AdminConsole = () => {
         window.open("http://localhost:8484/admin/master/console/#/CertEdu", "_blank");
     }
@@ -61,9 +79,12 @@ export default function AdminPanel() {
                                         onClick={handleShowRealmRoles}
                                         popperContent={handleShowRealmRoles()}
                     />
-                    <ButtonWithPopper buttonLabel="Send Http 2 Resource Server"
-
+                    <ButtonWithPopper
+                        buttonLabel="Send Http 2 Resource Server"
+                        onClick={handleSendHttp2ResourceServer}
+                        popperContent="Sending POST request to Resource Server"
                     />
+
                     <Button variant="outlined" onClick={handleRedirect2AdminConsole}
                     >Go To Keycloak Admin Console</Button>
                     </Stack>

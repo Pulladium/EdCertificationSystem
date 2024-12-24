@@ -9,6 +9,14 @@ import {ClickAwayListener} from "@mui/material";
 import Box from "@mui/material/Box";
 
 export default function ButtonWithPopper({buttonLabel,popperContent, onClick}) {
+    const [content, setContent] = React.useState("Click to send request");
+    const handleClick = async () => {
+        setContent("Sending request...");
+        if (onClick) {
+            const result = await onClick();
+            setContent(result);
+        }
+    };
 
     return (
         <PopupState variant="popper" popupId={buttonLabel}>

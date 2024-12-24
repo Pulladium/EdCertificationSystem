@@ -19,6 +19,10 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -56,10 +60,11 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http
     ,Converter<Jwt, Mono<AbstractAuthenticationToken>> authenticationConverter) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .addFilterBefore(new AuthorityLogFilter(), SecurityWebFiltersOrder.AUTHORIZATION)
                 .authorizeExchange((authorize) -> authorize
                         .pathMatchers("/eureka/**").permitAll()
-                        .pathMatchers("/api/data/dev/**").hasAuthority("admin")
+                        .pathMatchers("/api/data/dev/**").hasRole("admin")
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(jwtDecoder ->
@@ -68,10 +73,35 @@ public class SecurityConfig {
                         )));
         http.securityContextRepository(NoOpServerSecurityContextRepository.getInstance());
 //        why it is no writen that csrf.disable is deprecated as before but ok
-        http.csrf(ServerHttpSecurity.CsrfSpec::disable);
+//        http.csrf(ServerHttpSecurity.CsrfSpec::disable);
         return http.build();
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+    @Bean
+    public CorsWebFilter corsWebFilter() {
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        corsConfig.setMaxAge(8000L);
+        corsConfig.addAllowedMethod("*");
+        corsConfig.addAllowedHeader("*");
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfig);
+
+        return new CorsWebFilter(source);
+    }
 //    private String extractAuthorities() {
 //        return ReactiveSecurityContextHolder.getContext()
 //                .map(SecurityContext::getAuthentication)
