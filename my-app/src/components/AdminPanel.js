@@ -4,6 +4,7 @@ import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Button from "@mui/material/Button";
 import PopperPopupState from "./PopperPopupState";
+import ButtonWithPopper from "./ButtonWithPopper";
 
 const BasePaper = styled(Paper)(({ theme }) => ({
     width: '45vw',
@@ -20,13 +21,12 @@ export default function AdminPanel() {
             <BasePaper  square={false} >
                 <Stack spacing={2}>
                 <h2>Admin Panel</h2>
-                    <Button variant="outlined" color="primary">Is Authenticated</Button>
-                    <Button variant="outlined" color="primary">Show Access Token</Button>
-                    <Button variant="outlined" color="primary">Show Parsed Access token</Button>
-                    <Button variant="outlined" color="primary">Check Token expired</Button>
-                    <Button variant="outlined" color="primary">Send Http 2 Resource Server</Button>
-                    <Button variant="outlined" color="primary">Show Realm Roles</Button>
-                    <PopperPopupState />
+                    <ButtonWithPopper buttonLabel="Is Authenticated"/>
+                    <ButtonWithPopper buttonLabel="Show Access Token"/>
+                    <ButtonWithPopper buttonLabel="Show Parsed Access token"/>
+                    <ButtonWithPopper buttonLabel="Check Token expired"/>
+                    <ButtonWithPopper buttonLabel="Send Http 2 Resource Server"/>
+                    <ButtonWithPopper buttonLabel="Show Realm Roles"/>
                     </Stack>
             </BasePaper>
 
