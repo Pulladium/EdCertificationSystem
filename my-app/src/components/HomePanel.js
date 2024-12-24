@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import PaginatedList from "./PaginatedList";
 import keycloak from "../config/keycloak";
 import AdminPanel from "./AdminPanel";
+import {useNavigate} from "react-router-dom";
 
 export default function HomePanel({isAuthenticated, setInfoMessage, infoMessage}) {
     const userCertsData = [
@@ -30,11 +31,17 @@ export default function HomePanel({isAuthenticated, setInfoMessage, infoMessage}
         { id: 10, name: 'University of Colorado', hasAvatar: false },
     ];
 
+    const navigate = useNavigate();
+
+    const handleCreateCertificate = () => {
+        navigate('/create-certificate');
+    };
+
     return (
 
         <Grid container spacing={2} >
             <Grid margin={2} size={{ xs: 10, md: 5 }}>
-                <Button variant="outlined" color="primary">Add Certificate</Button>
+                <Button variant="outlined" color="primary" onClick={handleCreateCertificate}>Add Certificate</Button>
                 <PaginatedList data={userCertsData} />
             </Grid>
             <Grid margin={2} size={{ xs: 10, md: 5}}>

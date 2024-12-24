@@ -111,17 +111,6 @@ public class DataServiceApplication {
         };
     }
 
-//    @Bean
-//    public CommandLineRunner createData(DataItemRepository dataItemRepository) {
-//        return args -> {
-//            List<DataItem> items = Arrays.asList(
-//                    DataItem.builder().name("Phone pro max").value("45").build(),
-//                    DataItem.builder().name("Phone 12").value("12").build(),
-//                    DataItem.builder().name("Phone 32").value("2").build()
-//            );
-//            dataItemRepository.saveAll(items);
-//        };
-//    }
 
 
 

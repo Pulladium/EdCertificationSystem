@@ -1,25 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
 import ButtonAppBar from "./components/ButtonAppBar";
-import PaginatedList from "./components/PaginatedList";
 
-import Grid from "@mui/material/Grid2";
-import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
 import {httpClient} from "./config/HttpClient";
 import keycloak, {initKeycloak} from "./config/keycloak";
-import AdminPanel from "./components/AdminPanel";
-import {Home} from "@mui/icons-material";
+
 import HomePanel from "./components/HomePanel";
-// import { httpClient } from './HttpClient.js';
+import {Route, BrowserRouter, Routes} from "react-router-dom";
+import CreateCertPanel from "./components/CreateCertPanel";
 
 
-
-// async function fetchData() {
-//     let response = await fetch('https://api.example.com/data');
-//     let data = await response.json();
-//     console.log(data);
-// }
 
 
 function App() {
@@ -79,6 +70,7 @@ function App() {
 
 
   return (
+      <BrowserRouter>
     <div className="App">
 
         {/*
@@ -89,10 +81,33 @@ function App() {
         <ButtonAppBar keycloak={keycloak} isInitialized={isInitialized} isAuthenticated={isAuthenticated} />
 
         {isAuthenticated && (
-        <HomePanel keycloak={keycloak} isAuthenticated={isAuthenticated} setInfoMessage={setInfoMessage} infoMessage={infoMessage} />
-)}
-    </div>
+            // <Routes>
+            //     <Route exact path="/">
+            //     <HomePanel keycloak={keycloak} isAuthenticated={isAuthenticated} setInfoMessage={setInfoMessage} infoMessage={infoMessage} />
+            //     </Route>
+            //     <Route path="/create-certeficate">
+            //         <CreateCertPanel />
+            //     </Route>
+            // </Routes>
+            <Routes>
+                <Route exact path="/"  element={
+                    <HomePanel
+                        keycloak={keycloak}
+                        isAuthenticated={isAuthenticated}
+                        setInfoMessage={setInfoMessage}
+                        infoMessage={infoMessage} />
+                } />
 
+                <Route path="/create-certificate" element={<CreateCertPanel />} />
+            </Routes>
+)}
+        {/*<Switch>*/}
+        {/*    <Route path="/" exact component={HomePanel} />*/}
+        {/*    <Route path="/create-certeficate" component={About} />*/}
+        {/*    <Route path="/manage-organizations" component={Contact} />*/}
+        {/*</Switch>*/}
+    </div>
+      </BrowserRouter>
   );
 }
 
