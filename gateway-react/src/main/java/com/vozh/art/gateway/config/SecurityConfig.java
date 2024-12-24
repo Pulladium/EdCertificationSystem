@@ -65,6 +65,7 @@ public class SecurityConfig {
                 .authorizeExchange((authorize) -> authorize
                         .pathMatchers("/eureka/**").permitAll()
                         .pathMatchers("/api/data/dev/**").hasRole("admin")
+                        .pathMatchers("/api/data/certificates/**").hasRole("registered-user")
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(jwtDecoder ->
@@ -102,16 +103,6 @@ public class SecurityConfig {
 
         return new CorsWebFilter(source);
     }
-//    private String extractAuthorities() {
-//        return ReactiveSecurityContextHolder.getContext()
-//                .map(SecurityContext::getAuthentication)
-//                .map(Authentication::getAuthorities)
-//                .map(authorities -> authorities.stream()
-//                        .map(GrantedAuthority::getAuthority)
-//                        .collect(Collectors.joining(",")))
-//                .block();
-//    }
-
     @Bean
     ReactiveJwtAuthenticationConverter jwtAuthenticationConverter(Converter<Jwt, Flux<GrantedAuthority>> authoritiesConverter) {
         final var jwtAuthenticationConverter = new ReactiveJwtAuthenticationConverter();

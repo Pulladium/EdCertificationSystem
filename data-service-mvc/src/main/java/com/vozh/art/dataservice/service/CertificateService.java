@@ -1,20 +1,17 @@
 package com.vozh.art.dataservice.service;
 
-import com.vozh.art.dataservice.dto.request.CategoryRequest;
 import com.vozh.art.dataservice.dto.request.CertificateAddCategoryRequest;
-import com.vozh.art.dataservice.dto.request.CreateCertificateRequest;
-import com.vozh.art.dataservice.dto.request.ParticipantRequest;
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
-import com.vozh.art.dataservice.dto.utils.CategoryMapper;
 import com.vozh.art.dataservice.entity.Category;
 import com.vozh.art.dataservice.entity.Certificate;
-import com.vozh.art.dataservice.entity.CertificateParticipant;
-import com.vozh.art.dataservice.entity.Participant;
 import com.vozh.art.dataservice.repository.CategoryRepository;
 import com.vozh.art.dataservice.repository.CertificateRepository;
 import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +34,20 @@ public class CertificateService {
         }
         throw new PersistenceException("Cant find certificate by id");
     }
+
+    public Page<CertificateResponse> getCertificatesPagenated(PageRequest pageRequest) {
+        Page<Certificate> certificatePage = findAll(pageRequest);
+        return certificatePage.map(CertificateResponse::fromCertificate);
+    }
+
+    private Page<Certificate> findAll(Pageable pageRequest) {
+        return certificateRepository.findAll(pageRequest);
+    }
+
+    private List<Certificate> findAll() {
+        return certificateRepository.findAll();
+    }
+
 
     public Certificate save(Certificate certificate) {
         try {

@@ -4,7 +4,6 @@ import com.vozh.art.dataservice.dto.request.CertificateAddCategoryRequest;
 import com.vozh.art.dataservice.dto.request.CreateCertificateRequest;
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
 import com.vozh.art.dataservice.dto.utils.CertificateMapper;
-import com.vozh.art.dataservice.entity.Category;
 import com.vozh.art.dataservice.entity.Certificate;
 import com.vozh.art.dataservice.service.CategoryService;
 import com.vozh.art.dataservice.service.CertificateParticipantService;
@@ -12,6 +11,8 @@ import com.vozh.art.dataservice.service.CertificateService;
 import com.vozh.art.dataservice.service.ParticipantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,18 @@ public class CertificateController {
     private final CategoryService categoryService;
     private final CertificateParticipantService certificateParticipantService;
     private final ParticipantService participantService;
+
+
+    @GetMapping("/pagingList")
+    public ResponseEntity<Page<CertificateResponse>> getCertificates(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<CertificateResponse> certificatePage = certificateService.getCertificatesPagenated(pageRequest);
+
+        return ResponseEntity.ok(certificatePage);
+    }
 
 
     @GetMapping("/{id}")
