@@ -52,12 +52,11 @@ export default function HomePanel({isAuthenticated, setInfoMessage, infoMessage}
                 <p>{infoMessage}</p>
             </Grid>
             <Grid>
-                {isAuthenticated && keycloak.hasRealmRole('admin')} {
-                <AdminPanel>
-                    <Button variant="outlined" color="primary">Add Admin</Button>
-                </AdminPanel>
-
-            }
+                {isAuthenticated && keycloak.hasRealmRole('admin') && (
+                    <AdminPanel>
+                        <Button variant="outlined" color="primary">Add Admin</Button>
+                    </AdminPanel>
+                )}
 
             </Grid>
         </Grid>
