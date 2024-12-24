@@ -41,8 +41,8 @@ export default function HomePanel({isAuthenticated, setInfoMessage, infoMessage}
 
         <Grid container spacing={2} >
             <Grid margin={2} size={{ xs: 10, md: 5 }}>
-                <Button variant="outlined" color="primary" onClick={handleCreateCertificate}>Add Certificate</Button>
-                <PaginatedList data={userCertsData} />
+                {/*<Button variant="outlined" color="primary" onClick={handleCreateCertificate}>Add Certificate</Button>*/}
+                <PaginatedList data={userCertsData} AddButtonLabel={"Add new certificate"} onAddButtonClick={handleCreateCertificate} />
             </Grid>
             <Grid margin={2} size={{ xs: 10, md: 5}}>
                 <Button variant="outlined" color="primary">Add Organization</Button>

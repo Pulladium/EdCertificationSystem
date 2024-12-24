@@ -4,10 +4,11 @@ import {
     Avatar, TablePagination, Paper
 } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
+import {AddCircleOutline} from "@mui/icons-material";
 
 
 
-export default function PaginatedList({data = []}) {
+export default function PaginatedList({data = [], onAddButtonClick, AddButtonLabel}) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -26,6 +27,18 @@ export default function PaginatedList({data = []}) {
     return (
         <Paper>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                {page === 0 && (
+                    <ListItem disablePadding>
+                        <ListItemButton onClick={onAddButtonClick}>
+                            <ListItemIcon>
+                                <Avatar>
+                                <AddCircleOutline />
+                                </Avatar>
+                            </ListItemIcon>
+                            <ListItemText primary={AddButtonLabel || "Add Item"} />
+                        </ListItemButton>
+                    </ListItem>
+                )}
                 {currentPageData.map((item) => (
                     <ListItem key={item.id} disablePadding>
                         <ListItemButton>
