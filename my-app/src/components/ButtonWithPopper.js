@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper';
 import {ClickAwayListener} from "@mui/material";
 import Box from "@mui/material/Box";
 
-export default function ButtonWithPopper({buttonLabel}) {
+export default function ButtonWithPopper({buttonLabel,popperContent, onClick}) {
 
     return (
         <PopupState variant="popper" popupId={buttonLabel}>
@@ -18,6 +18,10 @@ export default function ButtonWithPopper({buttonLabel}) {
                         variant="outlined"
                         {...bindToggle(popupState)}
                         fullWidth
+                        onClick={(e) => {
+                            onClick(e);
+                            popupState.toggle(e);
+                        }}
                     >
                         {buttonLabel}
                     </Button>
@@ -26,7 +30,7 @@ export default function ButtonWithPopper({buttonLabel}) {
                             <ClickAwayListener onClickAway={popupState.close}>
                                 <Fade {...TransitionProps} timeout={350}>
                                     <Paper>
-                                        <Typography sx={{ p: 2 }}>The content of the Popper.</Typography>
+                                        <Typography sx={{ p: 2 }}>{popperContent}</Typography>
                                     </Paper>
                                 </Fade>
                             </ClickAwayListener>

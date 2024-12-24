@@ -5,6 +5,8 @@ import { styled } from '@mui/material/styles';
 import Button from "@mui/material/Button";
 import PopperPopupState from "./PopperPopupState";
 import ButtonWithPopper from "./ButtonWithPopper";
+import keycloak from "../config/keycloak";
+import Grid from "@mui/material/Grid2";
 
 const BasePaper = styled(Paper)(({ theme }) => ({
     width: '45vw',
@@ -16,17 +18,54 @@ const BasePaper = styled(Paper)(({ theme }) => ({
 }));
 
 export default function AdminPanel() {
+    const handleIsAuthenticated = () => {
+        keycloak.authenticated ? console.log("User is authenticated") : console.log("User is not authenticated");
+        return keycloak.authenticated ? "User is authenticated : TRUE" : "User is authenticated : FALSE";
+    };
+
+    const handleShowAccessToken = () => {
+        return keycloak.token;
+    };
+    const handleShowParsedAccessToken = () => {
+        return JSON.stringify(keycloak.tokenParsed);
+    };
+    const handleShowRealmRoles = () => {
+        return keycloak.realmAccess.roles.map((role) => {
+            return role + " ";
+        });
+    };
+
+
+    const handleSendHttp2ResourceServer = () => {};
+    const handleRedirect2AdminConsole = () => {
+        window.open("http://localhost:8484/admin/master/console/#/CertEdu", "_blank");
+    }
     return (
 
             <BasePaper  square={false} >
                 <Stack spacing={2}>
                 <h2>Admin Panel</h2>
-                    <ButtonWithPopper buttonLabel="Is Authenticated"/>
-                    <ButtonWithPopper buttonLabel="Show Access Token"/>
-                    <ButtonWithPopper buttonLabel="Show Parsed Access token"/>
-                    <ButtonWithPopper buttonLabel="Check Token expired"/>
-                    <ButtonWithPopper buttonLabel="Send Http 2 Resource Server"/>
-                    <ButtonWithPopper buttonLabel="Show Realm Roles"/>
+                    <ButtonWithPopper  buttonLabel="Is Authenticated"
+                                       onClick={handleIsAuthenticated}
+                                       popperContent={handleIsAuthenticated()}
+                    />
+                    <ButtonWithPopper buttonLabel="Show Access Token"
+                                        onClick={handleShowAccessToken}
+                                        popperContent={handleShowAccessToken()}
+                    />
+                    <ButtonWithPopper buttonLabel="Show Parsed Access token"
+                                        onClick={handleShowParsedAccessToken}
+                                        popperContent={handleShowParsedAccessToken()}
+                    />
+                    <ButtonWithPopper buttonLabel="Show Realm Roles"
+                                        onClick={handleShowRealmRoles}
+                                        popperContent={handleShowRealmRoles()}
+                    />
+                    <ButtonWithPopper buttonLabel="Send Http 2 Resource Server"
+
+                    />
+                    <Button variant="outlined" onClick={handleRedirect2AdminConsole}
+                    >Go To Keycloak Admin Console</Button>
                     </Stack>
             </BasePaper>
 

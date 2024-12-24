@@ -44,20 +44,12 @@ export default function HomePanel({isAuthenticated, setInfoMessage, infoMessage}
             <Grid marginY={6} size={{ xs: 2, md: 1}}>
                 <Button variant="outlined" color="primary">Verify Certificate</Button>
             </Grid>
-            <Grid marginY={6} size={{ xs: 2, md: 1}}>
-                <Button
-                    onClick={() => { setInfoMessage(keycloak.authenticated ? 'Authenticated: TRUE' : 'Authenticated: FALSE') }}
-                    variant="outlined" color="primary" >Authed?</Button>
-
-                <p>{infoMessage}</p>
-            </Grid>
             <Grid>
                 {isAuthenticated && keycloak.hasRealmRole('admin') && (
                     <AdminPanel>
                         <Button variant="outlined" color="primary">Add Admin</Button>
                     </AdminPanel>
                 )}
-
             </Grid>
         </Grid>
     )

@@ -88,8 +88,9 @@ function App() {
       */}
         <ButtonAppBar keycloak={keycloak} isInitialized={isInitialized} isAuthenticated={isAuthenticated} />
 
+        {isAuthenticated && (
         <HomePanel keycloak={keycloak} isAuthenticated={isAuthenticated} setInfoMessage={setInfoMessage} infoMessage={infoMessage} />
-
+)}
     </div>
 
   );
