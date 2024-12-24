@@ -20,30 +20,39 @@ export default function BasePaginatedList({
                                               totalCount,
                                               loading,
                                               error,
-                                              fetchData
+                                              fetchData,
+                                              addItem,
+                                              getPaginatedData
                                           }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [isInitialized, setIsInitialized] = useState(false);
-
-    useEffect(() => {
-        if (!isInitialized) {
-            setIsInitialized(true);
-            fetchData(page, rowsPerPage);
-        }
-    }, [isInitialized, fetchData, page, rowsPerPage]);
+    // const [isInitialized, setIsInitialized] = useState(false);
+    //
+    // useEffect(() => {
+    //     if (!isInitialized) {
+    //         setIsInitialized(true);
+    //         fetchData(page, rowsPerPage);
+    //     }
+    // }, [isInitialized, fetchData, page, rowsPerPage]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
-        fetchData(newPage, rowsPerPage);
+        if (fetchData) {
+            fetchData(newPage, rowsPerPage);
+        }
     };
 
     const handleChangeRowsPerPage = (event) => {
         const newRowsPerPage = parseInt(event.target.value, 10);
         setRowsPerPage(newRowsPerPage);
         setPage(0);
-        fetchData(0, newRowsPerPage);
+        if (fetchData) {
+            fetchData(0, newRowsPerPage);
+        }
+        // No need to call getPaginatedData here, it will be called when rendering
     };
+
+    const displayData = getPaginatedData ? getPaginatedData(page, rowsPerPage) : data;
 
     if (loading) {
         return <CircularProgress />;
@@ -57,7 +66,7 @@ export default function BasePaginatedList({
         <Paper>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 <ListItem disablePadding>
-                    <ListItemButton onClick={onAddButtonClick}>
+                    <ListItemButton onClick={() => onAddButtonClick(addItem)}>
                         <ListItemIcon>
                             <Avatar sx={{ bgcolor: blue[500] }}>
                                 {AddButtonIcon}
@@ -66,7 +75,7 @@ export default function BasePaginatedList({
                         <ListItemText primary={AddButtonLabel || "Add Item"} />
                     </ListItemButton>
                 </ListItem>
-                <ListComponent data={data} />
+                <ListComponent data={displayData} />
             </List>
             <TablePagination
                 component="div"

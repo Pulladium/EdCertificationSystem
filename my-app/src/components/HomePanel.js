@@ -17,6 +17,7 @@ export default function HomePanel({isAuthenticated, setInfoMessage, infoMessage}
     };
 
     let handleCreateOrg = () => {};
+
     return (
 
         <Grid container spacing={2} >
@@ -38,6 +39,14 @@ export default function HomePanel({isAuthenticated, setInfoMessage, infoMessage}
             <Grid margin={2} size={{ xs: 10, md: 5}}>
                 {/*<Button variant="outlined" color="primary">Add Organization</Button>*/}
                 {/*<BasePaginatedList AddButtonLabel={"Create new organization"} onAddButtonClick={handleCreateOrg} ListComponent={OrganizationsList} apiEndpoint={"http://localhost:8080/api/data/organization/pagingList"} />*/}
+                <FetchWrapperPaginatedList
+                    fetchApiEndpoint={"http://localhost:8080/api/data/organization/pagingList"}>
+                    <BasePaginatedList
+                        onAddButtonClick={handleCreateCertificate}
+                        AddButtonLabel={"Manage Your Organizations"}
+                        ListComponent={OrganizationsList}
+                    />
+                </FetchWrapperPaginatedList>
             </Grid>
             <Grid marginY={6} size={{ xs: 2, md: 1}}>
                 <Button variant="outlined" color="primary">Verify Certificate</Button>

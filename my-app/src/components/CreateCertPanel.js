@@ -16,6 +16,8 @@ import OrganizationsList from "./pageSubLists/OrganizationsList";
 
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import {useState} from "react";
+import FetchWrapperPaginatedList from "./paginateList/FetchWrapperPaginatedList";
+import EditableWrapperPaginatedList from "./paginateList/EditableWrapperPaginatedList";
 
 const BasePaper = styled(Paper)(({ theme }) => ({
     width: 'auto',
@@ -32,12 +34,16 @@ export default function CreateCertPanel() {
     // const [participants, setParticipants] = useState([]);
 
 
-    const handleAddParticipant = (addSimpleItem) => {
+    const handleAddParticipant = (addItem) => {
         const newParticipant = { id: Date.now(), name: 'New Participant', hasAvatar: false };
-        addSimpleItem(newParticipant);
+        addItem(newParticipant);
     };
 
 
+    const handleDataChange = (newData) => {
+        console.log('Data changed:', newData);
+        // Здесь вы можете обработать изменения данных, например, отправить их на сервер
+    };
     return (
 
         <BasePaper  square={false} >
@@ -68,12 +74,23 @@ export default function CreateCertPanel() {
                     />
                     </Stack>
                         <Stack spacing={2} direction={"row"}>
-                            <BasePaginatedList onAddButtonClick={handleAddParticipant} AddButtonLabel={"Add new participant"}
-                                               apiEndpoint={null} ListComponent={ParticipantsList} />
+                            {/*<BasePaginatedList onAddButtonClick={handleAddParticipant} AddButtonLabel={"Add new participant"}*/}
+                            {/*                   apiEndpoint={null} ListComponent={ParticipantsList} />*/}
+
+                            <EditableWrapperPaginatedList onDataChange={handleDataChange}>
+                                <BasePaginatedList
+                                    onAddButtonClick={(addItem) => {
+                                        const newItem = { id: Date.now(), name: 'New Item' };
+                                        addItem(newItem);
+                                    }}
+                                    AddButtonLabel={"Add new participant"}
+                                    ListComponent={ParticipantsList}
+                                />
+                            </EditableWrapperPaginatedList>
                            <Paper>
                                <Stack spacing={2} direction={"row"}>
-                            <BasePaginatedList AddButtonIcon={<DeleteOutlinedIcon/>} onAddButtonClick={()=>{}} AddButtonLabel={"Clean All"} apiEndpoint={null} ListComponent={OrganizationsList} />
-                            <BasePaginatedList onAddButtonClick={()=>{}} AddButtonLabel={"Manage your organizations"} apiEndpoint={null} ListComponent={OrganizationsList} />
+                            {/*<BasePaginatedList AddButtonIcon={<DeleteOutlinedIcon/>} onAddButtonClick={()=>{}} AddButtonLabel={"Clean All"} apiEndpoint={null} ListComponent={OrganizationsList} />*/}
+                            {/*<BasePaginatedList onAddButtonClick={()=>{}} AddButtonLabel={"Manage your organizations"} apiEndpoint={null} ListComponent={OrganizationsList} />*/}
                                  </Stack>
                            </Paper>
                         </Stack>
