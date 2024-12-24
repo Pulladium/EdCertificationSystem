@@ -6,6 +6,7 @@ import AdminPanel from "./AdminPanel";
 import {useNavigate} from "react-router-dom";
 import CertificatesList from "./pageSubLists/CertificatesList";
 import OrganizationsList from "./pageSubLists/OrganizationsList";
+import FetchWrapperPaginatedList from "./paginateList/FetchWrapperPaginatedList";
 
 export default function HomePanel({isAuthenticated, setInfoMessage, infoMessage}) {
 
@@ -21,11 +22,22 @@ export default function HomePanel({isAuthenticated, setInfoMessage, infoMessage}
         <Grid container spacing={2} >
             <Grid margin={2} size={{ xs: 10, md: 5 }}>
                 {/*<Button variant="outlined" color="primary" onClick={handleCreateCertificate}>Add Certificate</Button>*/}
-                <BasePaginatedList AddButtonLabel={"Add new certificate"} onAddButtonClick={handleCreateCertificate} ListComponent={CertificatesList} apiEndpoint={"http://localhost:8080/api/data/certificates/pagingList"} />
+                {/*<FetchWrapperPaginatedList fetchApiEndpoint="/api/certificates">*/}
+                {/*<BasePaginatedList AddButtonLabel={"Add new certificate"} onAddButtonClick={handleCreateCertificate} ListComponent={CertificatesList} apiEndpoint={"http://localhost:8080/api/data/certificates/pagingList"} />*/}
+                {/*</FetchWrapperPaginatedList>*/}
+                <FetchWrapperPaginatedList
+                    fetchApiEndpoint={"http://localhost:8080/api/data/certificates/pagingList"}>
+                    <BasePaginatedList
+                        onAddButtonClick={handleCreateCertificate}
+                        AddButtonLabel={"\"Add new certificate\""}
+                        ListComponent={CertificatesList}
+                    />
+                </FetchWrapperPaginatedList>
+
             </Grid>
             <Grid margin={2} size={{ xs: 10, md: 5}}>
                 {/*<Button variant="outlined" color="primary">Add Organization</Button>*/}
-                <BasePaginatedList AddButtonLabel={"Create new organization"} onAddButtonClick={handleCreateOrg} ListComponent={OrganizationsList} apiEndpoint={"http://localhost:8080/api/data/organization/pagingList"} />
+                {/*<BasePaginatedList AddButtonLabel={"Create new organization"} onAddButtonClick={handleCreateOrg} ListComponent={OrganizationsList} apiEndpoint={"http://localhost:8080/api/data/organization/pagingList"} />*/}
             </Grid>
             <Grid marginY={6} size={{ xs: 2, md: 1}}>
                 <Button variant="outlined" color="primary">Verify Certificate</Button>

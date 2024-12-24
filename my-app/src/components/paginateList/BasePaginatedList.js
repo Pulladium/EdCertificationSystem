@@ -9,75 +9,40 @@ import { blue } from "@mui/material/colors";
 import keycloak from "../../config/keycloak";
 import CertificatesList from "../pageSubLists/CertificatesList";
 
-export default function BasePaginatedList({AddButtonIcon = <AddCircleOutline/>, onAddButtonClick, AddButtonLabel, ListComponent, apiEndpoint }) {
+
+//done setData  setTotalCount isInitialized setIsInitialized setError
+export default function BasePaginatedList({
+                                              AddButtonIcon = <AddCircleOutline/>,
+                                              onAddButtonClick,
+                                              AddButtonLabel,
+                                              ListComponent,
+                                              data,
+                                              totalCount,
+                                              loading,
+                                              error,
+                                              fetchData
+                                          }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [data, setData] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [isInitialized, setIsInitialized] = useState(false);
 
-
-    const fetchData = async (page, rowsPerPage) => {
-        setLoading(true);
-        setError(null);
-        try {
-            const response = await fetch(`${apiEndpoint}?page=${page}&size=${rowsPerPage}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${keycloak.token}`
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const result = await response.json();
-            setData(result.content);
-            setTotalCount(result.totalElements);
-        } catch (error) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-    // only for new Participant
-    const addSimpleItem = (item) => {
-        setData(prevData => [...prevData, item]);
-        setTotalCount(prevCount => prevCount + 1);
-        setPage(0);
-    };
-
     useEffect(() => {
-
         if (!isInitialized) {
             setIsInitialized(true);
-            if (!apiEndpoint) {
-                setLoading(false);
-            }
-        }
-
-        if (apiEndpoint) {
             fetchData(page, rowsPerPage);
         }
-    }, [isInitialized, apiEndpoint, page, rowsPerPage]);
-
-    if (loading && apiEndpoint) {
-        return <CircularProgress />;
-    }
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+    }, [isInitialized, fetchData, page, rowsPerPage]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+        fetchData(newPage, rowsPerPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
+        const newRowsPerPage = parseInt(event.target.value, 10);
+        setRowsPerPage(newRowsPerPage);
         setPage(0);
+        fetchData(0, newRowsPerPage);
     };
 
     if (loading) {
@@ -92,7 +57,7 @@ export default function BasePaginatedList({AddButtonIcon = <AddCircleOutline/>, 
         <Paper>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 <ListItem disablePadding>
-                    <ListItemButton  onClick={() => onAddButtonClick(addSimpleItem)}>
+                    <ListItemButton onClick={onAddButtonClick}>
                         <ListItemIcon>
                             <Avatar sx={{ bgcolor: blue[500] }}>
                                 {AddButtonIcon}
@@ -101,10 +66,7 @@ export default function BasePaginatedList({AddButtonIcon = <AddCircleOutline/>, 
                         <ListItemText primary={AddButtonLabel || "Add Item"} />
                     </ListItemButton>
                 </ListItem>
-
-               <ListComponent data={data} />
-                {/*<CertificatesList data={data} />*/}
-
+                <ListComponent data={data} />
             </List>
             <TablePagination
                 component="div"
