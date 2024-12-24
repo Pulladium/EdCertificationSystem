@@ -14,6 +14,7 @@ export default function HomePanel({isAuthenticated, setInfoMessage, infoMessage}
         navigate('/create-certificate');
     };
 
+    let handleCreateOrg = () => {};
     return (
 
         <Grid container spacing={2} >
@@ -23,7 +24,7 @@ export default function HomePanel({isAuthenticated, setInfoMessage, infoMessage}
             </Grid>
             <Grid margin={2} size={{ xs: 10, md: 5}}>
                 {/*<Button variant="outlined" color="primary">Add Organization</Button>*/}
-                <PaginatedList  AddButtonLabel={"Create new organization"} />
+                {/*<PaginatedList  AddButtonLabel={"Create new organization"} onAddButtonClick={handleCreateOrg} ListComponent={OrganizationList} apiEndpoint={"http://localhost:8080/api/data/organization/pagingList"} />*/}
             </Grid>
             <Grid marginY={6} size={{ xs: 2, md: 1}}>
                 <Button variant="outlined" color="primary">Verify Certificate</Button>

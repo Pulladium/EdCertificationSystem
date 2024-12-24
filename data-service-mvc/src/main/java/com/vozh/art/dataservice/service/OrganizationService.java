@@ -1,6 +1,8 @@
 package com.vozh.art.dataservice.service;
 
+import com.vozh.art.dataservice.dto.response.CertificateResponse;
 import com.vozh.art.dataservice.dto.response.OrganizationResponse;
+import com.vozh.art.dataservice.entity.Certificate;
 import com.vozh.art.dataservice.entity.Organization;
 
 import com.vozh.art.dataservice.dto.request.OrganizationRequest;
@@ -10,6 +12,9 @@ import com.vozh.art.dataservice.repository.OrganizationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -83,4 +88,13 @@ public class OrganizationService {
     }
 
 
+
+    public Page<OrganizationResponse> getOrganizationsPagenated(PageRequest pageRequest) {
+//        Page<>
+        Page<Organization> organizationPage = findAll(pageRequest);
+        return organizationPage.map(OrganizationResponse::fromOrganization);
+    }
+    private Page<Organization> findAll(Pageable pageRequest) {
+        return organizationRepository.findAll(pageRequest);
+    }
 }
