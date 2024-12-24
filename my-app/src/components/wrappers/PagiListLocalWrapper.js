@@ -6,17 +6,41 @@ import {
 import StarIcon from '@mui/icons-material/Star';
 import { AddCircleOutline } from "@mui/icons-material";
 import { blue } from "@mui/material/colors";
-import keycloak from "../config/keycloak";
-import CertificatesList from "./pageSubLists/CertificatesList";
+import keycloak from "../../config/keycloak";
+import CertificatesList from "../pageSubLists/CertificatesList";
 
-export default function PaginatedList({AddButtonIcon = <AddCircleOutline/>, onAddButtonClick, AddButtonLabel, ListComponent, apiEndpoint }) {
+export default function PagiListFetchWrapper({AddButtonIcon = <AddCircleOutline/>, onAddButtonClick, AddButtonLabel, ListComponent, apiEndpoint }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [data, setData] = useState([]);
+    const [localData, setLocalData] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
+    const [error, setError] = useState(null);
+    const [isInitialized, setIsInitialized] = useState(false);
+
+
+    // only for new Participant
+    const addSimpleItem = (item) => {
+        setLocalData(prevData => [...prevData, item]);
+        setTotalCount(prevCount => prevCount + 1);
+        setPage(0);
+    };
 
 
 
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     return (
         <Paper>
@@ -32,7 +56,7 @@ export default function PaginatedList({AddButtonIcon = <AddCircleOutline/>, onAd
                     </ListItemButton>
                 </ListItem>
 
-               <ListComponent data={data} />
+                <ListComponent data={localData} />
                 {/*<CertificatesList data={data} />*/}
 
             </List>

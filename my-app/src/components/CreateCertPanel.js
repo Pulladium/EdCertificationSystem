@@ -11,6 +11,11 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import {FormControl, OutlinedInput} from "@mui/material";
 import PaginatedList from "./PaginatedList";
+import ParticipantsList from "./pageSubLists/ParticipantsList";
+import OrganizationsList from "./pageSubLists/OrganizationsList";
+
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import {useState} from "react";
 
 const BasePaper = styled(Paper)(({ theme }) => ({
     width: 'auto',
@@ -23,18 +28,15 @@ const BasePaper = styled(Paper)(({ theme }) => ({
 
 export default function CreateCertPanel() {
 
-    const participants = [
-        { id: 1, name: 'Alice', hasAvatar: true },
-        { id: 2, name: 'Bob', hasAvatar: false },
-        { id: 3, name: 'Charlie', hasAvatar: true },
-        { id: 4, name: 'David', hasAvatar: false },
-        { id: 5, name: 'Eve', hasAvatar: true },
-        { id: 6, name: 'Frank', hasAvatar: false },
-        { id: 7, name: 'Grace', hasAvatar: true },
-        { id: 8, name: 'Hank', hasAvatar: false },
-        { id: 9, name: 'Ivy', hasAvatar: true },
-        { id: 10, name: 'Jill', hasAvatar: false },
-    ];
+
+    // const [participants, setParticipants] = useState([]);
+
+
+    const handleAddParticipant = (addSimpleItem) => {
+        const newParticipant = { id: Date.now(), name: 'New Participant', hasAvatar: false };
+        addSimpleItem(newParticipant);
+    };
+
 
     return (
 
@@ -65,16 +67,15 @@ export default function CreateCertPanel() {
 
                     />
                     </Stack>
-                        <Stack spacing={2}>
-                            <PaginatedList data={participants} />
-                            <TextField
-                                required
-                                fullWidth
-                                id="dicriptionTextField"
-                                label="Discription"
-                                helperText="Please enter certificate discription"
-
-                            />
+                        <Stack spacing={2} direction={"row"}>
+                            <PaginatedList onAddButtonClick={handleAddParticipant}  AddButtonLabel={"Add new participant"}
+                                           apiEndpoint={null} ListComponent={ParticipantsList} />
+                           <Paper>
+                               <Stack spacing={2} direction={"row"}>
+                            <PaginatedList AddButtonIcon={<DeleteOutlinedIcon/>}  onAddButtonClick={()=>{}} AddButtonLabel={"Clean All"} apiEndpoint={null} ListComponent={OrganizationsList} />
+                            <PaginatedList onAddButtonClick={()=>{}} AddButtonLabel={"Manage your organizations"} apiEndpoint={null} ListComponent={OrganizationsList} />
+                                 </Stack>
+                           </Paper>
                         </Stack>
                     </Stack  >
                         <Box maxWidth={"30vw"}>
