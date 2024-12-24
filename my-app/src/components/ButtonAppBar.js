@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar({ keycloak , isInitialized, isAuthenticated}) {
 
 
     return (
@@ -29,15 +29,20 @@ export default function ButtonAppBar() {
                         Certification Edu
                     </Typography>
 
-                    <Button color="inherit">/Sign Up</Button>
-                    {/*{!keycloak.authenticated && (*/}
-                    {/*<Button color="inherit" onClick={() => keycloak.login()}>/Login</Button>*/}
-                    {/*)}*/}
-
-                    {/*{!!keycloak.authenticated && (*/}
-                    {/*<Button color="inherit">/Logout</Button>*/}
-                    {/*)}*/}
-                    <Button color="inherit">/Login</Button>
+                    {/*
+            Если Keycloak не инициализирован, можно временно показывать заглушку/пусто,
+            чтобы страница не дёргалась при рендере. Или просто оставить как есть.
+          */}
+                    {isInitialized && !isAuthenticated && (
+                        <Button color="inherit" onClick={() => keycloak.login()}>
+                            /Login
+                        </Button>
+                    )}
+                    {isInitialized && isAuthenticated && (
+                        <Button color="inherit" onClick={() => keycloak.logout()}>
+                            /Logout
+                        </Button>
+                    )}
 
                 </Toolbar>
             </AppBar>
