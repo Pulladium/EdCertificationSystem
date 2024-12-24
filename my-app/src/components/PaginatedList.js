@@ -77,7 +77,7 @@ export default function PaginatedList({ onAddButtonClick, AddButtonLabel, ListCo
                     </ListItemButton>
                 </ListItem>
 
-                ListComponent ? <ListComponent data={data} /> : <CertificatesList data={data} />
+               <ListComponent data={data} />
                 {/*<CertificatesList data={data} />*/}
 
             </List>
