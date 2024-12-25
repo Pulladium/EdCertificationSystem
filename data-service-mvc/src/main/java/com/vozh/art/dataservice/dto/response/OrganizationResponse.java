@@ -20,4 +20,25 @@ public class OrganizationResponse {
     private String contactInfo;
     private Organization.OrganizationStatus status;
     private String maintainerKeycloakUUID;
+
+    public static OrganizationResponse fromOrganization(Organization organization){
+        return OrganizationResponse.builder()
+                .organizationId(organization.getId())
+                .name(organization.getName())
+                .address(organization.getAddress())
+                .contactInfo(organization.getContactInfo())
+                .status(organization.getStatus())
+                .maintainerKeycloakUUID(organization.getMaintainerKeycloakUUID())
+                .build();
+    }
+    public static Organization toOrganization(OrganizationResponse organizationResponse){
+        return Organization.builder()
+                .id(organizationResponse.getOrganizationId())
+                .name(organizationResponse.getName())
+                .address(organizationResponse.getAddress())
+                .contactInfo(organizationResponse.getContactInfo())
+                .status(organizationResponse.getStatus())
+                .maintainerKeycloakUUID(organizationResponse.getMaintainerKeycloakUUID())
+                .build();
+    }
 }

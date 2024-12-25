@@ -20,7 +20,6 @@
         <module>data-service-mvc</module>
         <module>common-module</module>
         <module>eureka-server</module>
-        <module>processing-service-mcv-tmpl</module>
         <module>notification-service-mcv-tmpl</module>
     </modules>
 
