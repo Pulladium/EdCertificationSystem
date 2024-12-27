@@ -9,6 +9,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -19,6 +20,7 @@ import java.util.Set;
 @Builder
 public class CreateCertificateRequest {
 
+    //or title on js
     @NotBlank
     private String name;
     @NotBlank
@@ -27,7 +29,7 @@ public class CreateCertificateRequest {
     private Set<CategoryRequest> categories;
 
     //can set participants at start
-    private Set<ParticipantRequest> certificateParticipants;
+    private List<ParticipantRequest> certificateParticipants;
 
     //hz auto assign maybe if user org set
 //    private Set<Organization> issuers;

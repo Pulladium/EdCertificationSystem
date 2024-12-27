@@ -15,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+//dont use
 public class CreateNewCertificateRequest {
 
     //todo add to entity

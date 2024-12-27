@@ -47,6 +47,7 @@ public final class CertificateMapper {
                                                      CertificateParticipantService certificateParticipantService) {
         {
             Certificate certificate = Certificate.builder()
+                    .name(request.getName())
                     .description(request.getDescription())
                     .build();
             if (request.getCategories() != null) {
