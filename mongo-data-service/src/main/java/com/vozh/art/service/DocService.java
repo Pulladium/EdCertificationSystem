@@ -1,6 +1,7 @@
 package com.vozh.art.service;
 
 
+import com.vozh.art.dto.SignedDocAndFile;
 import com.vozh.art.entity.SignedDoc;
 import com.vozh.art.repo.DocRepository;
 import lombok.RequiredArgsConstructor;
@@ -107,10 +108,10 @@ public class DocService {
         }
     }
 
-    public DocWithFile getDocWithFile(String id) throws IOException {
+    public SignedDocAndFile getSignedDocAndFile(String id) throws IOException {
         SignedDoc document = getDocById(id);
         byte[] content = getFileFromGridFs(document.getGridFsFileId());
-        return new DocWithFile(document, content);
+        return new SignedDocAndFile(document, content);
     }
 
 
