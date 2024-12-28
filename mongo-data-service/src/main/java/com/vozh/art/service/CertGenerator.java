@@ -23,21 +23,44 @@ public class CertGenerator {
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
 
+
+        // Set up template resolver for CSS
+        ClassLoaderTemplateResolver cssResolver = new ClassLoaderTemplateResolver();
+        cssResolver.setSuffix(".css");
+        cssResolver.setTemplateMode(TemplateMode.CSS);
+//        cssResolver.setCharacterEncoding("UTF-8");
+
+
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
 
-        Context context = new Context();
-        context.setVariable("title", "Certificate of Achievement");
-        context.setVariable("name", "John Doe");
-        context.setVariable("description", "Has successfully completed the course");
-        context.setVariable("dateTime", "December 28, 2024");
+        // Process CSS template
+        Context cssContext = new Context();
+        cssContext.setVariable("backgroundColor", "#009688"); // Example variable for CSS
+        String processedCss = templateEngine.process("template/css/certificate-style.css", cssContext);
 
-        return templateEngine.process("template/certificate.html", context);
+
+
+
+        Context htmlContext = new Context();
+        htmlContext.setVariable("title", "Certificate of Achievement");
+        htmlContext.setVariable("name", "John Doe");
+        htmlContext.setVariable("description", "Has successfully completed the course");
+        htmlContext.setVariable("dateTime", "December 28, 2024");
+
+
+        htmlContext.setVariable("styles", processedCss);
+
+
+        return templateEngine.process("template/certificate.html", htmlContext);
     }
 
 
     public void generatePdfFromHtml(String html) throws IOException {
+
         String outputFolder = System.getProperty("user.home") + File.separator + "thymeleaf.pdf";
+
+
         OutputStream outputStream = new FileOutputStream(outputFolder);
 
         ITextRenderer renderer = new ITextRenderer();

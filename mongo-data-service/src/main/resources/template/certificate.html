@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html >
 <head>
 <!--    <meta charset="UTF-8">-->
     <title>Certificate</title>
-    <link rel="stylesheet" href="css/certificate-style.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-
+<!--    <link rel="stylesheet" href="css/certificate-style.css">-->
+<!--    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </meta>
+    <style type="text/css" th:utext="${styles}">
+        /* Styles will be injected here */
+    </style>
 </head>
 <body>
 <div class="certificate-container">
