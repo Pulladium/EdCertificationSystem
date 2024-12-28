@@ -20,7 +20,7 @@ public class MongoServiceApp {
     public CommandLineRunner createCertificate(){
         return args -> {
             System.out.println("Hello world");
-            certGenerator.generatePdfFromHtml(certGenerator.parseThymeleafTemplate());
+//            certGenerator.
         };
     }
 }

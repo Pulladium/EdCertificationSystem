@@ -10,7 +10,10 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.KeyPair;
 import java.time.LocalDateTime;
 import java.util.Base64;
@@ -27,8 +30,20 @@ public class DocService {
     private final KeyService keyStoreService;
     private final GridFsTemplate gridFsTemplate;
 
+
     public SignedDoc saveDocument(MultipartFile file) throws Exception {
         String gridFsFileId = gridFSService.storeFile(file);
+        return saveDocumentGridFsAndMongoDoc(gridFsFileId, file.getBytes(), file.getOriginalFilename(), file.getContentType());
+    }
+
+    public SignedDoc saveDocument(byte[] data, String fileName, String contentType) throws Exception {
+        InputStream inputStream = new ByteArrayInputStream(data);
+        String gridFsFileId = gridFSService.storeFile(inputStream, fileName, contentType);
+        return saveDocumentGridFsAndMongoDoc(gridFsFileId, data, fileName, contentType);
+    }
+    private SignedDoc saveDocumentGridFsAndMongoDoc(String gridFsFileId, byte[] data, String name, String contentType) throws Exception {
+
+//        gridFSService.storeFile()
 
         //с монго всё заебись работает
         // Генерируем новую пару ключей для каждого документа
@@ -36,15 +51,15 @@ public class DocService {
         KeyPair keyPair = keyStoreService.generateKeyPair(keyAlias);
 
         // Генерируем подпись для файла
-        String fileContent = new String(file.getBytes());
+        String fileContent = new String(data);
         String signature = keyStoreService.signData(fileContent, keyAlias);
         String publicKeyBase64 = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
 //TODO  not todo so i have base64 xd xd xd
 
 
         SignedDoc document = SignedDoc.builder()
-                .name(file.getOriginalFilename())
-                .fileType(file.getContentType())
+                .name(name)
+                .fileType(contentType)
                 .gridFsFileId(gridFsFileId)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())

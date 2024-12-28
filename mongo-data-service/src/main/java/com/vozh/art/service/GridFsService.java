@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +40,15 @@ public class GridFsService {
         );
         return fileId.toString();
     }
+    public String storeFile(InputStream inputStream, String fileName, String contentType) {
+        ObjectId fileId = gridFsTemplate.store(
+                inputStream,
+                fileName,
+                contentType
+        );
+        return fileId.toString();
+    }
+
 
     public InputStreamResource retrieveFile(String fileId) throws IOException {
         GridFSFile gridFSFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(fileId)));

@@ -1,6 +1,7 @@
 package com.vozh.art.controller;
 
-import com.vozh.art.dto.Participant;
+import com.vozh.art.dto.ParticipantKey;
+import com.vozh.art.dto.SignedDocRefResponse;
 import com.vozh.art.dto.request.ParticipantTemplateRequest;
 //import com.vozh.art.service.CertGenerator;
 import com.vozh.art.service.CertGenerator;
@@ -27,10 +28,26 @@ public class GenerateDocController {
         log.info("Document generation started");
     }
 
+    @PostMapping("/generate_and_save")
+    public ResponseEntity<SignedDocRefResponse> generateAndSaveDocument(
+            @RequestBody ParticipantTemplateRequest participantData
+    ) {
+        log.info("Document generation and saving started");
+        try {
+            SignedDocRefResponse signedDocRefResponse = certificateGenerator.generateAndSaveCertificate(participantData.getParticipantKey(), participantData.getTemplateName());
+            return ResponseEntity.ok(signedDocRefResponse);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     @PostMapping("/generate")
-    public ResponseEntity<byte[]> generateCertificate(@RequestBody Participant participant) {
+    public ResponseEntity<byte[]> generateCertificate(@RequestBody ParticipantKey participantKey) {
         try {
 //            byte[] pdfBytes = certificateGenerator.generatePdfFromHtml("sdfsd");
+
+
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
