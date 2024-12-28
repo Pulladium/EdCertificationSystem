@@ -21,6 +21,7 @@
         <module>common-module</module>
         <module>eureka-server</module>
         <module>notification-service-mcv-tmpl</module>
+        <module>mongo-data-service</module>
     </modules>
 
     <properties>
