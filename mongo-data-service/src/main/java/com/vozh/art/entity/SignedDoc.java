@@ -1,10 +1,7 @@
-package com.vozh.art.dataservice.entity.mongoDoc;
+package com.vozh.art.entity;
 
-
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -17,10 +14,10 @@ import java.time.LocalDateTime;
 @Data
 @Document(collection = "signed_documents")
 public class SignedDoc {
-//    todo MongoDB has its own ID generation strategy, so @GeneratedValue is not needed in exluded version of the code
+    //todo teset it
+    //MongoDB has its own ID generation strategy, so @GeneratedValue is not needed
 //    https://stackoverflow.com/questions/69732588/spring-boot-mongodb-can-generatedvalue-and-column-annotations-be-used
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private String name;
