@@ -31,6 +31,21 @@
         </dependency>
 
 
+        <!-- Flying Saucer PDF -->
+        <!-- https://mvnrepository.com/artifact/org.xhtmlrenderer/flying-saucer-pdf -->
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-pdf</artifactId>
+            <version>9.1.20</version>
+        </dependency>
+
+
+        <!-- Thymeleaf for template processing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on -->
         <!--          implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
             implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'-->
