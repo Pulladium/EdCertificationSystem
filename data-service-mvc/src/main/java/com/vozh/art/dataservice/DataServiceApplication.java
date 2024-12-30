@@ -3,6 +3,7 @@ package com.vozh.art.dataservice;
 import com.vozh.art.dataservice.entity.*;
 import com.vozh.art.dataservice.entity.embedKey.ParticipantKey;
 import com.vozh.art.dataservice.repository.*;
+import com.vozh.art.dataservice.service.CertificateParticipantService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -31,7 +32,8 @@ public class DataServiceApplication {
                                                CategoryRepository categoryRepository,
                                                OrganizationRepository organizationRepository,
                                                CertificateParticipantRepo certificateParticipantRepo,
-                                               ParticipantRepository participantRepository
+                                               ParticipantRepository participantRepository,
+                                                  CertificateParticipantService certificateParticipantService
     ){
 
         return args -> {
@@ -96,43 +98,48 @@ public class DataServiceApplication {
                     .description("Java Persistence qualification certificate")
                     .categories(Set.of(subCategory))
                     .issuers(Set.of(organization))
-                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
+//                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
                     .build();
 
+
+//            certificateParticipantService.assignParticipantToCertificate(certificateParticipant, certificate);
             certificateParticipant.setCertificate(certificate);
+            certificate.setCertificateParticipants(Set.of(certificateParticipant));
+            
+            
 
-            Certificate certificate2 = Certificate.builder()
-                    .description("Machine Learning qualification certificate")
-                    .categories(Set.of(subCategory))
-                    .issuers(Set.of(organization))
-                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
-                    .build();
-            Certificate certificate3 = Certificate.builder()
-                    .description("DevOps qualification certificate")
-                    .categories(Set.of(subCategory))
-                    .issuers(Set.of(organization))
-                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
-                    .build();
-            Certificate certificate4 = Certificate.builder()
-                    .description("Rust for beginners qualification certificate")
-                    .categories(Set.of(subCategory))
-                    .issuers(Set.of(organization))
-                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
-                    .build();
-
-            Certificate certificate5 = Certificate.builder()
-                    .description("IBM Cloud cli course certificate")
-                    .categories(Set.of(subCategory))
-                    .issuers(Set.of(organization))
-                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
-                    .build();
-            Certificate certificate6 = Certificate.builder()
-                    .description("AWS Cloud cli course certificate")
-                    .categories(Set.of(subCategory))
-                    .issuers(Set.of(organization))
-                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
-                    .build();
-            certificateParticipant.setCertificate(certificate2);
+//            Certificate certificate2 = Certificate.builder()
+//                    .description("Machine Learning qualification certificate")
+//                    .categories(Set.of(subCategory))
+//                    .issuers(Set.of(organization))
+////                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
+//                    .build();
+//            Certificate certificate3 = Certificate.builder()
+//                    .description("DevOps qualification certificate")
+//                    .categories(Set.of(subCategory))
+//                    .issuers(Set.of(organization))
+////                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
+//                    .build();
+//            Certificate certificate4 = Certificate.builder()
+//                    .description("Rust for beginners qualification certificate")
+//                    .categories(Set.of(subCategory))
+//                    .issuers(Set.of(organization))
+////                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
+//                    .build();
+//
+//            Certificate certificate5 = Certificate.builder()
+//                    .description("IBM Cloud cli course certificate")
+//                    .categories(Set.of(subCategory))
+//                    .issuers(Set.of(organization))
+////                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
+//                    .build();
+//            Certificate certificate6 = Certificate.builder()
+//                    .description("AWS Cloud cli course certificate")
+//                    .categories(Set.of(subCategory))
+//                    .issuers(Set.of(organization))
+////                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
+//                    .build();
+//            certificateParticipant.setCertificate(certificate2);
 
 
             participantRepository.save(participant);
@@ -141,7 +148,8 @@ public class DataServiceApplication {
             categoryRepository.save(category);
             organizationRepository.save(organization);
 //            List<Certificate> savedCert = certificateRepository.saveAll(List.of(certificate, certificate2));
-            certificateRepository.saveAll(List.of(certificate, certificate2, certificate3, certificate4, certificate5, certificate6));
+//            certificateRepository.saveAll(List.of(certificate, certificate2, certificate3, certificate4, certificate5, certificate6));
+            certificateRepository.save(certificate);
             certificateParticipantRepo.save(certificateParticipant);
 //            log.info("Cert id after save : {}", savedCert.get(0).getId());
         };

@@ -27,7 +27,7 @@ public class GenerateDocController {
     ) {
         log.info("Document generation started");
     }
-
+///api/data/documents-generate/generate_and_save
     @PostMapping("/generate_and_save")
     public ResponseEntity<SignedDocRefResponse> generateAndSaveDocument(
             @RequestBody ParticipantTemplateRequest participantData

@@ -29,7 +29,7 @@ public class CertificateController {
     private final CertificateParticipantService certificateParticipantService;
     private final ParticipantService participantService;
 
-
+// Logic for frontend
     @GetMapping("/pagingList")
     public ResponseEntity<Page<CertificateResponse>> getCertificates(
             @RequestParam(defaultValue = "0") int page,
@@ -59,6 +59,9 @@ public class CertificateController {
         Certificate savedCertificate = certificateService.save(cert2Save);
         return ResponseEntity.ok(CertificateMapper.mapToResponse(savedCertificate));
     }
+
+
+
 
     @PostMapping("/addCategory")
     public ResponseEntity<CertificateResponse> addCategoryToCertificate(@RequestBody CertificateAddCategoryRequest request) {

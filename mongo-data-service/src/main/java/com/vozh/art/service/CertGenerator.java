@@ -17,6 +17,7 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 
 import java.io.*;
+import java.time.LocalDateTime;
 
 @Service
 @Slf4j
@@ -55,7 +56,7 @@ public class CertGenerator {
 
 
 
-
+//todo need title and description
     private String parseThymeleafTemplate(String htmlPath, String cssPath, ParticipantKey participantKey) {
 
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
@@ -79,11 +80,12 @@ public class CertGenerator {
         String processedCss = templateEngine.process("template/css/certificate-style.css", cssContext);
 
 
+
         Context htmlContext = new Context();
         htmlContext.setVariable("title", "Certificate of Achievement");
-        htmlContext.setVariable("name", "John Doe");
+        htmlContext.setVariable("name", participantKey.getName() + " " + participantKey.getSurname());
         htmlContext.setVariable("description", "Has successfully completed the course");
-        htmlContext.setVariable("dateTime", "December 28, 2024");
+        htmlContext.setVariable("dateTime", LocalDateTime.now().toString());
 
         htmlContext.setVariable("styles", processedCss);
 

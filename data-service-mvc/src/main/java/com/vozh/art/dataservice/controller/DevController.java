@@ -27,4 +27,10 @@ public class DevController {
         return ResponseEntity.ok("pong");
     }
 
+
+//    //todo dev func
+//    @PostMapping("/mongo/genPdfwithCredentialsAndSave/")
+//    public
+
+
 }
