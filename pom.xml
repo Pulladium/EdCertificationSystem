@@ -18,7 +18,6 @@
     <modules>
         <module>gateway-react</module>
         <module>data-service-mvc</module>
-        <module>common-module</module>
         <module>eureka-server</module>
         <module>notification-service-mcv-tmpl</module>
         <module>mongo-data-service</module>
@@ -32,14 +31,7 @@
 
 
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>com.vozh.art</groupId>
-            <artifactId>common-module</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
+
 
     <dependencyManagement>
         <dependencies>

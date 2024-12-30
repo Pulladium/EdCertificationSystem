@@ -50,6 +50,17 @@ public class CertificateController {
                 mapToResponse(certificateService.getById(id)));
     }
 
+    /**
+     * Create certificate
+     *  String name;
+     *  String description;
+     *  can be setted later
+     *  Set<CategoryRequest> categories = null;
+     *  can be setted later
+     *  List<ParticipantRequest> certificateParticipants = null;
+     * @param request
+     * @return CertificateResponse
+     */
     @PostMapping("/create")
     public ResponseEntity<CertificateResponse> createCertificate(@RequestBody CreateCertificateRequest request) {
         log.trace("Creating certificate: {}", request);
@@ -61,8 +72,11 @@ public class CertificateController {
     }
 
 
-
-
+/**
+     * Add category to certificate
+     * @param request
+     * @return CertificateResponse
+     */
     @PostMapping("/addCategory")
     public ResponseEntity<CertificateResponse> addCategoryToCertificate(@RequestBody CertificateAddCategoryRequest request) {
         log.info("Adding category to certificate: {}", request);
