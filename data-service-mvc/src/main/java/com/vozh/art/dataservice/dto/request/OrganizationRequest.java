@@ -23,18 +23,4 @@ public class OrganizationRequest {
 //    private Organization.OrganizationStatus status;
 //    private String maintainerKeycloakUUID;
 
-    public static OrganizationRequest fromOrganization(Organization organization){
-        return OrganizationRequest.builder()
-                .name(organization.getName())
-                .address(organization.getAddress())
-                .contactInfo(organization.getContactInfo())
-                .build();
-    }
-    public static Organization toOrganization(OrganizationRequest organizationRequest){
-        return Organization.builder()
-                .name(organizationRequest.getName())
-                .address(organizationRequest.getAddress())
-                .contactInfo(organizationRequest.getContactInfo())
-                .build();
-    }
 }

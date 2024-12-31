@@ -1,5 +1,6 @@
 package com.vozh.art.dataservice.controller;
 
+import com.vozh.art.dataservice.dto.request.OrganizationRequest;
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
 import com.vozh.art.dataservice.dto.response.OrganizationResponse;
 import com.vozh.art.dataservice.service.OrganizationService;
@@ -8,10 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/data/organization")
@@ -31,7 +30,33 @@ public class OrganizationController {
 
         return ResponseEntity.ok(organizationsPagenated);
     }
-//        @PostMapping("/create")
+        @PostMapping("/create")
+        public ResponseEntity<OrganizationResponse> createOrganization(@RequestBody OrganizationRequest request) {
+            log.trace("OrganizationController: Creating organization: {}", request);
+            return ResponseEntity.ok(organizationService.createOrganization(request));
+        }
+
+        @GetMapping("/{id}")
+        public ResponseEntity<OrganizationResponse> getOrganization(@PathVariable Long id) {
+            log.trace("OrganizationController: Getting organization by id: {}", id);
+            return ResponseEntity.ok(organizationService.getOrganizationResponseById(id));
+        }
+
+
+        @PreAuthorize("hasRole('ROLE_admin')")
+        @PostMapping("/approveOrganization/{id}")
+        public ResponseEntity<OrganizationResponse> changeStatus(@PathVariable Long id) {
+            log.trace("OrganizationController: Changing status of organization by id: {}", id);
+            return ResponseEntity.ok(organizationService.approveOrganization(id));
+        }
+
+        @PreAuthorize("hasRole('ROLE_admin')")
+        @PostMapping("/rejectOrganization/{id}")
+        public ResponseEntity<OrganizationResponse> rejectOrganization(@PathVariable Long id) {
+            log.trace("OrganizationController: Rejecting organization by id: {}", id);
+            return ResponseEntity.ok(organizationService.rejectOrganization(id));
+        }
+
 //
 //
 //        @GetMapping("/{id}")

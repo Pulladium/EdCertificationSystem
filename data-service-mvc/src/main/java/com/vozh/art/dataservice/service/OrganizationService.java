@@ -2,6 +2,7 @@ package com.vozh.art.dataservice.service;
 
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
 import com.vozh.art.dataservice.dto.response.OrganizationResponse;
+import com.vozh.art.dataservice.dto.utils.OrganizationMapper;
 import com.vozh.art.dataservice.entity.Certificate;
 import com.vozh.art.dataservice.entity.Organization;
 
@@ -30,7 +31,7 @@ public class OrganizationService {
     @Transactional
     public OrganizationResponse createOrganization(OrganizationRequest request){
         log.trace("Mapping request to organization: {}", request);
-        Organization organization = OrganizationRequest.toOrganization(request);
+        Organization organization = OrganizationMapper.mapToEntity(request);
         log.trace("Saving organization via organization_repository: {}", organization);
         Organization savedOrganization = organizationRepository.save(organization);
         log.trace("Mapping saved organization to response: {}", savedOrganization);
@@ -43,6 +44,7 @@ public class OrganizationService {
         return OrganizationResponse.fromOrganization(organization);
     }
 
+    @Transactional
     public boolean deleteOrganizationById(Long id) {
         log.trace("Deleting organization by id: {}", id);
         organizationRepository.deleteById(id);
@@ -52,7 +54,7 @@ public class OrganizationService {
     @Transactional
     public OrganizationResponse updateOrganization(OrganizationRequest request){
         log.trace("Mapping request to organization: {}", request);
-        Organization organization = OrganizationRequest.toOrganization(request);
+        Organization organization =  OrganizationMapper.mapToEntity(request);
         log.trace("Saving organization via organization_repository: {}", organization);
         Organization savedOrganization = organizationRepository.save(organization);
         log.trace("Mapping saved organization to response: {}", savedOrganization);
@@ -64,6 +66,14 @@ public class OrganizationService {
         log.trace("Approving organization by id: {}", id);
         Organization organization = getOrganizationById(id);
         organization.setStatus(Organization.OrganizationStatus.APPROVED);
+        Organization savedOrganization = organizationRepository.save(organization);
+        return OrganizationResponse.fromOrganization(savedOrganization);
+    }
+    @Transactional
+    public OrganizationResponse rejectOrganization(Long id){
+        log.trace("Rejecting organization by id: {}", id);
+        Organization organization = getOrganizationById(id);
+        organization.setStatus(Organization.OrganizationStatus.REJECTED);
         Organization savedOrganization = organizationRepository.save(organization);
         return OrganizationResponse.fromOrganization(savedOrganization);
     }
