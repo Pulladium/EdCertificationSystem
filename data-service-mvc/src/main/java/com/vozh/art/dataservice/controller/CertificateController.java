@@ -55,7 +55,7 @@ public class CertificateController {
      *  String name;
      *  String description;
      *  can be setted later
-     *  Set<CategoryRequest> categories = null;
+     *  Set<CategoryRequest> categories = null; maybe not category request but their id. or use addCategory method
      *  can be setted later
      *  List<ParticipantRequest> certificateParticipants = null;
      * @param request
