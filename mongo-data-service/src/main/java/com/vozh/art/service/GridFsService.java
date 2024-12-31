@@ -1,5 +1,15 @@
-package com.vozh.art.dataservice.service;
+package com.vozh.art.service;
 
+import com.mongodb.client.gridfs.model.GridFSFile;
+import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsOperations;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.stereotype.Service;
+import java.io.IOException;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -12,11 +22,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 @RequiredArgsConstructor
-public class GridFSService {
-
+public class GridFsService {
     private final GridFsTemplate gridFsTemplate;
     private final GridFsOperations gridFsOperations;
 
@@ -30,10 +40,19 @@ public class GridFSService {
         );
         return fileId.toString();
     }
+    public String storeFile(InputStream inputStream, String fileName, String contentType) {
+        ObjectId fileId = gridFsTemplate.store(
+                inputStream,
+                fileName,
+                contentType
+        );
+        return fileId.toString();
+    }
+
 
     public InputStreamResource retrieveFile(String fileId) throws IOException {
         GridFSFile gridFSFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(fileId)));
-        if (gridFSFile == null) {
+        if (gridFSFile == null ) {
             throw new IOException("File not found");
         }
         return new InputStreamResource(gridFsOperations.getResource(gridFSFile).getInputStream());

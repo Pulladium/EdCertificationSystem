@@ -4,12 +4,14 @@ import com.vozh.art.gateway.config.filters.AuthorityLogFilter;
 //import com.vozh.art.gateway.config.utils.AuthoritiesConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -19,6 +21,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
+import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.CorsWebFilter;
@@ -38,12 +43,35 @@ public class SecurityConfig {
     private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
 
+    /**
+     * Flag to enable development mode with relaxed security settings.
+     */
+    @Value("${app.security.dev-mode:false}")
+    private boolean devMode;
+
+
+    /**
+     * Configures custom routes for the application.
+     * Defines paths and predicates for different services.
+     */
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("data-service-mvc", r ->
                         r.path("/api/data/**")
                                 .uri("lb://data-service"))
+                .route("no-csrf-data-service", r -> r
+                                .path("/no-csrf/api/data/**")
+                                .and().predicate(exchange -> devMode)
+                                .filters(f -> f.rewritePath("^/no-csrf(?<segment>/.*)$", "${segment}"))
+                                .uri("lb://data-service")
+                                )
+//                .route("no-csrf-data-service", r ->
+//                        r.path("/no-csrf/api/data/**")
+//                                .filters(f -> f.stripPrefix(1))
+//                                .uri("lb://data-service"))
+
+
                 .route("processing-service", r ->
                         r.path("/api/processing/**")
                                 .uri("lb://processing-service"))
@@ -56,10 +84,15 @@ public class SecurityConfig {
     }
     //todo change to pathMathcers.permit and others authinticated
 
+    /**
+     * Configures the security filter chain for the application.
+     * Defines authorization rules, CSRF protection, and authentication methods.
+     */
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http
     ,Converter<Jwt, Mono<AbstractAuthenticationToken>> authenticationConverter) throws Exception {
         http
+
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .addFilterBefore(new AuthorityLogFilter(), SecurityWebFiltersOrder.AUTHORIZATION)
                 .authorizeExchange((authorize) -> authorize
@@ -71,10 +104,22 @@ public class SecurityConfig {
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(jwtDecoder ->
                         jwtDecoder.jwtAuthenticationConverter(
                                 authenticationConverter
-                        )));
+                        ))
+
+                );
+        if (devMode) {
+            ServerWebExchangeMatcher csrfMatcher = new NegatedServerWebExchangeMatcher(
+                    new PathPatternParserServerWebExchangeMatcher("/no-csrf/**")
+            );
+            http.csrf(csrf -> csrf.requireCsrfProtectionMatcher(csrfMatcher));
+
+
+
+        }
+
         http.securityContextRepository(NoOpServerSecurityContextRepository.getInstance());
 //        why it is no writen that csrf.disable is deprecated as before but ok
-//        http.csrf(ServerHttpSecurity.CsrfSpec::disable);
+        http.csrf(ServerHttpSecurity.CsrfSpec::disable);
         return http.build();
     }
 
@@ -89,6 +134,9 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+    /**
+     * Creates a CorsWebFilter bean to apply CORS policies.
+     */
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
@@ -131,5 +179,4 @@ public class SecurityConfig {
             return Flux.fromStream(allRoles.stream().map(r -> "ROLE_%s".formatted(r)).map(SimpleGrantedAuthority::new));
         };
     }
-
 }

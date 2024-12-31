@@ -1,6 +1,6 @@
-package com.vozh.art.dataservice.repository.mDB;
+package com.vozh.art.repo;
 
-import com.vozh.art.dataservice.entity.mongoDoc.SignedDoc;
+import com.vozh.art.entity.SignedDoc;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDateTime;

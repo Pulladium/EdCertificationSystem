@@ -24,6 +24,9 @@ public class CategoryRequest {
     private String description;
 
     private Long parentCategoryId;
+
+
+    //todo ids or remove
     private Set<CategoryRequest> subCategories;
 
 

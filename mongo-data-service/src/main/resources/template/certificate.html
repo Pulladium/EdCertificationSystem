@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html >
+<head>
+<!--    <meta charset="UTF-8">-->
+    <title>Certificate</title>
+<!--    <link rel="stylesheet" href="css/certificate-style.css">-->
+<!--    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </meta>
+    <style type="text/css" th:utext="${styles}">
+        /* Styles will be injected here */
+    </style>
+</head>
+<body>
+<div class="certificate-container">
+    <!-- Certificate Header -->
+    <header>
+        <h1 th:text="${title}">Certificate Title</h1>
+    </header>
+
+    <!-- Main Certificate Content -->
+    <main>
+        <div class="recipient-info">
+            <h2>This certifies that</h2>
+            <p class="name" th:text="${name}">John Doe</p>
+        </div>
+
+        <div class="certificate-description">
+            <p th:text="${description}">Certificate Description</p>
+        </div>
+
+        <div class="certificate-footer">
+            <div class="date-time">
+                <p>Issued on: <span th:text="${dateTime}">January 1, 2024</span></p>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

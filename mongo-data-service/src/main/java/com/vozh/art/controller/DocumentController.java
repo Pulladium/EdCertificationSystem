@@ -1,10 +1,9 @@
-package com.vozh.art.dataservice.controller;
+package com.vozh.art.controller;
 
-
-import com.vozh.art.dataservice.dto.DocWithFile;
-import com.vozh.art.dataservice.entity.mongoDoc.SignedDoc;
-import com.vozh.art.dataservice.service.DocService;
-import com.vozh.art.dataservice.service.KeyService;
+import com.vozh.art.dto.SignedDocAndFile;
+import com.vozh.art.entity.SignedDoc;
+import com.vozh.art.service.DocService;
+import com.vozh.art.service.KeyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -19,6 +18,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/data/documents")
@@ -66,7 +66,7 @@ public class DocumentController {
     // http headers supports only utf8
 //    @GetMapping("/{id}")
 //    public ResponseEntity<ByteArrayResource> getDocument(@PathVariable String id) throws IOException {
-////        DocWithFile documentWithContent = signedDocService.getDocumentWithContent(id);
+    ////        DocWithFile documentWithContent = signedDocService.getDocumentWithContent(id);
 //        SignedDoc document = documentWithContent.getDocument();
 //        byte[] content = documentWithContent.getContent();
 //
@@ -94,7 +94,7 @@ public class DocumentController {
     //todo should also send verification data
     @GetMapping("/{id}")
     public ResponseEntity<ByteArrayResource> getDocumentFile (@PathVariable String id) throws IOException {
-        DocWithFile documentWithContent = signedDocService.getDocWithFile(id);
+        SignedDocAndFile documentWithContent = signedDocService.getSignedDocAndFile(id);
         SignedDoc document = documentWithContent.doc();
         byte[] content = documentWithContent.file();
 

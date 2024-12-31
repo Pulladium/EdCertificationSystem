@@ -24,8 +24,6 @@ import java.util.stream.Collectors;
 public class CategoryController {
     private final CategoryService categoryService;
 
-
-//    @PreAuthorize("hasAuthority('admin')")
     @PreAuthorize("hasRole('ROLE_admin')")
     @PostMapping("/create")
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
@@ -39,16 +37,9 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.postNewCategory(request));
     }
 
-//    @PreAuthorize("hasAuthority('admin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCategoryById(@PathVariable Long id) {
         log.trace("CategoryController: Deleting category by id: {}", id);
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        log.info("Current user authorities: {}",
-//                auth.getAuthorities().stream()
-//                        .map(Object::toString)
-//                        .collect(Collectors.joining(", "))
-//        );
         categoryService.deleteCategoryById(id);
         return ResponseEntity.ok("Category with id: " + id + " deleted");
     }
