@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -57,15 +58,60 @@ public class OrganizationService {
         return true;
     }
 
+//    @Transactional
+//    public OrganizationResponse updateOrganization(UpdateOrgRequest request){
+//        log.trace("Updating organization: {}", request);
+//        validateOrgUpdate(request);
+//        Organization organizationFromRepo = organizationRepository.findById(request.getOrganizationId()).orElseThrow();
+//        Organization organization = OrganizationMapper.mapToEntity(request);
+//
+//        organization.setStatus(organizationFromRepo.getStatus());
+//        organization.setMaintainerKeycloakUUID(organizationFromRepo.getMaintainerKeycloakUUID());
+//
+//        //todo make all list or set or check custing
+//        List<Certificate> certificateList = certificateRepository.findAllById(request.getCertificatesIds());
+//        Set<Certificate> certificateSet = new HashSet<>(certificateList);
+//
+//        organization.setCertificates(certificateSet);
+//
+//        Organization savedOrganization = organizationRepository.save(organization);
+//        return OrganizationMapper.mapToResponse(savedOrganization);
+//    }
     @Transactional
-    public OrganizationResponse updateOrganization(UpdateOrgRequest request){
+    public OrganizationResponse updateOrganization(UpdateOrgRequest request) {
         log.trace("Updating organization: {}", request);
         validateOrgUpdate(request);
+
         Organization organization = organizationRepository.findById(request.getOrganizationId()).orElseThrow();
-        //todo make all list or set or check custing
-        organization.setCertificates((Set<Certificate>) certificateRepository.findAllById(request.getCertificatesIds()));
-        Organization savedOrganization = organizationRepository.save(organization);
-        return OrganizationMapper.mapToResponse(savedOrganization);
+
+        // Update fields
+        organization.setName(request.getName());
+        organization.setAddress(request.getAddress());
+        organization.setContactInfo(request.getContactInfo());
+
+        // Get new certificates
+        List<Certificate> newCertificates = certificateRepository.findAllById(request.getCertificatesIds());
+
+        // Remove organization from old certificates that are not in new list
+        organization.getCertificates().forEach(cert -> {
+            if (!newCertificates.contains(cert)) {
+                cert.getIssuers().remove(organization);
+                certificateRepository.save(cert);
+            }
+        });
+
+        // Add organization to new certificates
+        newCertificates.forEach(cert -> {
+            if (!cert.getIssuers().contains(organization)) {
+                cert.getIssuers().add(organization);
+                certificateRepository.save(cert);
+            }
+        });
+
+        // Update organization's certificates set
+        organization.setCertificates(new HashSet<>(newCertificates));
+
+        return OrganizationMapper.mapToResponse(organizationRepository.save(organization));
     }
 
 // get all organizations

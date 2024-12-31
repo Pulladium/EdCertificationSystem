@@ -37,6 +37,7 @@ import java.util.*;
 //@KeycloakConfiguration
 //https://gauthier-cassany.com/posts/spring-boot-keycloak
 //https://www.springcloud.io/post/2022-07/spring-boot-keycloak-roles/#gsc.tab=0
+//todo do i really need /no-csrf/ path with curr keycloak conf
 @EnableWebFluxSecurity
 public class SecurityConfig {
 //https://stackoverflow.com/questions/77974795/how-to-resolve-role-based-authentication-using-keycloak-using-spring-webflux-in-apigateway
