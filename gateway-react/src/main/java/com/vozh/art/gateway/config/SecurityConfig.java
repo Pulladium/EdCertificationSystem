@@ -119,7 +119,7 @@ public class SecurityConfig {
 
         http.securityContextRepository(NoOpServerSecurityContextRepository.getInstance());
 //        why it is no writen that csrf.disable is deprecated as before but ok
-        http.csrf(ServerHttpSecurity.CsrfSpec::disable);
+//        http.csrf(ServerHttpSecurity.CsrfSpec::disable);
         return http.build();
     }
 
