@@ -1,14 +1,13 @@
 package com.vozh.art.dataservice.service;
 
-import com.vozh.art.dataservice.dto.response.CertificateResponse;
+import com.vozh.art.dataservice.dto.request.UpdateOrgRequest;
 import com.vozh.art.dataservice.dto.response.OrganizationResponse;
 import com.vozh.art.dataservice.dto.utils.OrganizationMapper;
 import com.vozh.art.dataservice.entity.Certificate;
 import com.vozh.art.dataservice.entity.Organization;
 
 import com.vozh.art.dataservice.dto.request.OrganizationRequest;
-import com.vozh.art.dataservice.dto.response.OrganizationResponse;
-import com.vozh.art.dataservice.entity.Organization;
+import com.vozh.art.dataservice.repository.CertificateRepository;
 import com.vozh.art.dataservice.repository.OrganizationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +20,15 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Set;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrganizationService {
 
     private final OrganizationRepository organizationRepository;
+    private final CertificateRepository certificateRepository;
 
     @Transactional
     public OrganizationResponse createOrganization(OrganizationRequest request){
@@ -52,13 +54,32 @@ public class OrganizationService {
     }
 
     @Transactional
-    public OrganizationResponse updateOrganization(OrganizationRequest request){
-        log.trace("Mapping request to organization: {}", request);
-        Organization organization =  OrganizationMapper.mapToEntity(request);
-        log.trace("Saving organization via organization_repository: {}", organization);
+    public OrganizationResponse updateOrganization(UpdateOrgRequest request){
+        log.trace("Updating organization: {}", request);
+        validateOrgUpdate(request);
+        Organization organization = organizationRepository.findById(request.getOrganizationId()).orElseThrow();
+        //todo make all list or set or check custing
+        organization.setCertificates((Set<Certificate>) certificateRepository.findAllById(request.getCertificateIds()));
         Organization savedOrganization = organizationRepository.save(organization);
-        log.trace("Mapping saved organization to response: {}", savedOrganization);
         return OrganizationResponse.fromOrganization(savedOrganization);
+    }
+
+// get all organizations
+    private void validateCertHaveOneMoreOrg(Certificate certificate, Organization org2Remove){
+        if(certificate.getIssuers().size() == 1 && certificate.getIssuers().contains(org2Remove)){
+            log.error("Certificate with id: {} has only one organization, cant remove it", certificate.getId());
+            throw new RuntimeException("Certificate with id: " + certificate.getId() + " has only one organization, cant remove it");
+        }
+    }
+
+    private boolean validateOrgUpdate(UpdateOrgRequest request){
+        final Organization organization = organizationRepository.findById(request.getOrganizationId()).orElseThrow();
+        request.getCertificateIds().forEach(certificateId -> {
+            //throws NoSuchElementException if not found
+            Certificate certificate = certificateRepository.findById(certificateId).orElseThrow();
+            validateCertHaveOneMoreOrg(certificate,organization);
+        });
+        return true;
     }
 
     @Transactional

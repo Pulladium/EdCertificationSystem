@@ -44,30 +44,34 @@ public class OrganizationController {
 
 
         @PreAuthorize("hasRole('ROLE_admin')")
-        @PostMapping("/approveOrganization/{id}")
+        @PutMapping("/approveOrganization/{id}")
         public ResponseEntity<OrganizationResponse> changeStatus(@PathVariable Long id) {
             log.trace("OrganizationController: Changing status of organization by id: {}", id);
             return ResponseEntity.ok(organizationService.approveOrganization(id));
         }
 
         @PreAuthorize("hasRole('ROLE_admin')")
-        @PostMapping("/rejectOrganization/{id}")
+        @PutMapping("/rejectOrganization/{id}")
         public ResponseEntity<OrganizationResponse> rejectOrganization(@PathVariable Long id) {
             log.trace("OrganizationController: Rejecting organization by id: {}", id);
             return ResponseEntity.ok(organizationService.rejectOrganization(id));
         }
 
-//
-//
-//        @GetMapping("/{id}")
-//        public ResponseEntity<OrganizationResponse> getOrganization(@PathVariable Long id) {
-//
+        //todo validate cert have altleast one org if cert will be removed from org
+//todo    also test cascade remove org from cert
+        @PutMapping("/update")
+        public ResponseEntity<OrganizationResponse> updateOrganization(@RequestBody OrganizationRequest request) {
+            log.trace("OrganizationController: Updating organization: {}", request);
+//            return ResponseEntity.ok(organizationService.updateOrganization(request));
+            return ResponseEntity.ok(null);
+        }
+
+
+
 //
 //        @DeleteMapping("/{id}")
 //
 //
-//        @PutMapping("/update")
-//
-//        @PutMapping("/approve/{id}")
+
 
 }

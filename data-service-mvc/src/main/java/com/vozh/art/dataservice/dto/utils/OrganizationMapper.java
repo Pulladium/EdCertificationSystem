@@ -1,14 +1,29 @@
 package com.vozh.art.dataservice.dto.utils;
 
 import com.vozh.art.dataservice.dto.request.OrganizationRequest;
+import com.vozh.art.dataservice.dto.request.UpdateOrgRequest;
 import com.vozh.art.dataservice.dto.response.OrganizationResponse;
+import com.vozh.art.dataservice.entity.BaseEntity;
 import com.vozh.art.dataservice.entity.Organization;
+import com.vozh.art.dataservice.service.CertificateService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 @Component
 public class OrganizationMapper {
+
+    private static CertificateService certificateService;
+    @Autowired
+    public void setCertificateService(CertificateService service) {
+        OrganizationMapper.certificateService = service;
+    }
+
+
     public static OrganizationResponse mapToResponse(Organization organization) {
-        return OrganizationResponse.builder()
+        OrganizationResponse organizationResponse = OrganizationResponse.builder()
                 .organizationId(organization.getId())
                 .name(organization.getName())
                 .address(organization.getAddress())
@@ -16,10 +31,19 @@ public class OrganizationMapper {
                 .status(organization.getStatus())
                 .maintainerKeycloakUUID(organization.getMaintainerKeycloakUUID())
                 .build();
+
+        //todo may throw null pointer
+        organizationResponse.setCertificatesId(organization.getCertificates()
+                .stream().map(BaseEntity::getId).collect(Collectors.toSet()));
+
+        return organizationResponse;
+
     }
 
+    //dosent map certificates
+    @Autowired
     public static Organization mapToEntity(OrganizationRequest organizationRequest) {
-        return Organization.builder()
+        Organization org =  Organization.builder()
                 .name(organizationRequest.getName())
                 .address(organizationRequest.getAddress())
                 .contactInfo(organizationRequest.getContactInfo())
@@ -28,5 +52,13 @@ public class OrganizationMapper {
 //                .maintainerKeycloakUUID(organizationRequest.getMaintainerKeycloakUUID())
 //                TODO should be set by system already here
                 .build();
+
+        if(organizationRequest instanceof UpdateOrgRequest){
+            UpdateOrgRequest updateOrgRequest = (UpdateOrgRequest) organizationRequest;
+            org.setId(updateOrgRequest.getOrganizationId());
+            org.setCertificates(certificateService.getAllByIds(updateOrgRequest.getCertificateIds()));
+        }
+
+        return org;
     }
 }
