@@ -54,6 +54,13 @@ public class OrganizationService {
     @Transactional
     public boolean deleteOrganizationById(Long id) {
         log.trace("Deleting organization by id: {}", id);
+        Organization organization2Delete = getOrganizationById(id);
+        List<Certificate> certificates = organization2Delete.getCertificates().stream().collect(Collectors.toList());
+        certificates.forEach(cert -> {
+            validateCertHaveOneMoreOrg(cert, organization2Delete);
+            cert.getIssuers().remove(organization2Delete);
+            certificateRepository.save(cert);
+        });
         organizationRepository.deleteById(id);
         return true;
     }

@@ -32,10 +32,10 @@ public class OrganizationMapper {
                 .maintainerKeycloakUUID(organization.getMaintainerKeycloakUUID())
                 .build();
 
-        //todo may throw null pointer
-        organizationResponse.setCertificatesId(organization.getCertificates()
-                .stream().map(BaseEntity::getId).collect(Collectors.toSet()));
-
+        if(organization.getCertificates() != null) {
+            organizationResponse.setCertificatesId(organization.getCertificates()
+                    .stream().map(BaseEntity::getId).collect(Collectors.toSet()));
+        }
         return organizationResponse;
 
     }
