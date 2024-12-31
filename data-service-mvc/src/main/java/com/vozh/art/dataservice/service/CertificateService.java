@@ -35,6 +35,14 @@ public class CertificateService {
         throw new PersistenceException("Cant find certificate by id");
     }
 
+    public Set<Certificate> getAllByIds(List<Long> ids) {
+        List<Certificate> certificates = certificateRepository.findAllById(ids);
+        if (certificates.isEmpty()) {
+            throw new PersistenceException("Cant find certificates by ids");
+        }
+        return certificates.stream().collect(Collectors.toSet());
+    }
+
     public Page<CertificateResponse> getCertificatesPagenated(PageRequest pageRequest) {
         Page<Certificate> certificatePage = findAll(pageRequest);
         return certificatePage.map(CertificateResponse::fromCertificate);

@@ -37,6 +37,7 @@ import java.util.*;
 //@KeycloakConfiguration
 //https://gauthier-cassany.com/posts/spring-boot-keycloak
 //https://www.springcloud.io/post/2022-07/spring-boot-keycloak-roles/#gsc.tab=0
+//todo do i really need /no-csrf/ path with curr keycloak conf
 @EnableWebFluxSecurity
 public class SecurityConfig {
 //https://stackoverflow.com/questions/77974795/how-to-resolve-role-based-authentication-using-keycloak-using-spring-webflux-in-apigateway
@@ -119,7 +120,7 @@ public class SecurityConfig {
 
         http.securityContextRepository(NoOpServerSecurityContextRepository.getInstance());
 //        why it is no writen that csrf.disable is deprecated as before but ok
-        http.csrf(ServerHttpSecurity.CsrfSpec::disable);
+//        http.csrf(ServerHttpSecurity.CsrfSpec::disable);
         return http.build();
     }
 
