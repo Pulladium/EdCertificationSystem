@@ -20,7 +20,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,13 +39,15 @@ public class OrganizationService {
         log.trace("Saving organization via organization_repository: {}", organization);
         Organization savedOrganization = organizationRepository.save(organization);
         log.trace("Mapping saved organization to response: {}", savedOrganization);
-        return OrganizationResponse.fromOrganization(savedOrganization);
+//        return OrganizationResponse.fromOrganization(savedOrganization);
+        return OrganizationMapper.mapToResponse(savedOrganization);
     }
 
     public OrganizationResponse getOrganizationResponseById(Long id) {
         log.trace("Getting organization by id: {}", id);
         Organization organization = getOrganizationById(id);
-        return OrganizationResponse.fromOrganization(organization);
+//        return OrganizationResponse.fromOrganization(organization);
+        return OrganizationMapper.mapToResponse(organization);
     }
 
     @Transactional
@@ -59,9 +63,9 @@ public class OrganizationService {
         validateOrgUpdate(request);
         Organization organization = organizationRepository.findById(request.getOrganizationId()).orElseThrow();
         //todo make all list or set or check custing
-        organization.setCertificates((Set<Certificate>) certificateRepository.findAllById(request.getCertificateIds()));
+        organization.setCertificates((Set<Certificate>) certificateRepository.findAllById(request.getCertificatesIds()));
         Organization savedOrganization = organizationRepository.save(organization);
-        return OrganizationResponse.fromOrganization(savedOrganization);
+        return OrganizationMapper.mapToResponse(savedOrganization);
     }
 
 // get all organizations
@@ -74,11 +78,36 @@ public class OrganizationService {
 
     private boolean validateOrgUpdate(UpdateOrgRequest request){
         final Organization organization = organizationRepository.findById(request.getOrganizationId()).orElseThrow();
-        request.getCertificateIds().forEach(certificateId -> {
-            //throws NoSuchElementException if not found
-            Certificate certificate = certificateRepository.findById(certificateId).orElseThrow();
-            validateCertHaveOneMoreOrg(certificate,organization);
-        });
+        Set<Long> currentCertificatesIds = organization.getCertificates().stream().map(Certificate::getId).collect(Collectors.toSet());
+
+        Set<Long> newCertificatesIds = request.getCertificatesIds().stream().collect(Collectors.toSet());
+
+        //  removed certificates
+        Set<Long> removedCertificatesIds = new HashSet<>(currentCertificatesIds);
+        removedCertificatesIds.removeAll(newCertificatesIds);
+
+        //  added certificates
+        Set<Long> addedCertificatesIds = new HashSet<>(newCertificatesIds);
+        addedCertificatesIds.removeAll(currentCertificatesIds);
+
+        for (Long certId : removedCertificatesIds) {
+            Certificate certificate = certificateRepository.findById(certId).orElseThrow();
+            validateCertHaveOneMoreOrg(certificate, organization);
+        }
+        for(Long certId : addedCertificatesIds) {
+            Certificate certificate = certificateRepository.findById(certId).orElseThrow();
+            if (certificate.getIssuers().contains(organization)) {
+                log.error("Certificate with id: {} already has organization with id: {}", certId, organization.getId());
+                throw new RuntimeException("Certificate with id: " + certId + " already has organization with id: " + organization.getId());
+            }
+        }
+
+//
+//        request.getCertificatesIds().forEach(certificateId -> {
+//            //throws NoSuchElementException if not found
+//            Certificate certificate = certificateRepository.findById(certificateId).orElseThrow();
+//            validateCertHaveOneMoreOrg(certificate,organization);
+//        });
         return true;
     }
 
@@ -88,7 +117,8 @@ public class OrganizationService {
         Organization organization = getOrganizationById(id);
         organization.setStatus(Organization.OrganizationStatus.APPROVED);
         Organization savedOrganization = organizationRepository.save(organization);
-        return OrganizationResponse.fromOrganization(savedOrganization);
+//        return OrganizationResponse.fromOrganization(savedOrganization);
+        return OrganizationMapper.mapToResponse(savedOrganization);
     }
     @Transactional
     public OrganizationResponse rejectOrganization(Long id){
@@ -96,7 +126,8 @@ public class OrganizationService {
         Organization organization = getOrganizationById(id);
         organization.setStatus(Organization.OrganizationStatus.REJECTED);
         Organization savedOrganization = organizationRepository.save(organization);
-        return OrganizationResponse.fromOrganization(savedOrganization);
+//        return OrganizationResponse.fromOrganization(savedOrganization);
+        return OrganizationMapper.mapToResponse(savedOrganization);
     }
 
     @GetMapping("/user-info")
@@ -123,7 +154,8 @@ public class OrganizationService {
     public Page<OrganizationResponse> getOrganizationsPagenated(PageRequest pageRequest) {
 //        Page<>
         Page<Organization> organizationPage = findAll(pageRequest);
-        return organizationPage.map(OrganizationResponse::fromOrganization);
+//        return organizationPage.map(OrganizationResponse::fromOrganization);
+        return organizationPage.map(OrganizationMapper::mapToResponse);
     }
     private Page<Organization> findAll(Pageable pageRequest) {
         return organizationRepository.findAll(pageRequest);

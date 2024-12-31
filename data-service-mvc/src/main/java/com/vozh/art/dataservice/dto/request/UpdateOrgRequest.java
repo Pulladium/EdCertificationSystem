@@ -9,9 +9,8 @@ import java.util.Set;
 @Data
 @Getter
 @Setter
-@Builder
 public class UpdateOrgRequest extends OrganizationRequest{
     private Long organizationId;
 
-    private List<Long> certificateIds;
+    private List<Long> certificatesIds;
 }

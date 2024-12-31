@@ -41,7 +41,6 @@ public class OrganizationMapper {
     }
 
     //dosent map certificates
-    @Autowired
     public static Organization mapToEntity(OrganizationRequest organizationRequest) {
         Organization org =  Organization.builder()
                 .name(organizationRequest.getName())
@@ -53,10 +52,9 @@ public class OrganizationMapper {
 //                TODO should be set by system already here
                 .build();
 
-        if(organizationRequest instanceof UpdateOrgRequest){
-            UpdateOrgRequest updateOrgRequest = (UpdateOrgRequest) organizationRequest;
+        if(organizationRequest instanceof UpdateOrgRequest updateOrgRequest){
             org.setId(updateOrgRequest.getOrganizationId());
-            org.setCertificates(certificateService.getAllByIds(updateOrgRequest.getCertificateIds()));
+            org.setCertificates(certificateService.getAllByIds(updateOrgRequest.getCertificatesIds()));
         }
 
         return org;
