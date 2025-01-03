@@ -52,7 +52,7 @@ public final class CertificateMapper {
                     .build();
             if (request.getCategories() != null) {
                 certificate.setCategories(request.getCategories().stream()
-                        .map(cat -> CategoryMapper.mapToCategoryEntity(cat, categoryService))
+                        .map(cat -> CategoryMapper.mapToCategoryEntity(cat))
                         .collect(java.util.stream.Collectors.toSet()));
             }
             if (request.getCertificateParticipants() != null) {

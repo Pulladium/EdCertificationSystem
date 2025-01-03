@@ -2,6 +2,7 @@ package com.vozh.art.dataservice.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
@@ -10,18 +11,16 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class CategoryRequest {
-    private Long id;
+@SuperBuilder
+public abstract class CategoryRequest {
+
     @NotBlank
     private String name;
     @NotBlank
     private String description;
 
-    private Long parentCategoryId;
 
 
-    //todo ids or remove
     private Set<Long> subCategoriesIds;
 
 

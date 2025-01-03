@@ -1,9 +1,11 @@
 package com.vozh.art.dataservice.service;
 
 import com.vozh.art.dataservice.dto.request.CategoryRequest;
+import com.vozh.art.dataservice.dto.request.CreateCatRequest;
 import com.vozh.art.dataservice.dto.response.CategoryResponse;
 import com.vozh.art.dataservice.entity.Category;
 import com.vozh.art.dataservice.repository.CategoryRepository;
+import com.vozh.art.dataservice.validate.CategoryRequestValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,7 @@ public class CategoryService {
     }
 
     public CategoryResponse updateCategory(CategoryRequest request){
-        Category category = mapToCategoryEntity(request, this);
+        Category category = mapToCategoryEntity(request);
         Category savedCategory = saveUpdateCategory(category);
         return mapToResponse(savedCategory, 2);
     }
@@ -45,8 +47,12 @@ public class CategoryService {
         return categoryRepository.findAllRootCategoriesWithSubCategories();
     }
 
-    public CategoryResponse postNewCategory(CategoryRequest request){
-        Category category = mapToCategoryEntity(request, this);
+    public CategoryResponse postNewCategory(CreateCatRequest request){
+        CategoryRequestValidator.validateParentChildCircularReference(request);
+        CategoryRequestValidator.validateSubcategoryParentCheck(request, this);
+        CategoryRequestValidator.validateDeepCircularReference(request, this);
+
+        Category category = mapToCategoryEntity(request);
         Category savedCategory = saveUpdateCategory(category);
         return mapToResponse(savedCategory, 2);
     }

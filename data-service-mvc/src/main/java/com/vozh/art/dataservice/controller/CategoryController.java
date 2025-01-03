@@ -2,6 +2,7 @@ package com.vozh.art.dataservice.controller;
 
 
 import com.vozh.art.dataservice.dto.request.CategoryRequest;
+import com.vozh.art.dataservice.dto.request.CreateCatRequest;
 import com.vozh.art.dataservice.dto.response.CategoryResponse;
 import com.vozh.art.dataservice.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class CategoryController {
 
     @PreAuthorize("hasRole('ROLE_admin')")
     @PostMapping("/create")
-    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
+    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CreateCatRequest request) {
         log.trace("CategoryController: Creating category: {}", request);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         log.info("Current user authorities: {}",
@@ -46,12 +47,17 @@ public class CategoryController {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_admin')")
-    @PutMapping("/update")
-    public ResponseEntity<CategoryResponse> updateCategory(@RequestBody CategoryRequest request) {
-        log.trace("CategoryController: Updating category: {}", request);
-        return ResponseEntity.ok(categoryService.postNewCategory(request));
-    }
+
+    //allready have update logic in create method
+
+
+//    @PreAuthorize("hasRole('ROLE_admin')")
+//    @PutMapping("/update")
+//    public ResponseEntity<CategoryResponse> updateCategory(@RequestBody CategoryRequest request) {
+//        log.trace("CategoryController: Updating category: {}", request);
+//        CategoryResponse response = categoryService.updateCategory(request);
+//        return ResponseEntity.ok(response);
+//    }
 
 
 
