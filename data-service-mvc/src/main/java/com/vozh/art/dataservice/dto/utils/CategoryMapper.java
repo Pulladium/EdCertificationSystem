@@ -4,7 +4,6 @@ import com.vozh.art.dataservice.dto.request.CategoryRequest;
 import com.vozh.art.dataservice.dto.response.CategoryResponse;
 import com.vozh.art.dataservice.entity.Category;
 import com.vozh.art.dataservice.service.CategoryService;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -55,8 +54,8 @@ public final class CategoryMapper {
             catFromRequest.setParentCategory(categoryService.getCategoryById(request.getParentCategoryId()));
         }
 
-        if(request.getSubCategories() != null){
-            catFromRequest.setSubCategories(request.getSubCategories().stream()
+        if(request.getSubCategoriesIds() != null){
+            catFromRequest.setSubCategories(request.getSubCategoriesIds().stream()
                     .map(subCat -> mapToCategoryEntity(subCat, categoryService))
                     .collect(Collectors.toSet()));
         }

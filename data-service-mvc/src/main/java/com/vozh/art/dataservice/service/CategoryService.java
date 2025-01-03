@@ -31,6 +31,12 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+    public CategoryResponse updateCategory(CategoryRequest request){
+        Category category = mapToCategoryEntity(request, this);
+        Category savedCategory = saveUpdateCategory(category);
+        return mapToResponse(savedCategory, 2);
+    }
+
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id).orElse(null);
     }

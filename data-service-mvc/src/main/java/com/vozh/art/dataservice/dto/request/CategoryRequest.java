@@ -1,14 +1,9 @@
 package com.vozh.art.dataservice.dto.request;
 
-import com.vozh.art.dataservice.dto.response.CategoryResponse;
-import com.vozh.art.dataservice.entity.Category;
-import com.vozh.art.dataservice.service.CategoryService;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
 @Getter
@@ -27,7 +22,7 @@ public class CategoryRequest {
 
 
     //todo ids or remove
-    private Set<CategoryRequest> subCategories;
+    private Set<Long> subCategoriesIds;
 
 
 }

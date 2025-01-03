@@ -83,4 +83,8 @@ public class CertificateController {
         Certificate cert = certificateService.addCategoryToCertificate(request);
         return ResponseEntity.ok(CertificateMapper.mapToResponse(cert));
     }
+//    @DeleteMapping("/delete/{id}")
+//    public ResponseEntity<String> deleteCertificateById(@PathVariable Long id) {
+//
+//    }
 }

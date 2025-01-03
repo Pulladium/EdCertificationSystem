@@ -37,6 +37,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.postNewCategory(request));
     }
 
+    @PreAuthorize("hasRole('ROLE_admin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCategoryById(@PathVariable Long id) {
         log.trace("CategoryController: Deleting category by id: {}", id);
@@ -45,6 +46,16 @@ public class CategoryController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_admin')")
+    @PutMapping("/update")
+    public ResponseEntity<CategoryResponse> updateCategory(@RequestBody CategoryRequest request) {
+        log.trace("CategoryController: Updating category: {}", request);
+        return ResponseEntity.ok(categoryService.postNewCategory(request));
+    }
+
+
+
+//    for every one
     @GetMapping("/byId/{id}/depth/{depth}")
     public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id, @PathVariable int depth) {
         log.trace("CategoryController: Getting category by id: {}", id);
