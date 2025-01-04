@@ -1,6 +1,7 @@
 package com.vozh.art.dataservice.dto.request;
 
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -13,5 +14,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class UpdateCatRequest  extends CategoryRequest {
     //id for update
+    @NotNull
     private Long id;
 }

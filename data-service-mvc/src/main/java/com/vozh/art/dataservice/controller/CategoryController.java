@@ -3,6 +3,7 @@ package com.vozh.art.dataservice.controller;
 
 import com.vozh.art.dataservice.dto.request.CategoryRequest;
 import com.vozh.art.dataservice.dto.request.CreateCatRequest;
+import com.vozh.art.dataservice.dto.request.UpdateCatRequest;
 import com.vozh.art.dataservice.dto.response.CategoryResponse;
 import com.vozh.art.dataservice.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -47,17 +48,22 @@ public class CategoryController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_admin')")
+    @PutMapping("/makeCategoryRoot/{id}")
+    public ResponseEntity<CategoryResponse> makeCategoryRoot(@PathVariable Long id) {
+        log.trace("CategoryController: Making category root by id: {}", id);
+        CategoryResponse response = categoryService.makeCategoryRoot(id);
+        return ResponseEntity.ok(response);
+    }
 
-    //allready have update logic in create method
 
-
-//    @PreAuthorize("hasRole('ROLE_admin')")
-//    @PutMapping("/update")
-//    public ResponseEntity<CategoryResponse> updateCategory(@RequestBody CategoryRequest request) {
-//        log.trace("CategoryController: Updating category: {}", request);
-//        CategoryResponse response = categoryService.updateCategory(request);
-//        return ResponseEntity.ok(response);
-//    }
+    @PreAuthorize("hasRole('ROLE_admin')")
+    @PutMapping("/update")
+    public ResponseEntity<CategoryResponse> updateCategory(@RequestBody UpdateCatRequest request) {
+        log.trace("CategoryController: Updating category: {}", request);
+        CategoryResponse response = categoryService.updateCategory(request);
+        return ResponseEntity.ok(response);
+    }
 
 
 
