@@ -2,6 +2,8 @@ package com.vozh.art.dataservice.controller;
 
 
 import com.vozh.art.dataservice.dto.request.CategoryRequest;
+import com.vozh.art.dataservice.dto.request.CreateCatRequest;
+import com.vozh.art.dataservice.dto.request.UpdateCatRequest;
 import com.vozh.art.dataservice.dto.response.CategoryResponse;
 import com.vozh.art.dataservice.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,7 @@ public class CategoryController {
 
     @PreAuthorize("hasRole('ROLE_admin')")
     @PostMapping("/create")
-    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
+    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CreateCatRequest request) {
         log.trace("CategoryController: Creating category: {}", request);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         log.info("Current user authorities: {}",
@@ -37,6 +39,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.postNewCategory(request));
     }
 
+    @PreAuthorize("hasRole('ROLE_admin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCategoryById(@PathVariable Long id) {
         log.trace("CategoryController: Deleting category by id: {}", id);
@@ -45,6 +48,26 @@ public class CategoryController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_admin')")
+    @PutMapping("/makeCategoryRoot/{id}")
+    public ResponseEntity<CategoryResponse> makeCategoryRoot(@PathVariable Long id) {
+        log.trace("CategoryController: Making category root by id: {}", id);
+        CategoryResponse response = categoryService.makeCategoryRoot(id);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_admin')")
+    @PutMapping("/update")
+    public ResponseEntity<CategoryResponse> updateCategory(@RequestBody UpdateCatRequest request) {
+        log.trace("CategoryController: Updating category: {}", request);
+        CategoryResponse response = categoryService.updateCategory(request);
+        return ResponseEntity.ok(response);
+    }
+
+
+
+//    for every one
     @GetMapping("/byId/{id}/depth/{depth}")
     public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id, @PathVariable int depth) {
         log.trace("CategoryController: Getting category by id: {}", id);
