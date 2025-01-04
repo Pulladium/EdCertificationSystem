@@ -15,13 +15,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -47,7 +46,7 @@ public class CertificateService {
         if (certificates.isEmpty()) {
             throw new PersistenceException("Cant find certificates by ids");
         }
-        return certificates.stream().collect(Collectors.toSet());
+        return new HashSet<>(certificates);
     }
 
     public Page<CertificateResponse> getCertificatesPagenated(PageRequest pageRequest) {
@@ -131,6 +130,15 @@ public class CertificateService {
             participant = participantService.savePaticipant(participant);
         }
 
+        final Long participantId = participant.getId();
+        boolean participantExists = certificate.getCertificateParticipants().stream()
+                .anyMatch(cp -> cp.getParticipant().getId().equals(participantId));
+
+        if (participantExists) {
+            throw new IllegalStateException("Participant already exists in this certificate");
+        }
+
+
         CertificateParticipant certificateParticipant = CertificateParticipant.builder()
                 .certificate(certificate)
                 .participant(participant)
@@ -143,6 +151,7 @@ public class CertificateService {
         return save(certificate);
 
     }
+
 
     @Transactional
     public Certificate removeParticipantFromCertificate(Long id, ParticipantRequest request) {
