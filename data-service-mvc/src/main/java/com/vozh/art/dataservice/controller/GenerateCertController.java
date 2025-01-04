@@ -4,6 +4,7 @@ import com.vozh.art.dataservice.entity.Certificate;
 import com.vozh.art.dataservice.entity.SingedDocRef;
 import com.vozh.art.dataservice.entity.embedKey.ParticipantKey;
 import com.vozh.art.dataservice.service.CertificateService;
+import com.vozh.art.dataservice.service.SignedDocRefService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
@@ -23,6 +26,7 @@ public class GenerateCertController {
 
     private final RestTemplate restTemplate;
     private final CertificateService certificateService;
+    private final SignedDocRefService signedDocRefService;
 
     @PostMapping("/generate")
     public ResponseEntity<SingedDocRef> generateCertificate(@RequestBody String certId){
@@ -46,8 +50,19 @@ public class GenerateCertController {
 
         SingedDocRef signedDocResult = restTemplate.postForObject("http://mongo-service//api/data/documents-generate/generate_and_save", signedDocRefRequest, SingedDocRef.class);
 
+        if(signedDocResult == null){
+            throw new RuntimeException("Document generation failed null response from mongo-service");
+        }
 
         log.info("Document generation finished, result: {}", signedDocResult);
+        signedDocResult = signedDocRefService.save(signedDocResult);
+
+        if (currCert.getSignedDocumentUUID() == null) {
+            currCert.setSignedDocumentUUID(new HashSet<>());
+        }
+        currCert.getSignedDocumentUUID().add(signedDocResult);
+
+        certificateService.save(currCert);
 
 
         return ResponseEntity.ok(signedDocResult);
