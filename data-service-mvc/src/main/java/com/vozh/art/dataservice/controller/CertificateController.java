@@ -26,9 +26,6 @@ public class CertificateController {
 
 
     private final CertificateService certificateService;
-    private final CategoryService categoryService;
-    private final CertificateParticipantService certificateParticipantService;
-    private final ParticipantService participantService;
 
 // Logic for frontend
     @GetMapping("/pagingList")
@@ -66,7 +63,7 @@ public class CertificateController {
     public ResponseEntity<CertificateResponse> createCertificate(@RequestBody CreateCertificateRequest request) {
         log.trace("Creating certificate: {}", request);
 
-        Certificate cert2Save = CertificateMapper.mapToCertificateEntity(request, categoryService,participantService,certificateParticipantService);
+        Certificate cert2Save = CertificateMapper.mapToCertificateEntity(request);
 
         Certificate savedCertificate = certificateService.save(cert2Save);
         return ResponseEntity.ok(CertificateMapper.mapToResponse(savedCertificate));

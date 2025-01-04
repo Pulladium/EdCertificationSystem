@@ -26,10 +26,12 @@ public class CreateCertificateRequest {
     @NotBlank
     private String description;
 
-    private Set<CategoryRequest> categories;
 
-    //can set participants at start
-    private List<ParticipantRequest> certificateParticipants;
+    // maybe id????????
+    private List<Long> categoriesIds;
+
+    //can set participants at start spis not
+//    private List<ParticipantRequest> certificateParticipants;
 
     //hz auto assign maybe if user org set
 //    private Set<Organization> issuers;

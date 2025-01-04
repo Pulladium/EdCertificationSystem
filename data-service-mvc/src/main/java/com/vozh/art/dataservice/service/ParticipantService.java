@@ -65,8 +65,4 @@ public class ParticipantService {
         return getAllParticipants();
     }
 
-
-
-
-
 }
