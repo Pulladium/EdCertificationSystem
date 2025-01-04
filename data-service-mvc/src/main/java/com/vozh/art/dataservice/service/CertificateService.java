@@ -3,10 +3,7 @@ package com.vozh.art.dataservice.service;
 import com.vozh.art.dataservice.dto.request.CertificateAddCategoryRequest;
 import com.vozh.art.dataservice.dto.request.ParticipantRequest;
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
-import com.vozh.art.dataservice.entity.Category;
-import com.vozh.art.dataservice.entity.Certificate;
-import com.vozh.art.dataservice.entity.CertificateParticipant;
-import com.vozh.art.dataservice.entity.Participant;
+import com.vozh.art.dataservice.entity.*;
 import com.vozh.art.dataservice.entity.embedKey.ParticipantKey;
 import com.vozh.art.dataservice.repository.CategoryRepository;
 import com.vozh.art.dataservice.repository.CertificateRepository;
@@ -18,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +32,7 @@ public class CertificateService {
     private final CategoryRepository categoryRepository;
     private final ParticipantService participantService;
     private final CertificateParticipantService certificateParticipantService;
+    private final OrganizationService organizationService;
 
     public Certificate getById(Long certificateID) {
         Optional<Certificate> cert = certificateRepository.findById(certificateID);
@@ -145,6 +144,7 @@ public class CertificateService {
 
     }
 
+    @Transactional
     public Certificate removeParticipantFromCertificate(Long id, ParticipantRequest request) {
         Certificate certificate = getById(id);
         if(certificate == null){
@@ -171,4 +171,47 @@ public class CertificateService {
         return save(certificate);
 
     }
+
+
+    @Transactional
+    public Certificate addIssuersToCertificate(Long id, List<Long> issuerIds) {
+        Certificate certificate = getById(id);
+        if(certificate == null){
+            throw new PersistenceException("Certificate with id " + id + " not found");
+        }
+
+        for (Long issuerId : issuerIds) {
+            Organization issuer = organizationService.getOrganizationById(issuerId);
+            if(issuer == null){
+                throw new PersistenceException("Organization with id " + issuerId + " not found");
+            }
+
+            certificate.getIssuers().add(issuer);
+        }
+
+        return save(certificate);
+    }
+    @Transactional
+    public Certificate removeIssuersFromCertificate(Long id, List<Long> issuerIds) {
+        Certificate certificate = getById(id);
+        if(certificate == null){
+            throw new PersistenceException("Certificate with id " + id + " not found");
+        }
+
+        if(certificate.getIssuers() == null || certificate.getIssuers().isEmpty()) {
+            throw new PersistenceException("Certificate has no issuers to remove");
+        }
+
+        for (Long issuerId : issuerIds) {
+            Organization issuer = organizationService.getOrganizationById(issuerId);
+            if(issuer == null){
+                throw new PersistenceException("Organization with id " + issuerId + " not found");
+            }
+
+            certificate.getIssuers().remove(issuer);
+        }
+
+        return save(certificate);
+    }
+
 }

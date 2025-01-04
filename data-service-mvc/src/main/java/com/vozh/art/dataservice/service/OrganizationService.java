@@ -192,7 +192,7 @@ public class OrganizationService {
     }
 
 
-    private Organization getOrganizationById(Long id) {
+    public Organization getOrganizationById(Long id) {
         Organization organization = organizationRepository.findById(id).orElse(null);
         if(organization == null){
             log.error("Organization with id: {} not found", id);
