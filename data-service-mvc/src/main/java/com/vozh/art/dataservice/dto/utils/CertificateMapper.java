@@ -24,17 +24,17 @@ public final class CertificateMapper {
         CertificateMapper.categoryService = service;
     }
 
-    private static ParticipantService participantService;
-    @Autowired
-    public void setParticipantService(ParticipantService service) {
-        CertificateMapper.participantService = service;
-    }
+//    private static ParticipantService participantService;
+//    @Autowired
+//    public void setParticipantService(ParticipantService service) {
+//        CertificateMapper.participantService = service;
+//    }
 
-    private static CertificateParticipantService certificateParticipantService;
-    @Autowired
-    public void setCertificateParticipantService(CertificateParticipantService service) {
-        CertificateMapper.certificateParticipantService = service;
-    }
+//    private static CertificateParticipantService certificateParticipantService;
+//    @Autowired
+//    public void setCertificateParticipantService(CertificateParticipantService service) {
+//        CertificateMapper.certificateParticipantService = service;
+//    }
 
 
 
@@ -72,17 +72,6 @@ public final class CertificateMapper {
             if (request.getCategoriesIds() != null) {
                 certificate.setCategories(categoryService.getAllByIds(request.getCategoriesIds()));
             }
-//                certificate.setCategories(request.getCategories().stream()
-//                        .map(cat -> CategoryMapper.mapToCategoryEntity(cat))
-//                        .collect(java.util.stream.Collectors.toSet()));
-//            }
-//            if (request.getCertificateParticipants() != null) {
-//                List<Participant> addedPartic = participantService.addNewParticipants((List<ParticipantRequest>) request.getCertificateParticipants());
-//
-//                certificateParticipantService.assignParticipantsToCertificate(certificate.getId(), addedPartic.stream()
-//                        .map(Participant::getId)
-//                        .collect(Collectors.toList()));
-//            }
             return certificate;
         }
     }
