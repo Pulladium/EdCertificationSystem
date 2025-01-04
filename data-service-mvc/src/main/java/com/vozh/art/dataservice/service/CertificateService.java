@@ -1,12 +1,17 @@
 package com.vozh.art.dataservice.service;
 
 import com.vozh.art.dataservice.dto.request.CertificateAddCategoryRequest;
+import com.vozh.art.dataservice.dto.request.ParticipantRequest;
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
 import com.vozh.art.dataservice.entity.Category;
 import com.vozh.art.dataservice.entity.Certificate;
+import com.vozh.art.dataservice.entity.CertificateParticipant;
+import com.vozh.art.dataservice.entity.Participant;
+import com.vozh.art.dataservice.entity.embedKey.ParticipantKey;
 import com.vozh.art.dataservice.repository.CategoryRepository;
 import com.vozh.art.dataservice.repository.CertificateRepository;
 import jakarta.persistence.PersistenceException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,6 +32,8 @@ public class CertificateService {
 
     private final CertificateRepository certificateRepository;
     private final CategoryRepository categoryRepository;
+    private final ParticipantService participantService;
+    private final CertificateParticipantService certificateParticipantService;
 
     public Certificate getById(Long certificateID) {
         Optional<Certificate> cert = certificateRepository.findById(certificateID);
@@ -66,6 +74,7 @@ public class CertificateService {
     }
 
     //todo maybe return CertificateResponse
+    @Transactional
     public Certificate addCategoryToCertificate(CertificateAddCategoryRequest request) {
         Long certificateId = request.getCertificateId();
         Long categoryId = request.getCategoryId();
@@ -104,6 +113,35 @@ public class CertificateService {
     }
 
 
+    @Transactional
+    public Certificate addParticipantToCertificate(Long id, ParticipantRequest request) {
+        Certificate certificate = getById(id);
+        if(certificate == null){
+            throw new PersistenceException("Certificate with id " + id + " not found");
+        }
 
 
+        ParticipantKey participantKey = new ParticipantKey(request.getName(), request.getSurname(), request.getEmail());
+
+
+        Participant participant = participantService.getParticipantByKey(participantKey);
+        if(participant == null){
+            participant = Participant.builder()
+                    .participantKey(participantKey)
+                    .build();
+            participant = participantService.savePaticipant(participant);
+        }
+
+        CertificateParticipant certificateParticipant = CertificateParticipant.builder()
+                .certificate(certificate)
+                .participant(participant)
+                .assignDate(LocalDateTime.now())
+                .build();
+
+        certificateParticipant = certificateParticipantService.save(certificateParticipant);
+
+        certificate.getCertificateParticipants().add(certificateParticipant);
+        return save(certificate);
+
+    }
 }

@@ -46,6 +46,11 @@ public class ParticipantService {
         return participantRepository.findAll();
     }
 
+
+    public Participant getParticipantByKey(ParticipantKey key){
+        return participantRepository.findByParticipantKey(key);
+    }
+
 //    returns all participants in db
     public List<Participant> addNewParticipants(List<ParticipantRequest> participants){
 

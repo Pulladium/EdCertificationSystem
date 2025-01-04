@@ -2,6 +2,7 @@ package com.vozh.art.dataservice.controller;
 
 import com.vozh.art.dataservice.dto.request.CertificateAddCategoryRequest;
 import com.vozh.art.dataservice.dto.request.CreateCertificateRequest;
+import com.vozh.art.dataservice.dto.request.ParticipantRequest;
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
 import com.vozh.art.dataservice.dto.utils.CertificateMapper;
 import com.vozh.art.dataservice.entity.Certificate;
@@ -83,8 +84,12 @@ public class CertificateController {
         Certificate cert = certificateService.addCategoryToCertificate(request);
         return ResponseEntity.ok(CertificateMapper.mapToResponse(cert));
     }
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<String> deleteCertificateById(@PathVariable Long id) {
-//
-//    }
+
+
+    @PutMapping("/addParticipant/{id}")
+    public ResponseEntity<CertificateResponse> addParticipantToCertificate(@RequestParam Long id , @RequestBody ParticipantRequest request) {
+        log.info("Adding participant to certificate: {}", request);
+        Certificate cert = certificateService.addParticipantToCertificate(id, request);
+        return ResponseEntity.ok(CertificateMapper.mapToResponse(cert));
+    }
 }

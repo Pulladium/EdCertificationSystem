@@ -7,7 +7,6 @@ import com.vozh.art.dataservice.entity.Certificate;
 import com.vozh.art.dataservice.entity.Participant;
 import com.vozh.art.dataservice.service.CategoryService;
 import com.vozh.art.dataservice.service.CertificateParticipantService;
-import com.vozh.art.dataservice.service.OrganizationService;
 import com.vozh.art.dataservice.service.ParticipantService;
 import org.springframework.stereotype.Component;
 
@@ -58,7 +57,7 @@ public final class CertificateMapper {
             if (request.getCertificateParticipants() != null) {
                 List<Participant> addedPartic = participantService.addNewParticipants((List<ParticipantRequest>) request.getCertificateParticipants());
 
-                certificateParticipantService.assignParticipantToCertificate(certificate.getId(), addedPartic.stream()
+                certificateParticipantService.assignParticipantsToCertificate(certificate.getId(), addedPartic.stream()
                         .map(Participant::getId)
                         .collect(Collectors.toList()));
             }
