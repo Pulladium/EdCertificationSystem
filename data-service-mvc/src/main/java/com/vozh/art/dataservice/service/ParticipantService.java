@@ -47,8 +47,12 @@ public class ParticipantService {
     }
 
 
-    public Participant getParticipantByKey(ParticipantKey key){
-        return participantRepository.findByParticipantKey(key);
+    public Participant getParticipantByKey(ParticipantKey key) {
+        return participantRepository.findByParticipantKey(
+                key.getName(),
+                key.getSurname(),
+                key.getEmail()
+        );
     }
 
 //    returns all participants in db
@@ -56,8 +60,10 @@ public class ParticipantService {
 
         for(ParticipantRequest participant: participants){
             Participant foundParticipant = participantRepository.findByParticipantKey(
-//                    expecting problems here with query
-                    new ParticipantKey(participant.getName(), participant.getSurname(), participant.getEmail()));
+                    participant.getName(),
+                    participant.getSurname(),
+                    participant.getEmail()
+            );
             if(foundParticipant == null){
                 participantRepository.save(ParticipantMapper.mapToEntity(participant));
             }

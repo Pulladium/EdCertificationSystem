@@ -24,6 +24,8 @@ public class CertificateResponse {
     private Set<ParticipantResponse> participants;
 
 
+
+    //todo uses this method for paging logic
     public static CertificateResponse fromCertificate(Certificate certificate){
         return CertificateResponse.builder()
                 .certificateId(certificate.getId())

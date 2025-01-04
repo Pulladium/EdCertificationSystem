@@ -57,8 +57,11 @@ public final class CertificateMapper {
         if (certificate.getCertificateParticipants() != null) {
 
             response.setParticipants(certificate.getCertificateParticipants().stream()
-                    .map(participant -> ParticipantMapper.mapToResponse(participant.getParticipant()))
+                    .map(certificateParticipant -> ParticipantMapper.mapToResponse(certificateParticipant))
                     .collect(Collectors.toSet()));
+//            response.setParticipants(certificate.getCertificateParticipants().stream()
+//                    .map(participant -> ParticipantMapper.mapToResponse(participant.getParticipant()))
+//                    .collect(Collectors.toSet()));
         }
         return response;
     }

@@ -16,9 +16,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CertificateParticipantService {
 
-    CertificateRepository certificateRepository;
-    ParticipantService participantService;
-    CertificateParticipantRepo certificateParticipantRepo;
+    private final CertificateRepository certificateRepository;
+    private final ParticipantService participantService;
+    private final CertificateParticipantRepo certificateParticipantRepo;
     @Transactional
     public void assignParticipantsToCertificate(Long certificateId, List<Long> participantsIds) {
         for (Long id : participantsIds) {
