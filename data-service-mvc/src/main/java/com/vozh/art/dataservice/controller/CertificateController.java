@@ -89,4 +89,11 @@ public class CertificateController {
         Certificate cert = certificateService.addParticipantToCertificate(id, request);
         return ResponseEntity.ok(CertificateMapper.mapToResponse(cert));
     }
+
+    @PutMapping("/removeParticipant/{id}")
+    public ResponseEntity<CertificateResponse> removeParticipantFromCertificate(@RequestParam Long id , @RequestBody ParticipantRequest request) {
+        log.info("Removing participant from certificate: {}", request);
+        Certificate cert = certificateService.removeParticipantFromCertificate(id, request);
+        return ResponseEntity.ok(CertificateMapper.mapToResponse(cert));
+    }
 }

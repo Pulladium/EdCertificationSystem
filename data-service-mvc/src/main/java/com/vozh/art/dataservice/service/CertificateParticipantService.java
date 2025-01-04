@@ -4,6 +4,7 @@ import com.vozh.art.dataservice.entity.CertificateParticipant;
 import com.vozh.art.dataservice.entity.Participant;
 import com.vozh.art.dataservice.repository.CertificateParticipantRepo;
 import com.vozh.art.dataservice.repository.CertificateRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,13 @@ public class CertificateParticipantService {
 
     public CertificateParticipant save(CertificateParticipant certificateParticipant) {
         return certificateParticipantRepo.save(certificateParticipant);
+    }
+
+    public CertificateParticipant findById(Long id) {
+        CertificateParticipant certificateParticipant = certificateParticipantRepo.findById(id).orElse(null);
+        if (certificateParticipant == null) {
+            throw new EntityNotFoundException("CertificateParticipant with id " + id + " not found");
+        }
+        return certificateParticipant;
     }
 }

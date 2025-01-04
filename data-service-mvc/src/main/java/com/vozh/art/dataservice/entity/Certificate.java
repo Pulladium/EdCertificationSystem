@@ -51,7 +51,9 @@ public class Certificate extends BaseEntity<Long> {
     private Set<Category> categories;
 
     //    one certificate can have many participants
-    @OneToMany(mappedBy = "certificate")
+    @OneToMany(mappedBy = "certificate",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Set<CertificateParticipant> certificateParticipants;
 
 

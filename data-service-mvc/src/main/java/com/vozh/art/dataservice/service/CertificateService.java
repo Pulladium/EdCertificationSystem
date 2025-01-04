@@ -144,4 +144,31 @@ public class CertificateService {
         return save(certificate);
 
     }
+
+    public Certificate removeParticipantFromCertificate(Long id, ParticipantRequest request) {
+        Certificate certificate = getById(id);
+        if(certificate == null){
+            throw new PersistenceException("Certificate with id " + id + " not found");
+        }
+
+        ParticipantKey participantKey = new ParticipantKey(request.getName(), request.getSurname(), request.getEmail());
+        Participant participant = participantService.getParticipantByKey(participantKey);
+        if(participant == null){
+            throw new PersistenceException("Participant with key " + participantKey + " not found");
+        }
+
+        //todo check if this works correctly should cascade save certificateParticipant>=?=
+        CertificateParticipant certificateParticipant = certificate.getCertificateParticipants().stream()
+                .filter(certPart -> certPart.getParticipant().equals(participant))
+                .findFirst()
+                .orElse(null);
+        if(certificateParticipant == null){
+            throw new PersistenceException("Participant with key " + participantKey + " not found in certificate with id " + id);
+        }
+
+        certificate.getCertificateParticipants().remove(certificateParticipant);
+        //todo check if this works correctly should cascade save certificateParticipant>=?=
+        return save(certificate);
+
+    }
 }
