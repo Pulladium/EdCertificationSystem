@@ -11,6 +11,7 @@ import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -66,10 +67,17 @@ public class CertificateService {
     public Certificate save(Certificate certificate) {
         try {
             return certificateRepository.save(certificate);
-        } catch (Exception e) {
-            throw new PersistenceException("Failed to save into DB" . concat(e.getMessage()));
+        } catch (DataIntegrityViolationException e) {
+            if (e.getMessage().contains("uk_certificate_name_maintainer")) {
+                throw new IllegalStateException(
+                        "Certificate with name '" + certificate.getName() +
+                                "' already exists for this maintainer"
+                );
+            }
+            throw new PersistenceException("Failed to save into DB: " + e.getMessage());
         }
     }
+
 
     //todo maybe return CertificateResponse
     @Transactional

@@ -21,7 +21,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/api/data/documents")
+@RequestMapping("/api/data-mongo/documents")
 @RequiredArgsConstructor
 @Slf4j
 public class DocumentController {

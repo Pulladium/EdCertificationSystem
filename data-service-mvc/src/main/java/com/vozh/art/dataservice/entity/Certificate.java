@@ -20,6 +20,12 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = {
+        @UniqueConstraint(
+                name = "uk_certificate_name_maintainer",
+                columnNames = {"name", "maintainerKeycloakUUID"}
+        )
+})
 public class Certificate extends BaseEntity<Long> {
 
     private String name;

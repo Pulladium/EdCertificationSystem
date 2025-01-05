@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @RestController
-@RequestMapping("/api/data/documents-generate")
+@RequestMapping("/api/data-mongo/documents-generate")
 @RequiredArgsConstructor
 @Slf4j
 public class GenerateDocController {
