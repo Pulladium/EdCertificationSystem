@@ -64,9 +64,6 @@ public class OrganizationController {
             return ResponseEntity.ok(organizationService.rejectOrganization(id));
         }
 
-        //todo validate cert have altleast one org if cert will be removed from org
-//todo    also test cascade remove org from cert
-//    todo should check if org uuid == user uuid or user has role admin
         @PutMapping("/update")
         public ResponseEntity<OrganizationResponse> updateOrganization(@RequestBody UpdateOrgRequest request) {
             log.trace("OrganizationController: Updating organization: {}", request);
