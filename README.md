@@ -15,6 +15,23 @@ Getting Started
    * Go to: Create realm.
    * Drag or browse [keycloak-realm-configuration.json](./keycloak-realm-configuration.json) into resource file field 
    * Import configuration
+   * Go to Users -> Add user
+   * create 2 users
+
+   Admin User
+   1. enter Username: meinadm
+   2. Choose Email verified == true
+   3. Click Create
+   4. Go to Credentianls -> Set password (postman conf with "admin_password") -> Set Temporary == false
+   5. Go to Role mappping -> Assign role -> choose admin and registered-user
+
+   Registered User
+   1. enter Username: simpleUser
+   2. Choose Email verified == true
+   3. Click Create
+   4. Go to Credentianls -> Set password (postman conf with "user_password") -> Set Temporary == false
+   5. Go to Role mappping -> Assign role -> choose registered-user
+    
 
 4. Run Spring Boot Services
    * ```cd eureka-server/``` ```mvn spring-boot:run```
@@ -25,6 +42,11 @@ Getting Started
 5. Run Client(Postman recomended)
    1. Run React.js(not fishied) --```cd EdCertificationSysFront/``` , ```npm install``` , ```npm start```
    2. Use Postman api
+      * import testing Collection from [postmanCollection.json](./CertificatOnline.postman_collection.json)
+      * to start scenario go to scenario collection (for ex. CreateCertAndGenerateDocScenario)
+      * go to Authorization menu and Click Get New Access Token -> Proceed -> Use Token
+      (by default client secret is "**********") it can be changed via keycloak admin console -> clients ->postman-certedu-api->credentials
+      * Next Click Run near the collection name
 
 
 Technology Stack
