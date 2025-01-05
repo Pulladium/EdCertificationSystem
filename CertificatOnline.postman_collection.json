@@ -283,6 +283,11 @@
 				"type": "oauth2",
 				"oauth2": [
 					{
+						"key": "clientSecret",
+						"value": "**********",
+						"type": "string"
+					},
+					{
 						"key": "password",
 						"value": "user_password",
 						"type": "string"
@@ -315,11 +320,6 @@
 					{
 						"key": "grant_type",
 						"value": "password_credentials",
-						"type": "string"
-					},
-					{
-						"key": "clientSecret",
-						"value": "dneU2rMIRHd9jXh6CnAfh2HVOOqKaoEK",
 						"type": "string"
 					},
 					{
@@ -494,6 +494,11 @@
 				"type": "oauth2",
 				"oauth2": [
 					{
+						"key": "clientSecret",
+						"value": "**********",
+						"type": "string"
+					},
+					{
 						"key": "refreshRequestParams",
 						"value": [],
 						"type": "any"
@@ -526,11 +531,6 @@
 					{
 						"key": "grant_type",
 						"value": "password_credentials",
-						"type": "string"
-					},
-					{
-						"key": "clientSecret",
-						"value": "dneU2rMIRHd9jXh6CnAfh2HVOOqKaoEK",
 						"type": "string"
 					},
 					{
@@ -919,6 +919,11 @@
 				"type": "oauth2",
 				"oauth2": [
 					{
+						"key": "clientSecret",
+						"value": "**********",
+						"type": "string"
+					},
+					{
 						"key": "password",
 						"value": "user_password",
 						"type": "string"
@@ -951,11 +956,6 @@
 					{
 						"key": "grant_type",
 						"value": "password_credentials",
-						"type": "string"
-					},
-					{
-						"key": "clientSecret",
-						"value": "dneU2rMIRHd9jXh6CnAfh2HVOOqKaoEK",
 						"type": "string"
 					},
 					{
