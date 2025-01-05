@@ -1,20 +1,16 @@
 package com.vozh.art.dataservice.dto.utils;
 
 import com.vozh.art.dataservice.dto.request.CreateCertificateRequest;
-import com.vozh.art.dataservice.dto.request.ParticipantRequest;
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
 import com.vozh.art.dataservice.entity.Certificate;
-import com.vozh.art.dataservice.entity.Participant;
 import com.vozh.art.dataservice.service.CategoryService;
-import com.vozh.art.dataservice.service.CertificateParticipantService;
-import com.vozh.art.dataservice.service.CertificateService;
-import com.vozh.art.dataservice.service.ParticipantService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public final class CertificateMapper {
 
@@ -23,19 +19,6 @@ public final class CertificateMapper {
     public void setCategoryService(CategoryService service) {
         CertificateMapper.categoryService = service;
     }
-
-//    private static ParticipantService participantService;
-//    @Autowired
-//    public void setParticipantService(ParticipantService service) {
-//        CertificateMapper.participantService = service;
-//    }
-
-//    private static CertificateParticipantService certificateParticipantService;
-//    @Autowired
-//    public void setCertificateParticipantService(CertificateParticipantService service) {
-//        CertificateMapper.certificateParticipantService = service;
-//    }
-
 
 
     public static CertificateResponse mapToResponse(Certificate certificate) {
@@ -59,10 +42,17 @@ public final class CertificateMapper {
             response.setParticipants(certificate.getCertificateParticipants().stream()
                     .map(certificateParticipant -> ParticipantMapper.mapToResponse(certificateParticipant))
                     .collect(Collectors.toSet()));
-//            response.setParticipants(certificate.getCertificateParticipants().stream()
-//                    .map(participant -> ParticipantMapper.mapToResponse(participant.getParticipant()))
-//                    .collect(Collectors.toSet()));
         }
+        if(certificate.getSignedDocumentsUUIDs() != null){
+            response.setSingedDocRefs(certificate.getSignedDocumentsUUIDs());
+        }
+        if(certificate.getMaintainerKeycloakUUID() != null){
+            response.setMaintainerKeycloakUUID(certificate.getMaintainerKeycloakUUID());
+        }else {
+            log.error("CertificateMapper: Certificate maintainerKeycloakUUID is null");
+            response.setMaintainerKeycloakUUID("null");
+        }
+
         return response;
     }
 

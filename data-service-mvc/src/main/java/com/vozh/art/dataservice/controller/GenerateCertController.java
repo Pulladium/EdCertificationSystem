@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
@@ -57,10 +56,10 @@ public class GenerateCertController {
         log.info("Document generation finished, result: {}", signedDocResult);
         signedDocResult = signedDocRefService.save(signedDocResult);
 
-        if (currCert.getSignedDocumentUUID() == null) {
-            currCert.setSignedDocumentUUID(new HashSet<>());
+        if (currCert.getSignedDocumentsUUIDs() == null) {
+            currCert.setSignedDocumentsUUIDs(new HashSet<>());
         }
-        currCert.getSignedDocumentUUID().add(signedDocResult);
+        currCert.getSignedDocumentsUUIDs().add(signedDocResult);
 
         certificateService.save(currCert);
 

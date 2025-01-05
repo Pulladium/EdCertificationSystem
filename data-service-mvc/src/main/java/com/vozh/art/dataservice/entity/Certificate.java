@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -39,7 +37,7 @@ public class Certificate extends BaseEntity<Long> {
 //    In SingDoc Object find by Participant UUID
     @OneToMany
     @JoinColumn(name = "document_id")
-    private Set<SingedDocRef> signedDocumentUUID;
+    private Set<SingedDocRef> signedDocumentsUUIDs;
 
 
     @ManyToMany
@@ -55,6 +53,10 @@ public class Certificate extends BaseEntity<Long> {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private Set<CertificateParticipant> certificateParticipants;
+
+
+
+    private String maintainerKeycloakUUID;
 
 
 //    todo maybe add here method to get SingedDoc from signedDocumentUUID
