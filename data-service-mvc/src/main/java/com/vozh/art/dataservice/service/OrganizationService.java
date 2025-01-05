@@ -15,7 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +40,9 @@ public class OrganizationService {
         log.trace("Mapping request to organization: {}", request);
         Organization organization = OrganizationMapper.mapToEntity(request);
         log.trace("Saving organization via organization_repository: {}", organization);
+        organization.setStatus(Organization.OrganizationStatus.AWAITING);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        organization.setMaintainerKeycloakUUID(auth.getName());
         Organization savedOrganization = organizationRepository.save(organization);
         log.trace("Mapping saved organization to response: {}", savedOrganization);
 //        return OrganizationResponse.fromOrganization(savedOrganization);
@@ -155,12 +160,6 @@ public class OrganizationService {
             }
         }
 
-//
-//        request.getCertificatesIds().forEach(certificateId -> {
-//            //throws NoSuchElementException if not found
-//            Certificate certificate = certificateRepository.findById(certificateId).orElseThrow();
-//            validateCertHaveOneMoreOrg(certificate,organization);
-//        });
         return true;
     }
 
