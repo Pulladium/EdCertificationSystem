@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -34,12 +35,14 @@ public class CertificateService {
     private final CertificateParticipantService certificateParticipantService;
     private final OrganizationService organizationService;
 
+    private final RestTemplate restTemplate;
+
     public Certificate getById(Long certificateID) {
         Optional<Certificate> cert = certificateRepository.findById(certificateID);
         if (cert.isPresent()) {
             return cert.get();
         }
-        throw new PersistenceException("Cant find certificate by id");
+        throw new PersistenceException("Cant find certificate by id with id " + certificateID);
     }
 
     public Set<Certificate> getAllByIds(List<Long> ids) {
@@ -174,7 +177,6 @@ public class CertificateService {
             throw new PersistenceException("Participant with key " + participantKey + " not found");
         }
 
-        //todo check if this works correctly should cascade save certificateParticipant>=?=
         CertificateParticipant certificateParticipant = certificate.getCertificateParticipants().stream()
                 .filter(certPart -> certPart.getParticipant().equals(participant))
                 .findFirst()
@@ -184,7 +186,43 @@ public class CertificateService {
         }
 
         certificate.getCertificateParticipants().remove(certificateParticipant);
-        //todo check if this works correctly should cascade save certificateParticipant>=?=
+        return save(certificate);
+
+    }
+    @Transactional
+    public Certificate removeParticipantFromCertificate(Long id, Long participantId) {
+        log.info("Removing participant with id {} from certificate with id {}", participantId, id);
+        Certificate certificate = getById(id);
+        if(certificate == null){
+            throw new PersistenceException("Certificate with id " + id + " not found");
+        }
+
+        Participant participant = participantService.getById(participantId);
+        if(participant == null){
+            throw new PersistenceException("Participant with id " + participantId + " not found");
+        }
+
+        CertificateParticipant certificateParticipant = certificate.getCertificateParticipants().stream()
+                .filter(certPart -> certPart.getParticipant().equals(participant))
+                .findFirst()
+                .orElse(null);
+        if(certificateParticipant == null){
+            throw new PersistenceException("Participant with id " + participantId + " not found in certificate with id " + id);
+        }
+
+        certificate.getCertificateParticipants().remove(certificateParticipant);
+
+        //todo remove doc from grid fs
+
+        for (SingedDocRef signedDocRef : certificate.getSignedDocumentsUUIDs()) {
+            if(signedDocRef.getParticipantKey().equals(participant.getParticipantKey())){
+                restTemplate.delete("http://mongo-service/api/data-mongo/documents/" + signedDocRef.getUuidOfDoc());
+                certificate.getSignedDocumentsUUIDs().remove(signedDocRef);
+            }
+        }
+
+
+
         return save(certificate);
 
     }

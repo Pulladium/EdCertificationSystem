@@ -104,14 +104,23 @@ public class CertificateController {
         Certificate cert = certificateService.addParticipantToCertificate(id, request);
         return ResponseEntity.ok(CertificateMapper.mapToResponse(cert));
     }
+//    @PreAuthorize("hasRole('ROLE_registered-user')")
+//    @PutMapping("/removeParticipant/{id}")
+//    public ResponseEntity<CertificateResponse> removeParticipantFromCertificate(@PathVariable Long id , @RequestBody ParticipantRequest request) {
+//        validateCertAccessPermission(id);
+//        log.info("Removing participant from certificate: {}", request);
+//        Certificate cert = certificateService.removeParticipantFromCertificate(id, request);
+//        return ResponseEntity.ok(CertificateMapper.mapToResponse(cert));
+//    }
     @PreAuthorize("hasRole('ROLE_registered-user')")
     @PutMapping("/removeParticipant/{id}")
-    public ResponseEntity<CertificateResponse> removeParticipantFromCertificate(@PathVariable Long id , @RequestBody ParticipantRequest request) {
+    public ResponseEntity<CertificateResponse> removeParticipantFromCertificate(@PathVariable Long id , @RequestBody Long participantId) {
         validateCertAccessPermission(id);
-        log.info("Removing participant from certificate: {}", request);
-        Certificate cert = certificateService.removeParticipantFromCertificate(id, request);
+        log.info("Removing participant from certificate: {}", participantId);
+        Certificate cert = certificateService.removeParticipantFromCertificate(id, participantId);
         return ResponseEntity.ok(CertificateMapper.mapToResponse(cert));
     }
+
 
 
     @PreAuthorize("hasRole('ROLE_registered-user')")
