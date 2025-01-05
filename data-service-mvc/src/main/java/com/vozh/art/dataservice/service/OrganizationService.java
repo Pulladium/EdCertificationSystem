@@ -39,6 +39,12 @@ public class OrganizationService {
     public OrganizationResponse createOrganization(OrganizationRequest request){
         log.trace("Mapping request to organization: {}", request);
         Organization organization = OrganizationMapper.mapToEntity(request);
+
+        if(organizationRepository.findByName(organization.getName()).isPresent()){
+            log.error("Organization with name: {} already exists", organization.getName());
+            throw new RuntimeException("Organization with name: " + organization.getName() + " already exists");
+        }
+
         log.trace("Saving organization via organization_repository: {}", organization);
         organization.setStatus(Organization.OrganizationStatus.AWAITING);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

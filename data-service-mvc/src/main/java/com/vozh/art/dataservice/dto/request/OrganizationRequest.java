@@ -21,13 +21,4 @@ public class OrganizationRequest {
     private String address;
     @NotBlank
     private String contactInfo;
-
-
-
-//    @ManyToMany(mappedBy = "issuers")
-//    private Set<Certificate> certificates;
-//    uuid assigned by system. status assigned by admin
-//    private Organization.OrganizationStatus status;
-//    private String maintainerKeycloakUUID;
-
 }
