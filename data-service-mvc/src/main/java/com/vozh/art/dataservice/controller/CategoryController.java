@@ -64,6 +64,13 @@ public class CategoryController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ROLE_admin')")
+    @PutMapping("/putParent/{parentId}/child/{childId}")
+    public ResponseEntity<CategoryResponse> putParentCategory(@PathVariable Long parentId, @PathVariable Long childId) {
+        log.trace("CategoryController: Putting parent category: {} to child category: {}", parentId, childId);
+        CategoryResponse response = categoryService.addParentCategory(childId, parentId);
+        return ResponseEntity.ok(response);
+    }
 
 
 //    for every one
