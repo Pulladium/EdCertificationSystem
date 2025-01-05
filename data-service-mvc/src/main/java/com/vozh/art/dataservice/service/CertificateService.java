@@ -67,7 +67,7 @@ public class CertificateService {
         try {
             return certificateRepository.save(certificate);
         } catch (Exception e) {
-            throw new PersistenceException("Failed to save into DB");
+            throw new PersistenceException("Failed to save into DB" . concat(e.getMessage()));
         }
     }
 

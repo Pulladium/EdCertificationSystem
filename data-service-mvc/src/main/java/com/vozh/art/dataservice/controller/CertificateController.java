@@ -74,6 +74,7 @@ public class CertificateController {
         log.trace("Creating certificate: {}", request);
 
         Certificate cert2Save = CertificateMapper.mapToCertificateEntity(request);
+        cert2Save.setMaintainerKeycloakUUID(SecurityContextHolder.getContext().getAuthentication().getName());
 
         Certificate savedCertificate = certificateService.save(cert2Save);
         return ResponseEntity.ok(CertificateMapper.mapToResponse(savedCertificate));

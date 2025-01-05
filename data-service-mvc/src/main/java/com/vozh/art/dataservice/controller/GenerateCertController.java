@@ -85,6 +85,8 @@ public class GenerateCertController {
 
         //must-have validation for pdf generation
         validateCertParticipant(currCert);
+        validateCertCategory(currCert);
+        validateCertIssuers(currCert);
 
 
     }

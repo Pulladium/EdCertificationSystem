@@ -21,12 +21,12 @@ public class GenerateDocController {
 
     private final CertGenerator certificateGenerator;
 
-    @PostMapping
-    public void generateDocument(
-            @RequestBody ParticipantTemplateRequest participantData
-    ) {
-        log.info("Document generation started");
-    }
+//    @PostMapping
+//    public void generateDocument(
+//            @RequestBody ParticipantTemplateRequest participantData
+//    ) {
+//        log.info("Document generation started");
+//    }
 ///api/data/documents-generate/generate_and_save
     @PostMapping("/generate_and_save")
     public ResponseEntity<SignedDocRefResponse> generateAndSaveDocument(
