@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
@@ -27,7 +28,7 @@ public class GenerateCertController {
     private final CertificateService certificateService;
     private final SignedDocRefService signedDocRefService;
 
-    @PostMapping("/generate")
+    @PostMapping("/generateLastAdded")
     public ResponseEntity<SingedDocRef> generateCertificate(@RequestBody String certId){
         log.info("Certificate generation started");
 
@@ -69,6 +70,54 @@ public class GenerateCertController {
     }
 
 
+
+    @PostMapping("/massiveDocsForCert")
+    public ResponseEntity<List<SingedDocRef>> generateDocsForCertificate(@RequestBody String certId){
+        log.info("Certificate generation started");
+
+        validateCertificate(certId);
+
+        Certificate currCert = certificateService.getById(Long.valueOf(certId));
+
+        List<ParticipantKey> participantKeys = currCert.getCertificateParticipants().stream()
+                .map(certParticipants -> certParticipants.getParticipant().getParticipantKey())
+                .toList();
+
+
+        List<SingedDocRef> signedDocsRefRequest = participantKeys.stream()
+                .map(participantKey -> {
+                    SingedDocRef signedDocRefRequest = new SingedDocRef();
+                    signedDocRefRequest.setParticipantKey(participantKey);
+                    return signedDocRefRequest;
+                })
+                .toList();
+//        SingedDocRef signedDocRefRequest = new SingedDocRef();
+//        signedDocRefRequest.setParticipantKey(participantKey.get());
+//        log.info("ParticipantKey: {}", participantKey.get());
+
+
+        List<SingedDocRef> signedDocResults = restTemplate.postForObject("http://mongo-service//api/data/documents-generate/massive_generate_and_save", signedDocsRefRequest, List.class);
+
+
+        if(signedDocResults == null){
+            throw new RuntimeException("Massive Document generation failed null response from mongo-service");
+        }
+
+        signedDocResults = signedDocRefService.saveAll(signedDocResults);
+
+        if (currCert.getSignedDocumentsUUIDs() == null) {
+            currCert.setSignedDocumentsUUIDs(new HashSet<>());
+        }
+        signedDocResults.forEach(signedDocResult ->
+                currCert.getSignedDocumentsUUIDs().add(signedDocResult)
+        );
+
+
+        certificateService.save(currCert);
+
+
+        return ResponseEntity.ok(signedDocResults);
+    }
 
 
     private void validateCertificate(String certId){
