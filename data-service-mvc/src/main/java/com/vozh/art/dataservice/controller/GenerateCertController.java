@@ -7,6 +7,9 @@ import com.vozh.art.dataservice.service.CertificateService;
 import com.vozh.art.dataservice.service.SignedDocRefService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,7 +51,7 @@ public class GenerateCertController {
         log.info("ParticipantKey: {}", participantKey.get());
 
 
-        SingedDocRef signedDocResult = restTemplate.postForObject("http://mongo-service//api/data/documents-generate/generate_and_save", signedDocRefRequest, SingedDocRef.class);
+        SingedDocRef signedDocResult = restTemplate.postForObject("http://mongo-service//api/data-mongo/documents-generate/generate_and_save", signedDocRefRequest, SingedDocRef.class);
 
         if(signedDocResult == null){
             throw new RuntimeException("Document generation failed null response from mongo-service");
@@ -96,7 +99,15 @@ public class GenerateCertController {
 //        log.info("ParticipantKey: {}", participantKey.get());
 
 
-        List<SingedDocRef> signedDocResults = restTemplate.postForObject("http://mongo-service//api/data/documents-generate/massive_generate_and_save", signedDocsRefRequest, List.class);
+//        List<SingedDocRef> signedDocResults = restTemplate.postForObject("http://mongo-service//api/data-mongo/documents-generate/massive_generate_and_save", signedDocsRefRequest, List.class);
+        ResponseEntity<List<SingedDocRef>> response = restTemplate.exchange(
+                "http://mongo-service//api/data-mongo/documents-generate/massive_generate_and_save",
+                HttpMethod.POST,
+                new HttpEntity<>(signedDocsRefRequest),
+                new ParameterizedTypeReference<List<SingedDocRef>>() {}
+        );
+
+        List<SingedDocRef> signedDocResults = response.getBody();
 
 
         if(signedDocResults == null){

@@ -112,6 +112,8 @@ public class CertificateController {
         Certificate cert = certificateService.removeParticipantFromCertificate(id, request);
         return ResponseEntity.ok(CertificateMapper.mapToResponse(cert));
     }
+
+
     @PreAuthorize("hasRole('ROLE_registered-user')")
     @PutMapping("/addIssuer/{id}")
     public ResponseEntity<CertificateResponse> addIssuerToCertificate(@PathVariable Long id , @RequestBody OrganizationRequest request) {
