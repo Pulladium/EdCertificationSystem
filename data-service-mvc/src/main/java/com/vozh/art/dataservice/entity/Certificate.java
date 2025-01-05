@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,6 +20,12 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = {
+        @UniqueConstraint(
+                name = "uk_certificate_name_maintainer",
+                columnNames = {"name", "maintainerKeycloakUUID"}
+        )
+})
 public class Certificate extends BaseEntity<Long> {
 
     private String name;
@@ -39,7 +43,7 @@ public class Certificate extends BaseEntity<Long> {
 //    In SingDoc Object find by Participant UUID
     @OneToMany
     @JoinColumn(name = "document_id")
-    private Set<SingedDocRef> signedDocumentUUID;
+    private Set<SingedDocRef> signedDocumentsUUIDs;
 
 
     @ManyToMany
@@ -51,8 +55,14 @@ public class Certificate extends BaseEntity<Long> {
     private Set<Category> categories;
 
     //    one certificate can have many participants
-    @OneToMany(mappedBy = "certificate")
+    @OneToMany(mappedBy = "certificate",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Set<CertificateParticipant> certificateParticipants;
+
+
+
+    private String maintainerKeycloakUUID;
 
 
 //    todo maybe add here method to get SingedDoc from signedDocumentUUID

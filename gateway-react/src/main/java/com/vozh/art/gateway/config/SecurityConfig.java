@@ -61,21 +61,23 @@ public class SecurityConfig {
                 .route("data-service-mvc", r ->
                         r.path("/api/data/**")
                                 .uri("lb://data-service"))
-                .route("no-csrf-data-service", r -> r
-                                .path("/no-csrf/api/data/**")
-                                .and().predicate(exchange -> devMode)
-                                .filters(f -> f.rewritePath("^/no-csrf(?<segment>/.*)$", "${segment}"))
-                                .uri("lb://data-service")
-                                )
+//                .route("no-csrf-data-service", r -> r
+//                                .path("/no-csrf/api/data/**")
+//                                .and().predicate(exchange -> devMode)
+//                                .filters(f -> f.rewritePath("^/no-csrf(?<segment>/.*)$", "${segment}"))
+//                                .uri("lb://data-service")
+//                                )
+//
 //                .route("no-csrf-data-service", r ->
 //                        r.path("/no-csrf/api/data/**")
 //                                .filters(f -> f.stripPrefix(1))
 //                                .uri("lb://data-service"))
 
 
-                .route("processing-service", r ->
-                        r.path("/api/processing/**")
-                                .uri("lb://processing-service"))
+                .route("mongo-data-service", r ->
+                        r.path("/api/data-mongo/**")
+                                .uri("lb://mongo-service"))
+
                 .route("eureka-server", r -> r.path("/eureka/web/**")
                         .filters(f -> f.setPath("/"))
                         .uri("http://localhost:8761"))
@@ -83,7 +85,6 @@ public class SecurityConfig {
                         .uri("http://localhost:8761"))
                 .build();
     }
-    //todo change to pathMathcers.permit and others authinticated
 
     /**
      * Configures the security filter chain for the application.
@@ -100,6 +101,8 @@ public class SecurityConfig {
                         .pathMatchers("/eureka/**").permitAll()
                         .pathMatchers("/api/data/dev/**").hasRole("admin")
                         .pathMatchers("/api/data/certificates/**").hasRole("registered-user")
+                        .pathMatchers("/api/data-mongo/documents-generate/**").denyAll()
+                        .pathMatchers("/api/data-mongo/documents/**").permitAll()
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(jwtDecoder ->

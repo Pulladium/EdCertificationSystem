@@ -1,6 +1,5 @@
 package com.vozh.art.dataservice.service;
 
-import com.vozh.art.dataservice.dto.request.CategoryRequest;
 import com.vozh.art.dataservice.dto.request.CreateCatRequest;
 import com.vozh.art.dataservice.dto.request.UpdateCatRequest;
 import com.vozh.art.dataservice.dto.response.CategoryResponse;
@@ -13,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -116,5 +116,13 @@ public class CategoryService {
         return mapToResponse(category, 2);
     }
 
+
+    public Set<Category> getAllByIds(List<Long> ids) {
+        try {
+            return new HashSet<>(categoryRepository.findAllById(ids));
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Cant find categories by ids");
+        }
+    }
 
 }
