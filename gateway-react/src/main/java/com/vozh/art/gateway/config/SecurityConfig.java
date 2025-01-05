@@ -85,7 +85,6 @@ public class SecurityConfig {
                         .uri("http://localhost:8761"))
                 .build();
     }
-    //todo change to pathMathcers.permit and others authinticated
 
     /**
      * Configures the security filter chain for the application.
@@ -102,7 +101,7 @@ public class SecurityConfig {
                         .pathMatchers("/eureka/**").permitAll()
                         .pathMatchers("/api/data/dev/**").hasRole("admin")
                         .pathMatchers("/api/data/certificates/**").hasRole("registered-user")
-                        .pathMatchers("/api/data-mongo/documents-generate/**").permitAll()
+                        .pathMatchers("/api/data-mongo/documents-generate/**").denyAll()
                         .pathMatchers("/api/data-mongo/documents/**").permitAll()
                         .anyExchange().authenticated()
                 )
