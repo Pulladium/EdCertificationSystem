@@ -94,13 +94,9 @@ public class GenerateCertController {
                     return signedDocRefRequest;
                 })
                 .toList();
-//        SingedDocRef signedDocRefRequest = new SingedDocRef();
-//        signedDocRefRequest.setParticipantKey(participantKey.get());
-//        log.info("ParticipantKey: {}", participantKey.get());
 
 
-//        List<SingedDocRef> signedDocResults = restTemplate.postForObject("http://mongo-service//api/data-mongo/documents-generate/massive_generate_and_save", signedDocsRefRequest, List.class);
-        ResponseEntity<List<SingedDocRef>> response = restTemplate.exchange(
+      ResponseEntity<List<SingedDocRef>> response = restTemplate.exchange(
                 "http://mongo-service//api/data-mongo/documents-generate/massive_generate_and_save",
                 HttpMethod.POST,
                 new HttpEntity<>(signedDocsRefRequest),

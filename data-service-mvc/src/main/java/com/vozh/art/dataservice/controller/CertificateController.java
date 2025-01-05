@@ -8,7 +8,6 @@ import com.vozh.art.dataservice.dto.response.CertificateResponse;
 import com.vozh.art.dataservice.dto.response.OrganizationResponse;
 import com.vozh.art.dataservice.dto.utils.CertificateMapper;
 import com.vozh.art.dataservice.entity.Certificate;
-import com.vozh.art.dataservice.entity.Organization;
 import com.vozh.art.dataservice.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -104,14 +103,7 @@ public class CertificateController {
         Certificate cert = certificateService.addParticipantToCertificate(id, request);
         return ResponseEntity.ok(CertificateMapper.mapToResponse(cert));
     }
-//    @PreAuthorize("hasRole('ROLE_registered-user')")
-//    @PutMapping("/removeParticipant/{id}")
-//    public ResponseEntity<CertificateResponse> removeParticipantFromCertificate(@PathVariable Long id , @RequestBody ParticipantRequest request) {
-//        validateCertAccessPermission(id);
-//        log.info("Removing participant from certificate: {}", request);
-//        Certificate cert = certificateService.removeParticipantFromCertificate(id, request);
-//        return ResponseEntity.ok(CertificateMapper.mapToResponse(cert));
-//    }
+
     @PreAuthorize("hasRole('ROLE_registered-user')")
     @PutMapping("/removeParticipant/{id}")
     public ResponseEntity<CertificateResponse> removeParticipantFromCertificate(@PathVariable Long id , @RequestBody Long participantId) {

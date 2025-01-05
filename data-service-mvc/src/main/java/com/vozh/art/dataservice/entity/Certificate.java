@@ -30,7 +30,8 @@ public class Certificate extends BaseEntity<Long> {
 
     private String name;
     private String description;
-//    many issueres can issue many certificates
+
+
     @ManyToMany
     @JoinTable(
             name = "certificate_issuer",
@@ -39,8 +40,7 @@ public class Certificate extends BaseEntity<Long> {
     )
     private Set<Organization> issuers;
 
-//    one certificate have all signed document for it
-//    In SingDoc Object find by Participant UUID
+
     @OneToMany
     @JoinColumn(name = "document_id")
     private Set<SingedDocRef> signedDocumentsUUIDs;
@@ -64,9 +64,4 @@ public class Certificate extends BaseEntity<Long> {
 
     private String maintainerKeycloakUUID;
 
-
-//    todo maybe add here method to get SingedDoc from signedDocumentUUID
-
-//    @OneToMany(mappedBy = "certificate", cascade = CascadeType.ALL)
-//    private Set<CertificateParticipant> certificateParticipants = new HashSet<>();
 }

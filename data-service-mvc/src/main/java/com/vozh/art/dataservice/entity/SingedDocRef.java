@@ -16,7 +16,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SingedDocRef extends BaseEntity<Long> {
-//need part id
     private String uuidOfDoc;
 
     private ParticipantKey participantKey;

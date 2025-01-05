@@ -1,7 +1,6 @@
 package com.vozh.art.dataservice.controller;
 
 
-import com.vozh.art.dataservice.dto.request.CategoryRequest;
 import com.vozh.art.dataservice.dto.request.CreateCatRequest;
 import com.vozh.art.dataservice.dto.request.UpdateCatRequest;
 import com.vozh.art.dataservice.dto.response.CategoryResponse;
