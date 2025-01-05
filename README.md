@@ -48,6 +48,17 @@ Getting Started
       (by default client secret is "**********") it can be changed via keycloak admin console -> clients ->postman-certedu-api->credentials
       * Next Click Run near the collection name
 
+System Architecture
+------------------
+![Microservices Communication](./doc/microservicesArciteture.png)
+*Microservices interaction and communication flow*
+
+
+Data Model
+----------
+
+![Entity Relationship Diagram](./doc/entityRelations.png)
+*Persistence entity relationships*
 
 Technology Stack
 --------------
@@ -72,3 +83,35 @@ Technology Stack
   * Docker
   * Eureka Server
   * Spring Cloud Gateway
+
+Technical Experience and Challenges
+---------------------------------
+
+Key Technologies and Decisions:
+
+* Chose RestTemplate over Feign Client because:
+  * Feign is being deprecated
+  * RestTemplate provides better control over HTTP requests
+  * More straightforward error handling
+
+* Security Implementation:
+  * Implemented Keycloak OAuth2 instead of basic Spring Security
+  * Provides better user management
+  * Supports SSO and token-based authentication
+  * More scalable for microservices architecture
+
+* Document Generation:
+  * Used Flying Saucer (open-source) for PDF generation
+  * Integrated Thymeleaf for dynamic HTML templates
+  * Implemented GridFS for efficient PDF storage in MongoDB
+
+* Testing and Development:
+  * Mastered Postman scripting for automated API testing
+  * Created comprehensive test scenarios
+
+Planned but Not Implemented:
+* Asynchronous communication between services using Kafka
+* Would improve system scalability and reduce coupling
+
+Main Challenge:
+Time management was the biggest obstacle - underestimated the complexity of integrating multiple technologies and implementing proper security measures.
