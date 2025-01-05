@@ -29,18 +29,8 @@ public class DocumentController {
     private final DocService signedDocService;
     private final KeyService keyStoreService;
 
-    @PostMapping
-    public ResponseEntity<Map<String, String>> uploadDocument(@RequestParam("file") MultipartFile file) throws Exception {
-        SignedDoc document = signedDocService.saveDocument(file);
 
-        Map<String, String> response = Map.of(
-                "publicKey", document.getEd25519PublicKey(),
-                "signature", document.getEd25519Signature() + " doc uuid = " +  document.getId()
-        );
-
-        return ResponseEntity.ok(response);
-    }
-
+    //no role
     @PutMapping("/{id}/verify")
     public ResponseEntity<Boolean> verifyDocument(@PathVariable String id,
                                                   @RequestBody Map<String, String> verificationData) throws Exception {
@@ -62,34 +52,20 @@ public class DocumentController {
     }
 
 
-    //todo should decode file name if it was in Russian on Client side,
-    // http headers supports only utf8
-//    @GetMapping("/{id}")
-//    public ResponseEntity<ByteArrayResource> getDocument(@PathVariable String id) throws IOException {
-    ////        DocWithFile documentWithContent = signedDocService.getDocumentWithContent(id);
-//        SignedDoc document = documentWithContent.getDocument();
-//        byte[] content = documentWithContent.getContent();
-//
-//        ByteArrayResource resource = new ByteArrayResource(content);
-//
-//        String fileName = document.getName();
-//        String fileExtension = FilenameUtils.getExtension(fileName);
-//        String fileNameWithoutExtension = FilenameUtils.getBaseName(fileName);
-//
-//        String encodedFileName = URLEncoder.encode(fileNameWithoutExtension, StandardCharsets.UTF_8.toString())
-//                .replaceAll("\\+", "%20");
-//
-//        String contentDisposition = String.format("attachment; filename=\"%s.%s\"; filename*=UTF-8''%s.%s",
-//                encodedFileName, fileExtension, encodedFileName, fileExtension);
-//
-//        log.warn(document.getName());
-//
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
-//                .contentType(MediaType.parseMediaType(document.getFileType()))
-//                .contentLength(content.length)
-//                .body(resource);
-//    }
+
+
+    @PostMapping
+    public ResponseEntity<Map<String, String>> uploadDocument(@RequestParam("file") MultipartFile file) throws Exception {
+        SignedDoc document = signedDocService.saveDocument(file);
+
+        Map<String, String> response = Map.of(
+                "publicKey", document.getEd25519PublicKey(),
+                "signature", document.getEd25519Signature() + " doc uuid = " +  document.getId()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
 
     //todo should also send verification data
     @GetMapping("/{id}")
@@ -117,5 +93,11 @@ public class DocumentController {
                 .contentType(MediaType.parseMediaType(document.getFileType()))
                 .contentLength(content.length)
                 .body(resource);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteDocument(@PathVariable String id) throws IOException {
+        signedDocService.deleteDocument(id);
+        return ResponseEntity.ok().build();
     }
 }
