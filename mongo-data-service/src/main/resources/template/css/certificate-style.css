@@ -1,0 +1,88 @@
+/* Base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.certificate-container {
+    width: 100%;
+    margin: 0;
+    padding: 40px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 20px solid #009688;
+}
+
+/* Header styles */
+header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+header h1 {
+    color: #009688;
+    font-size: 48px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 20px 0;
+    border-bottom: 2px solid #009688;
+}
+
+/* Main content styles */
+main {
+    text-align: center;
+}
+
+.recipient-info {
+    margin: 40px 0;
+}
+
+.recipient-info h2 {
+    color: #757575; /* w3-text-grey */
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.name {
+    font-size: 36px;
+    color: #000;
+    font-weight: bold;
+    margin: 20px 0;
+    padding: 10px 0;
+    border-bottom: 2px solid #009688;
+    display: inline-block;
+}
+
+.certificate-description {
+    margin: 40px 0;
+}
+
+.certificate-description p {
+    font-size: 20px;
+    line-height: 1.6;
+    color: #444;
+}
+
+/* Footer styles */
+.certificate-footer {
+    margin-top: 60px;
+    text-align: right;
+}
+
+.date-time {
+    font-size: 18px;
+    color: #666;
+}
+
+.date-time p {
+    display: inline-block;
+    border-top: 1px solid #009688;
+    padding-top: 10px;
+}

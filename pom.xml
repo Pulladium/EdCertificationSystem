@@ -18,10 +18,8 @@
     <modules>
         <module>gateway-react</module>
         <module>data-service-mvc</module>
-        <module>common-module</module>
         <module>eureka-server</module>
-        <module>processing-service-mcv-tmpl</module>
-        <module>notification-service-mcv-tmpl</module>
+        <module>mongo-data-service</module>
     </modules>
 
     <properties>
@@ -32,14 +30,7 @@
 
 
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>com.vozh.art</groupId>
-            <artifactId>common-module</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
+
 
     <dependencyManagement>
         <dependencies>
@@ -56,16 +47,15 @@
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>com.vozh.art</groupId>-->
-<!--                <artifactId>common-module</artifactId>-->
-<!--                <version>0.0.1-SNAPSHOT</version>-->
-<!--                <scope>compile</scope>-->
-<!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
 
-
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>
@@ -79,26 +69,6 @@
                         </exclude>
                     </excludes>
 
-                    <image>
-                        <name>pulkabulky/micros-template:${project.artifactId}${project.version}</name>
-                        <builder>paketobuildpacks/builder-jammy-base:latest</builder>
-                        <publish>true</publish>
-                    </image>
-
-                    <docker>
-\
-
-                        <publishRegistry>
-<!--                        dockerHub credentials-->
-                            <username>pulkabulky</username>
-                            <!--need to be provided for build-->
-                            <!--        mvn spring-boot:build-image -DskipTests -DdockerPassword=dckr_pat_staGys7XQj05MbY6se-z-62iEg0
-                            -->
-                            <!--mvn spring-boot:build-image -DskipTests -DockerPassword= dockerHub token-->
-                            <!--        <dockerPassword>${dockerPassword}</dockerPassword>-->
-                            <password>dckr_pat_2Njzz2IRjOpsU8Uu5XYJeOsuDHQ</password>
-                        </publishRegistry>
-                    </docker>
                 </configuration>
             </plugin>
         </plugins>

@@ -1,41 +1,57 @@
-#kompose convert -f docker-compose.yml can be used.
-version: '4'
 services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.0
-    hostname: zookeeper
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
+  postgres:
+    image: postgres:16.2-alpine
+    container_name: keycloak_postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak_password
+    networks:
+      - keycloak_network
+  #https://www.baeldung.com/spring-boot-keycloak
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.6
 
-  broker:
-    image: confluentinc/cp-kafka:7.5.0
-    container_name: broker
+    container_name: keycloak
+    command: start
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak_password
+      KC_HOSTNAME: localhost
+      KC_HTTP_PORT: 8080
+      KC_HOSTNAME_PORT: 8484
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HEALTH_ENABLED: "true"
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin_password
     ports:
-      - "9092:9092"
-      - "29092:29092"
+      - "8484:8080"
+
     depends_on:
-      - zookeeper
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      - postgres
+    networks:
+      - keycloak_network
 
-  kafka-ui:
-    container_name: kafka-ui
-    image: provectuslabs/kafka-ui:latest
+  mongodb:
+    image: mongo:latest
     ports:
-      - "8086:8080"
-    depends_on:
-      - broker
+      - "27017:27017"
     environment:
-      KAFKA_CLUSTERS_NAME: local
-      KAFKA_CLUSTERS_BOOTSTRAPSERVERS: broker:29092
-      DYNAMIC_CONFIG_ENABLED: 'true'
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: MongoDocumentDb
+    volumes:
+      - mongodb_data:/data/db
 
+volumes:
+  mongodb_data:
+  postgres_data:
 
+networks:
+  keycloak_network:
+    driver: bridge

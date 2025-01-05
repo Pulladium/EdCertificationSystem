@@ -1,6 +1,7 @@
 package com.vozh.art.dataservice.entity;
 
 
+import com.vozh.art.dataservice.entity.embedKey.ParticipantKey;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SingedDocRef extends BaseEntity<Long> {
-
     private String uuidOfDoc;
 
+    private ParticipantKey participantKey;
 }

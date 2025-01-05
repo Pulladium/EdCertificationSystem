@@ -73,8 +73,11 @@
         "composite": true,
         "composites": {
           "client": {
-            "cert-edu-api": [
-              "client_admin"
+            "postman-certedu-api": [
+              "admin-postman-certedu-api"
+            ],
+            "react-client-certedu-api": [
+              "admin-react-client-api"
             ]
           }
         },
@@ -89,8 +92,11 @@
         "composite": true,
         "composites": {
           "client": {
-            "cert-edu-api": [
-              "client_registered_user"
+            "postman-certedu-api": [
+              "reguser-postman-certedu-api"
+            ],
+            "react-client-certedu-api": [
+              "registered-user-react-client-api"
             ]
           }
         },
@@ -118,7 +124,55 @@
       }
     ],
     "client": {
+      "postman-certedu-api": [
+        {
+          "id": "ef369b7c-be79-4eaf-8b38-6f081e47f124",
+          "name": "admin-postman-certedu-api",
+          "description": "",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "838370c8-a3ee-4f69-8c90-8640ab44be60",
+          "attributes": {}
+        },
+        {
+          "id": "0bd346b8-e4b0-44a4-a9ba-0b176596780e",
+          "name": "reguser-postman-certedu-api",
+          "description": "",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "838370c8-a3ee-4f69-8c90-8640ab44be60",
+          "attributes": {}
+        }
+      ],
       "without-authority": [],
+      "react-client-certedu-api": [
+        {
+          "id": "7b8edce4-d017-4293-830e-6875d574bea6",
+          "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "6d295d64-fd74-4e07-ae87-0d826627d351",
+          "attributes": {}
+        },
+        {
+          "id": "51ad6485-52b5-478a-a8a7-df613f7bbd3d",
+          "name": "admin-react-client-api",
+          "description": "",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "6d295d64-fd74-4e07-ae87-0d826627d351",
+          "attributes": {}
+        },
+        {
+          "id": "0f653cf1-ebc9-44d5-a354-02be5dd479af",
+          "name": "registered-user-react-client-api",
+          "description": "",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "6d295d64-fd74-4e07-ae87-0d826627d351",
+          "attributes": {}
+        }
+      ],
       "realm-management": [
         {
           "id": "130a2f30-1e00-4ed1-bf42-0b5103fdf561",
@@ -331,26 +385,6 @@
           "attributes": {}
         }
       ],
-      "cert-edu-api": [
-        {
-          "id": "c3fc6a7a-c208-486f-905e-40ec9a7ba62b",
-          "name": "client_registered_user",
-          "description": "",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "6d295d64-fd74-4e07-ae87-0d826627d351",
-          "attributes": {}
-        },
-        {
-          "id": "f992fa5f-8555-497b-a69b-02c729d278a6",
-          "name": "client_admin",
-          "description": "",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "6d295d64-fd74-4e07-ae87-0d826627d351",
-          "attributes": {}
-        }
-      ],
       "security-admin-console": [],
       "admin-cli": [],
       "account-console": [],
@@ -508,13 +542,13 @@
   "webAuthnPolicyPasswordlessExtraOrigins": [],
   "users": [
     {
-      "id": "e55d0b7f-1c96-4a5d-92ea-b03c65e8411b",
-      "createdTimestamp": 1734871501915,
-      "username": "service-account-cert-edu-api",
+      "id": "0c184604-7f20-438b-8cb5-0167b7631f67",
+      "createdTimestamp": 1735324386845,
+      "username": "service-account-postman-certedu-api",
       "enabled": true,
       "totp": false,
       "emailVerified": false,
-      "serviceAccountClientId": "cert-edu-api",
+      "serviceAccountClientId": "postman-certedu-api",
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
@@ -740,8 +774,8 @@
       ]
     },
     {
-      "id": "6d295d64-fd74-4e07-ae87-0d826627d351",
-      "clientId": "cert-edu-api",
+      "id": "838370c8-a3ee-4f69-8c90-8640ab44be60",
+      "clientId": "postman-certedu-api",
       "name": "",
       "description": "",
       "rootUrl": "",
@@ -753,7 +787,7 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "http://localhost:8484/login/oauth2/code/cert-edu-api"
+        "/*"
       ],
       "webOrigins": [
         "/*"
@@ -770,11 +804,117 @@
       "protocol": "openid-connect",
       "attributes": {
         "oidc.ciba.grant.enabled": "false",
-        "client.secret.creation.time": "1734871501",
-        "backchannel.logout.session.required": "true",
-        "display.on.consent.screen": "false",
         "oauth2.device.authorization.grant.enabled": "false",
+        "client.secret.creation.time": "1735324386",
+        "backchannel.logout.session.required": "true",
         "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "f0bab684-81aa-4cfc-aab2-87dae61dd3b3",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "client_id",
+            "introspection.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "client_id",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "7e6eaa35-1f76-4a88-88fb-739ef587b1c9",
+          "name": "Client Host",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientHost",
+            "introspection.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientHost",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "ed7a22bd-c303-442b-a69a-dfe37015a944",
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "introspection.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
+      "id": "6d295d64-fd74-4e07-ae87-0d826627d351",
+      "clientId": "react-client-certedu-api",
+      "name": "",
+      "description": "",
+      "rootUrl": "",
+      "adminUrl": "",
+      "baseUrl": "",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "redirectUris": [
+        "http://localhost:3000/*"
+      ],
+      "webOrigins": [
+        "http://localhost:3000"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "publicClient": true,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "client.secret.creation.time": "1734871501",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "use.refresh.tokens": "true",
+        "oidc.ciba.grant.enabled": "false",
+        "backchannel.logout.session.required": "true",
+        "client_credentials.use_refresh_token": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "require.pushed.authorization.requests": "false",
+        "acr.loa.map": "{}",
+        "display.on.consent.screen": "false",
+        "pkce.code.challenge.method": "S256",
+        "token.response.type.bearer.lower-case": "false"
       },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,

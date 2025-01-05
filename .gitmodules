@@ -1,0 +1,3 @@
+[submodule "EdCertificationSysFront"]
+	path = EdCertificationSysFront
+	url = git@github.com:Pulladium/EdCertificationSysFront.git

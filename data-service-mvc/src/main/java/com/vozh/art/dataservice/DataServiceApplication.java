@@ -3,6 +3,8 @@ package com.vozh.art.dataservice;
 import com.vozh.art.dataservice.entity.*;
 import com.vozh.art.dataservice.entity.embedKey.ParticipantKey;
 import com.vozh.art.dataservice.repository.*;
+import com.vozh.art.dataservice.service.CertificateParticipantService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -25,11 +27,13 @@ public class DataServiceApplication {
     }
 
     @Bean
+    @Transactional
     public CommandLineRunner createCertificate(CertificateRepository certificateRepository,
                                                CategoryRepository categoryRepository,
                                                OrganizationRepository organizationRepository,
                                                CertificateParticipantRepo certificateParticipantRepo,
-                                               ParticipantRepository participantRepository
+                                               ParticipantRepository participantRepository,
+                                                  CertificateParticipantService certificateParticipantService
     ){
 
         return args -> {
@@ -94,34 +98,27 @@ public class DataServiceApplication {
                     .description("Java Persistence qualification certificate")
                     .categories(Set.of(subCategory))
                     .issuers(Set.of(organization))
-                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
+//                    .signedDocumentUUID(Set.of(new SingedDocRef("NOT YET")))
                     .build();
 
-            certificateParticipant.setCertificate(certificate);
 
+//            certificateParticipantService.assignParticipantToCertificate(certificateParticipant, certificate);
+            certificateParticipant.setCertificate(certificate);
+            certificate.setCertificateParticipants(Set.of(certificateParticipant));
+            
 
             participantRepository.save(participant);
 
 //            categoryRepository.saveAll(List.of(category,subCategory,subCategory2));
             categoryRepository.save(category);
             organizationRepository.save(organization);
-            Certificate savedCert = certificateRepository.save(certificate);
+//            List<Certificate> savedCert = certificateRepository.saveAll(List.of(certificate, certificate2));
+            certificateRepository.save(certificate);
             certificateParticipantRepo.save(certificateParticipant);
-            log.info("Cert id after save : {}", savedCert.getId());
+//            log.info("Cert id after save : {}", savedCert.get(0).getId());
         };
     }
 
-//    @Bean
-//    public CommandLineRunner createData(DataItemRepository dataItemRepository) {
-//        return args -> {
-//            List<DataItem> items = Arrays.asList(
-//                    DataItem.builder().name("Phone pro max").value("45").build(),
-//                    DataItem.builder().name("Phone 12").value("12").build(),
-//                    DataItem.builder().name("Phone 32").value("2").build()
-//            );
-//            dataItemRepository.saveAll(items);
-//        };
-//    }
 
 
 

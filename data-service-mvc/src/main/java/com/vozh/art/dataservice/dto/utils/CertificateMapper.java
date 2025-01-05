@@ -1,21 +1,26 @@
 package com.vozh.art.dataservice.dto.utils;
 
 import com.vozh.art.dataservice.dto.request.CreateCertificateRequest;
-import com.vozh.art.dataservice.dto.request.ParticipantRequest;
 import com.vozh.art.dataservice.dto.response.CertificateResponse;
 import com.vozh.art.dataservice.entity.Certificate;
-import com.vozh.art.dataservice.entity.Participant;
 import com.vozh.art.dataservice.service.CategoryService;
-import com.vozh.art.dataservice.service.CertificateParticipantService;
-import com.vozh.art.dataservice.service.OrganizationService;
-import com.vozh.art.dataservice.service.ParticipantService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public final class CertificateMapper {
+
+    private static CategoryService categoryService;
+    @Autowired
+    public void setCategoryService(CategoryService service) {
+        CertificateMapper.categoryService = service;
+    }
+
+
     public static CertificateResponse mapToResponse(Certificate certificate) {
         CertificateResponse response = CertificateResponse.builder()
                 .certificateId(certificate.getId())
@@ -35,31 +40,30 @@ public final class CertificateMapper {
         if (certificate.getCertificateParticipants() != null) {
 
             response.setParticipants(certificate.getCertificateParticipants().stream()
-                    .map(participant -> ParticipantMapper.mapToResponse(participant.getParticipant()))
+                    .map(certificateParticipant -> ParticipantMapper.mapToResponse(certificateParticipant))
                     .collect(Collectors.toSet()));
         }
+        if(certificate.getSignedDocumentsUUIDs() != null){
+            response.setSingedDocRefs(certificate.getSignedDocumentsUUIDs());
+        }
+        if(certificate.getMaintainerKeycloakUUID() != null){
+            response.setMaintainerKeycloakUUID(certificate.getMaintainerKeycloakUUID());
+        }else {
+            log.error("CertificateMapper: Certificate maintainerKeycloakUUID is null");
+            response.setMaintainerKeycloakUUID("null");
+        }
+
         return response;
     }
 
-    public static Certificate mapToCertificateEntity(CreateCertificateRequest request,
-                                                     CategoryService categoryService,
-                                                     ParticipantService participantService,
-                                                     CertificateParticipantService certificateParticipantService) {
+    public static Certificate mapToCertificateEntity(CreateCertificateRequest request) {
         {
             Certificate certificate = Certificate.builder()
+                    .name(request.getName())
                     .description(request.getDescription())
                     .build();
-            if (request.getCategories() != null) {
-                certificate.setCategories(request.getCategories().stream()
-                        .map(cat -> CategoryMapper.mapToCategoryEntity(cat, categoryService))
-                        .collect(java.util.stream.Collectors.toSet()));
-            }
-            if (request.getCertificateParticipants() != null) {
-                List<Participant> addedPartic = participantService.addNewParticipants((List<ParticipantRequest>) request.getCertificateParticipants());
-
-                certificateParticipantService.assignParticipantToCertificate(certificate.getId(), addedPartic.stream()
-                        .map(Participant::getId)
-                        .collect(Collectors.toList()));
+            if (request.getCategoriesIds() != null) {
+                certificate.setCategories(categoryService.getAllByIds(request.getCategoriesIds()));
             }
             return certificate;
         }
